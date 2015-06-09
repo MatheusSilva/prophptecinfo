@@ -15,6 +15,9 @@ require_once 'rotas/divisaoRotas.php';
 $objDivisao = new divisaoRotas($app);
 
 require_once 'rotas/tecnicoRotas.php';
-$objTecnico= new tecnicoRotas($app);
+$objTecnico = new tecnicoRotas($app);
+
+require_once 'rotas/timeRotas.php';
+$objtimeRotas = new timeRotas($app);
 
 $app->run();

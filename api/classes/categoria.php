@@ -1,5 +1,4 @@
 <?php
-require_once '../adm/classes/conexao.php';
 
 /**
 * classe Categoria
@@ -9,19 +8,23 @@ require_once '../adm/classes/conexao.php';
 */
 class Categoria
 {
-	/**
+    /**
     * @access private
     * @var integer Armazena o codigo da categoria
     */
-	private $codigo_categoria;
+	private $codigoCategoria;
 
 	/**
     * @access private
     * @var string Armazena o nome da categoria
     */
-	private $nome;
+    private $nome;
 
-	/**
+    function __construct()
+    {
+        require_once '../adm/classes/conexao.php';
+    }    
+    /**
     * metodo acessor Get que retorna a informação da propriedade codigoCategoria
     *
     * @access    public
@@ -290,8 +293,10 @@ class Categoria
     * @since     14/12/2010
     * @version   0.2
     */
-	public static function listarTudo()
+	public static function listarTudo($strRequire = '../adm/classes/conexao.php')
 	{
+                require_once $strRequire;
+                
 		try {
 			$conexao = Conexao::getConexao();
 

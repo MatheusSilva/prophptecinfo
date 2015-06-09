@@ -1,5 +1,4 @@
 <?php
-require_once '../adm/classes/conexao.php';
 
 /**
 * classe Tecnico
@@ -9,11 +8,16 @@ require_once '../adm/classes/conexao.php';
 */
 class Tecnico
 {
-	private $codigo_tecnico;
+	private $codigoTecnico;
 	private $nome;
 	private $data;
 
-	public function getCodigoTecnico() 
+        function __construct() 
+        {
+            require_once '../adm/classes/conexao.php';
+        }
+
+        public function getCodigoTecnico() 
 	{
 		return $this->codigoTecnico;
 	}
@@ -135,8 +139,10 @@ class Tecnico
 		return $retorno;
 	}
 	
-	public static function listarTudo()
+	public static function listarTudo($strRequire = '../adm/classes/conexao.php')
 	{
+                require_once $strRequire;
+                
 		$sql   = "\n SELECT *";
 		$sql  .= "\n FROM tecnico";
 

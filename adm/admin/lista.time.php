@@ -2,23 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpladmin.dwt.php" codeOutsideHTMLIsLocked="false" -->
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<!-- InstanceBeginEditable name="doctitle" -->
 		<title>Cat&aacute;logo de Jogos</title>
-		<!-- InstanceEndEditable -->
-		<!-- InstanceBeginEditable name="head" -->
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-		
-		<script language="javascript" type="text/javascript">
-			function confirmar(codigo)
-			{
-				var ok = window.confirm("Você tem certeza que deseja excluir?");
-				
-				if (ok)	{	
-					location.href="../adaptadores/adaptador.time.php?acao=3&codigo=" + codigo;
-				}
-			}
-		</script>
-		<!-- InstanceEndEditable -->
+		<script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+                <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
 	</head>
 	
 	<body>
@@ -71,7 +58,7 @@
 								echo "<td>$nome</td>";
 								
 								$detalhes = "<a href=\"../consultas/detalhe.time.php?codigo=$codigo\">[D]</a>";
-								$alterar  = "<a href=\"../formularios/alterar.time.php?codigo=$codigo\">[A]</a>";
+								$alterar  = "<a href=\"../formularios/alterar.time.htm?codigo=$codigo\">[A]</a>";
 								$excluir  = "<a href=\"javascript:confirmar($codigo)\">[X]</a>";
 								
 								echo "<td>$detalhes $alterar $excluir</td>";

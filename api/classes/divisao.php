@@ -1,5 +1,5 @@
 <?php
-require_once '../adm/classes/conexao.php';
+
 
 /**
 * classe Divisao
@@ -9,10 +9,15 @@ require_once '../adm/classes/conexao.php';
 */
 class Divisao
 {
-	private $codigo_divisao;
+	private $codigoDivisao;
 	private $nome;
 	
-	public function getCodigo_divisao()
+        function __construct()
+        {
+            require_once '../adm/classes/conexao.php';
+        }
+
+        public function getCodigo_divisao()
 	{
 		return $this->codigoDivisao;
 	}
@@ -121,8 +126,10 @@ class Divisao
 		return $retorno;
 	}
 
-	public static function listarTudo()
+	public static function listarTudo($strRequire = '../adm/classes/conexao.php')
 	{
+                require_once $strRequire;
+                
 		$sql   = "\n SELECT *";
 		$sql  .= "\n FROM divisao";
 

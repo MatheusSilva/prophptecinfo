@@ -2,13 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpladmin.dwt.php" codeOutsideHTMLIsLocked="false" -->
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO8859-1" />
-		<script language="javascript" type="text/javascript" src="../../javascript/valida_time.js"> </script>
-		<!-- InstanceBeginEditable name="doctitle" -->
 		<title>Cat&aacute;logo de times</title>
-		<!-- InstanceEndEditable -->
-		<!-- InstanceBeginEditable name="head" -->
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-		<!-- InstanceEndEditable -->
+                <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+                <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
+                <script language="javascript" type="text/javascript">
+                    carregaDivisao();
+                    carregaCategoria();
+                    carregaTecnico();
+                </script>
 	</head>
 	
 	<body>
@@ -25,9 +27,7 @@
 			</div>
 			
 			<div id="conteudo">
-				<!-- InstanceBeginEditable name="conteudo" -->
-				<form method="post" action="../adaptadores/adaptador.time.php"
-				name="frmCadastro" id="frmCadastro" enctype="multipart/form-data" onSubmit="return valida(this);">
+                            <div name="frmCadastro" id="frmCadastro">
 					<table>
 						<tr>
 							<td width="251">Nome do Time: </td>
@@ -46,56 +46,21 @@
 						<tr>
 							<td>Divis&atilde;o: </td>
 							<td>
-								<select name="cmbDivisao" id="cmbDivisao">
-								 <?php
-									require_once('../classes/divisao.php');
-									$vetor = Divisao :: listarTudo();
-									
-									foreach ($vetor as $dados) {
-										$codigo_divisao = $dados['codigo_divisao'];
-										$nome = $dados['nome'];
-										echo "<option value=\"$codigo_divisao\">$nome</option>";
-									}
-								?>
-								</select>
+                                                            <select id="cmbDivisao" name="cmbDivisao"></select>
 							</td>
 						</tr>
 						
 						<tr>
 							<td>Categoria: </td>
 							<td>
-								<select name="cmbCategoria" id="cmbCategoria">
-								<?php
-									require_once('../classes/categoria.php');
-									$vetor = Categoria :: listarTudo();
-									
-									foreach ($vetor as $dados) {
-										$codigo_categoria = $dados['codigo_categoria'];
-										$nome 			  = $dados['nome'];
-										echo "<option value=\"$codigo_categoria\">$nome</option>";
-									}
-								?>
-							  
-								</select>
+                                                            <select name="cmbCategoria" id="cmbCategoria"></select>
 							</td>
 						</tr>
 						
 						<tr>
 							<td>Tecnico: </td>
 							<td>
-								<select name="cmbTecnico" id="cmbTecnico">
-								<?php
-									require_once('../classes/tecnico.php');
-									$vetor = Tecnico :: listarTudo();
-									
-									foreach ($vetor as $dados) {
-										$codigo_tecnico = $dados['codigo_tecnico'];
-										$nome 			= $dados['nome'];
-										echo "<option value=\"$codigo_tecnico\">$nome</option>";
-									}
-								?>
-								  
-								</select>
+                                                            <select id="cmbTecnico" name="cmbTecnico"></select>
 							</td>                             
 						</tr>
 						
@@ -113,7 +78,7 @@
 							<td> comprar novos jogadores:</td>
 							<td>
 								<input type="radio" name="rComprarnovojogador" value="Sim" checked/> <label>Sim</label>
-								<input type="radio" name="rComprarnovojogador" value="Nao" /> <label>Não</label>
+								<input type="radio" name="rComprarnovojogador" value="Nao" /> <label>Nï¿½o</label>
 							</td>
 						</tr>
 						
@@ -135,14 +100,8 @@
 						
 					</table>
 					
-				</form>
+				</div>
 				
-				<?php
-					if(isset($_GET['msg'])) {
-						echo urldecode($_GET['msg']);
-					}	
-				?>                
-				<!-- InstanceEndEditable -->
 			</div>
 			
 			<div id="rodape">
