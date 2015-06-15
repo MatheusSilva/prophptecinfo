@@ -204,6 +204,7 @@ class Categoria
 	public static function ultimoCodigo()
 	{
 		try {
+                        require_once '../classes/conexao.php';
 			$conexao = Conexao::getConexao();
 			$sql  = "\n SELECT MAX(codigo_categoria) + 1 AS codigo";
 			$sql .= "\n FROM categoria";
@@ -232,6 +233,7 @@ class Categoria
 	public static function listarPorCodigo($codigo)
 	{
 		try {
+                        require_once '../classes/conexao.php';
 			$conexao = Conexao::getConexao();
 
 			$sql  = "\n SELECT codigo_categoria";
@@ -263,6 +265,7 @@ class Categoria
  	public static function listarPorNome($nome)
 	{
 		try {
+                        require_once '../classes/conexao.php';
 			$nome .= "%";
 			$conexao = Conexao::getConexao();
 
@@ -298,6 +301,7 @@ class Categoria
                 require_once $strRequire;
                 
 		try {
+                        
 			$conexao = Conexao::getConexao();
 
 			$sql  = "\n SELECT codigo_categoria";

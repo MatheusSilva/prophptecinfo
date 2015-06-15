@@ -30,7 +30,7 @@
 			<div id="conteudo">
 				<!-- InstanceBeginEditable name="conteudo" -->
 				<ul>
-					<li><a href="../consultas/consulta.nometime.php">Consultar Time por nome</a></li>
+					<li><a href="../consultas/consulta.nometime.htm">Consultar Time por nome</a></li>
 					<li><a href="../consultas/consulta.nometecnico.htm">Consultar Tecnico por nome</a></li>
 					<li><a href="../consultas/consulta.nomecategoria.htm">Consultar categoria por nome</a></li>
 					<li><a href="../consultas/consulta.nomedivisao.htm">Consultar divisao  por nome</a></li>

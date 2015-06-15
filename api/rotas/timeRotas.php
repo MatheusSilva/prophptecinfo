@@ -65,21 +65,25 @@ class timeRotas
 	
 		});
 
-		// GET route
 		$app->get('/time/nome/:id', function ($id) use ($app) {
-	
 		    require_once 'classes/time.php';
-		$time = new time();
-				//$time->setNome($nome);
-		    // GET with parameter
-		    $db = new time();
+		    $db    = new time();
 		    $items = $db->listarPorNome($id);
-		    if($items) {
+                    
+		    if (empty($items) === false) {
 			$app->response()->header('Content-Type', 'application/json');
-			echo json_encode($items);
-		    }
-		    else {
-			$app->response()->status(500);
+                        $json = "{\"times\":";
+                        $items[] = array("mensagem" => "");
+			$json .= json_encode($items);
+			$json .= "}";
+			echo $json;
+		    } else {
+                        $app->response()->header('Content-Type', 'application/json');
+                        $json = "{\"times\":";
+                        $arr[] = array("mensagem" => "Nenhum time encontrado");
+			$json .= json_encode($arr);
+			$json .= "}";
+			echo $json;
 		    }
 	
 		});

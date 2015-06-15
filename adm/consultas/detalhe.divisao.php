@@ -26,7 +26,7 @@
 				<!-- InstanceBeginEditable name="conteudo" -->
 				<h2>Detalhe de divisao</h2>
 				<?php
-					require_once('../classes/divisao.php');
+					require_once('../../api/classes/divisao.php');
 					$codigo = $_GET['codigo'];
 					$dados = Divisao :: listarPorCodigo($codigo);
 					

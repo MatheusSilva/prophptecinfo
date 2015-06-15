@@ -26,9 +26,9 @@
 				<!-- InstanceBeginEditable name="conteudo" -->
 				<h2>Detalhe de Tecnico</h2>
 				<?php
-					require_once('../classes/tecnico.php');
+					require_once('../../api/classes/tecnico.php');
 					$codigo = $_GET['codigo'];
-					$dados  = Tecnico :: listarPorCodigo($codigo);
+					$dados  = Tecnico::listarPorCodigo($codigo);
 					
 					if ($dados != 0) {
 						$codigo_tecnico = $dados['codigo_tecnico'];

@@ -1,4 +1,73 @@
 $(document).ready(function() {
+
+    $("#btnConsultar").click(function() {
+        var nomeTime = document.getElementById("txtNome").value;
+        var consulta = "";
+        
+        if(nomeTime != ""){
+            consulta = "/"+document.getElementById("txtNome").value;
+        } else {
+            consulta = "/listaTodosTimes";
+        }
+        
+        $.getJSON( "http://localhost/sistemaRest/api/time/nome"+consulta, function( json ) {
+            var len               = json.times.length;
+            var mensagem	      = "";
+            var strHTML  	      = '<table width="80%" class="lista">'
+                          + '<tr class="primeira_linha">'
+                          + '<td>C&oacute;digo</td>'
+                          + '<td>Nome</td>'
+                          + '<td>A&ccedil;&otilde;es</td>'
+                          + '</tr>';
+
+            for (var i=0; i < len; i++){
+              var codigo   = json.times[i].codigo;
+              var nome     = json.times[i].nome;
+
+
+              if (i % 2 == 0) {
+                     strHTML = strHTML + '<tr class="linha_par">';
+              } else {
+                     strHTML = strHTML + '<tr class="linha_impar">';
+              }	
+
+              if (codigo > 0) {
+                var detalhes = "<a href=\"../consultas/detalhe.time.php?codigo="
+                + codigo
+                + "\">[D]</a>";
+
+                var alterar = "<a href=\"../formularios/alterar.time.htm?codigo="
+                + codigo
+                + "\">[A]</a>";
+
+                var excluir = "<a href=\"javascript:confirmar("
+                + codigo
+                + ")\">[X]</a>";
+
+                var acao = detalhes+alterar+excluir;
+
+                strHTML = strHTML + "<td>"+codigo+"</td>"
+                + "<td>"+nome+"</td>"	
+                + "<td>"+acao+"</td>"	
+                + "</tr>";
+              } else {
+                  mensagem = json.times[i].mensagem;
+              }
+              
+            }
+
+            strHTML = strHTML + "</table>";
+            
+            if(mensagem != "") {
+                    strHTML = mensagem;
+            }
+            
+            $("#tabela").html(strHTML);
+        });
+
+        return false;
+    });
+    
     $("#btnCadastrar").click(function() {   
               var jForm = new FormData();
               
@@ -93,6 +162,65 @@ function confirmar(codigo)
 			alert(mensagem);
 		} 
    }
+}
+
+function listaTodosTimes()
+{
+    $(document).ready(function() {
+	$.getJSON( "http://localhost/sistemaRest/api/time", function( json ) {
+			
+			
+
+			var len               = json.times.length;
+			var temRegistro	      = false;
+		        var strHTML  	      = '<table width="80%" class="lista">'
+			  	      + '<tr class="primeira_linha">'
+			  	      + '<td>C&oacute;digo</td>'
+			  	      + '<td>Nome</td>'
+			  	      + '<td>A&ccedil;&otilde;es</td>'
+				      + '</tr>';
+			
+			for (var i=0; i < len; i++){
+			  var codigo   = json.times[i].codigo;
+			  var nome     = json.times[i].nome;
+			  
+
+			  if (i % 2 == 0) {
+				 strHTML = strHTML + '<tr class="linha_par">';
+			  } else {
+				 strHTML = strHTML + '<tr class="linha_impar">';
+			  }	
+			
+			  var detalhes = "<a href=\"../consultas/detalhe.time.php?codigo="
+			  + codigo
+			  + "\">[D]</a>";
+				
+		  	  var alterar = "<a href=\"../formularios/alterar.time.htm?codigo="
+			  + codigo
+			  + "\">[A]</a>";
+
+			  var excluir = "<a href=\"javascript:confirmar("
+			  + codigo
+			  + ")\">[X]</a>";
+
+			  var acao = detalhes+alterar+excluir;
+
+			  strHTML = strHTML + "<td>"+codigo+"</td>"
+			  + "<td>"+nome+"</td>"	
+			  + "<td>"+acao+"</td>"	
+			  + "</tr>";
+			  temRegistro = true;	
+			}
+			
+			if(temRegistro  == false) {
+				strHTML = "Nenhum time cadastrado";
+			}   
+			
+			strHTML = strHTML + "</table>";
+			
+			$("#tabela").html(strHTML);
+		});
+    });            
 }
 
 function listaNomePorCodigo(codigoParam)

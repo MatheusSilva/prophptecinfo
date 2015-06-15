@@ -200,7 +200,7 @@ class Time
 	{
 		$sql     = "\n SELECT *";
 		$sql    .= "\n FROM time";
-		
+
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->execute();
@@ -230,7 +230,8 @@ class Time
 		$sql    .= "\n AND tecnico_codigo_tecnico     = codigo_tecnico"; 
 		$sql    .= "\n AND categoria_codigo_categoria = codigo_categoria"; 
 		$sql    .= "\n AND codigo_time 			 	  = :codigo";
-				
+                
+                require_once '../classes/conexao.php';
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->bindParam(":codigo", $codigo);
@@ -242,14 +243,21 @@ class Time
 	
 	public static function listarPorNome($nome)
 	{
-		$sql     = "\n SELECT *";
+		$sql     = "\n SELECT time.codigo_time AS codigo,time.nome AS nome";
 		$sql    .= "\n FROM time"; 
-		$sql    .= "\n WHERE nome LIKE :nome";
+                
+                if ($nome !== "listaTodosTimes") {
+                    $sql    .= "\n WHERE nome LIKE :nome";
+                    $nome    = $nome."%";
+                }
 
-		$nome   .= "%";
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
-		$stmt->bindParam(":nome", $nome);
+                
+                if ($nome !== "listaTodosTimes") {
+                    $stmt->bindParam(":nome", $nome);
+                }
+                
 		$stmt->execute();
 		$retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$conexao = null;

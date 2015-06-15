@@ -114,6 +114,7 @@ class Tecnico
 		$sql  .= "\n FROM tecnico";
 		$sql  .= "\n WHERE codigo_tecnico = :codigo";
 		
+                require_once '../classes/conexao.php';
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->bindParam(":codigo",$codigo);
@@ -129,7 +130,8 @@ class Tecnico
 		$sql   = "\n SELECT *";
 		$sql  .= "\n FROM tecnico";
 		$sql  .= "\n WHERE nome LIKE :nome";
-
+                
+                require_once '../classes/conexao.php';
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->bindParam(":nome",$nome);
@@ -140,12 +142,11 @@ class Tecnico
 	}
 	
 	public static function listarTudo($strRequire = '../adm/classes/conexao.php')
-	{
-                require_once $strRequire;
-                
+	{ 
 		$sql   = "\n SELECT *";
 		$sql  .= "\n FROM tecnico";
 
+                require_once $strRequire;
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->execute();

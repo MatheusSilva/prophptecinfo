@@ -101,6 +101,7 @@ class Divisao
 		$sql  .= "\n FROM divisao";
 		$sql  .= "\n WHERE codigo_divisao = :codigo";
 
+                require_once '../classes/conexao.php';
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->bindParam(":codigo",$codigo);
@@ -117,6 +118,7 @@ class Divisao
 		$sql  .= "\n FROM divisao";
 		$sql  .= "\n WHERE nome LIKE :nome";
 
+                require_once '../classes/conexao.php';
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->bindParam(":nome",$nome);
@@ -127,12 +129,11 @@ class Divisao
 	}
 
 	public static function listarTudo($strRequire = '../adm/classes/conexao.php')
-	{
-                require_once $strRequire;
-                
+	{     
 		$sql   = "\n SELECT *";
 		$sql  .= "\n FROM divisao";
-
+                
+                require_once $strRequire;
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->execute();

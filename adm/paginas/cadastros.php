@@ -27,7 +27,7 @@
 				<!-- InstanceBeginEditable name="conteudo" -->
 				<ul>
 					<li><a href="../formularios/cadastro.tecnico.htm">Cadastrar Tecnico</a></li>
-					<li><a href="../formularios/cadastro.time.php">Cadastrar Time</a></li>
+					<li><a href="../formularios/cadastro.time.htm">Cadastrar Time</a></li>
 					<li><a href="../formularios/cadastro.categoria.htm">Cadastrar categoria</a></li>
 					<li><a href="../formularios/cadastro.divisao.htm">Cadastrar divisao</a></li>
 				</ul>

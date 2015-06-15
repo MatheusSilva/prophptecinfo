@@ -6,6 +6,10 @@
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
 		<script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
                 <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
+                
+                <script language="javascript" type="text/javascript">
+                    listaTodosTimes();
+		</script>
 	</head>
 	
 	<body>
@@ -24,51 +28,9 @@
 			<div id="conteudo">
 				<!-- InstanceBeginEditable name="conteudo" -->
 				<h2>Lista de Times</h2>
-				<?php
-					if (isset($_GET['msg'])) {
-						echo urldecode($_GET['msg']);
-					}
-				?> 
 				
-				<table width="80%" class="lista">
-					<tr class="primeira_linha">
-						<td>C&oacute;digo</td>
-						<td>Nome</td>
-						<td>Divis&atilde;o:</td>
-					</tr>
-					<?php
-						require_once('../classes/time.php');
-						$vetor = Time::listarTudo();
-						
-						if ($vetor != 0) {
-							// lista as times
-							$linha = 0;
-							
-							foreach ($vetor as $info) { 								
-								if (++$linha % 2 == 0) {
-									echo '<tr class="linha_par">';
-								} else {
-									echo '<tr class="linha_impar">';								
-								}
-								
-								$codigo   = $info['codigo_time'];
-								$nome 	  = $info['nome'];
-								//$codigo_divisao = $info['codigo_divisao'];
-								echo "<td>$codigo</td>";
-								echo "<td>$nome</td>";
-								
-								$detalhes = "<a href=\"../consultas/detalhe.time.php?codigo=$codigo\">[D]</a>";
-								$alterar  = "<a href=\"../formularios/alterar.time.htm?codigo=$codigo\">[A]</a>";
-								$excluir  = "<a href=\"javascript:confirmar($codigo)\">[X]</a>";
-								
-								echo "<td>$detalhes $alterar $excluir</td>";
-								echo '</tr>';
-							}
-						} else {
-							echo 'Nenhuma time cadastrado';
-						}	
-					?>
-				</table>
+				<div id="tabela">
+				</div>
 					
 				<!-- InstanceEndEditable -->
 			</div>

@@ -26,9 +26,9 @@
 				<!-- InstanceBeginEditable name="conteudo" -->
 				<h2>Detalhe de Time</h2>
 				<?php
-					require_once('../classes/time.php');
+					require_once('../../api/classes/time.php');
 					$codigo = $_GET['codigo'];
-					$dados  = Time :: listarPorCodigo($codigo);
+					$dados  = Time::listarPorCodigo($codigo);
 					
 					if ($dados != 0) {
 						$codigo 			= $dados['codigotime'];

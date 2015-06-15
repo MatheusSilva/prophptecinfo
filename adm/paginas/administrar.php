@@ -32,7 +32,7 @@ Login :: verificar();
 				<!-- InstanceBeginEditable name="conteudo" -->
 				<ul>
 					<li><a href="../admin/lista.tecnico.htm">Adminsitrar Tecnico</a></li>
-					<li><a href="../admin/lista.time.php">Adminsitrar Time</a></li>
+					<li><a href="../admin/lista.time.htm">Adminsitrar Time</a></li>
 					<li><a href="../admin/lista.categoria.htm">Adminsitrar categoria</a></li>
 					<li><a href="../admin/lista.divisao.htm">Adminsitrar divisao</a></li>
 				</ul>
