@@ -1,14 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpladmin.dwt.php" codeOutsideHTMLIsLocked="false" -->
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO8859-1" />
-		<script language="javascript" src="../../javascript/valida_login.js"> </script>
-		<!-- InstanceBeginEditable name="doctitle" -->
 		<title>Cat&aacute;logo de Jogos</title>
-		<!-- InstanceEndEditable -->
-		<!-- InstanceBeginEditable name="head" -->
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-		<!-- InstanceEndEditable -->
+                <script language="javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+                <script language="javascript" src="http://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/md5.js"></script>
+                <script language="javascript" src="../../javascript/valida_login.js"></script>
 	</head>
 	
 	<body>
@@ -31,7 +29,7 @@
 				<form method="post" 
 				action="../adaptadores/adaptador.login.php"
 				name="frmLogin"
-				id="frmLogin" OnSubmit="valida(this);">
+				id="frmLogin" onsubmit="valida()">
 					<table>
 						<tr>
 							<td>Login:</td>

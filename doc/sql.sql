@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS torcedor (
   nome VARCHAR(35) NULL,
   login VARCHAR(20) NULL,
   senha CHAR(32) NULL,
+  token VARCHAR(64) NOT NULL,
   PRIMARY KEY(codigo_torcedor)
 );
 

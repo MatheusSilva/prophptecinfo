@@ -110,12 +110,20 @@ $(document).ready(function() {
 			mensagem += "<br /><b>Você não preencheu a categoria</b>";
 		}
 
+                var token  = getCookie('token');
+                var consulta = "";
+                
+                if (token !== "") {
+                    consulta = "/"+token;
+                }
+                
+                
 		if(mensagem == "") {
 			$.ajax({
 			  type: 'POST',
 			  contentType: 'application/json',
 			  dataType: "json",
-			  url: 'http://localhost/sistemaRest/api/categoria',
+			  url: 'http://localhost/sistemaRest/api/categoria'+consulta,
 			  data: formToJSON(),
 			  beforeSend: function(){
 			    $("#mensagem").html("<br /><b>Carregando...</b>");

@@ -1,12 +1,12 @@
 <?php
-
+require "classeBase.php";
 /**
 * classe Categoria
 *
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
 */
-class Categoria
+class Categoria extends classeBase
 {
     /**
     * @access private
@@ -94,8 +94,12 @@ class Categoria
     * @since     14/12/2010
     * @version   0.2
     */
-	public function inserir()
+	public function inserir($token)
 	{
+                if ($this->tokenEhValido($token) === false) {
+                    return false;
+                }
+                        
 		try {
 			$nome  = $this->getNome();
 			$id    = $this->ultimoCodigo();
@@ -204,7 +208,7 @@ class Categoria
 	public static function ultimoCodigo()
 	{
 		try {
-                        require_once '../classes/conexao.php';
+                        
 			$conexao = Conexao::getConexao();
 			$sql  = "\n SELECT MAX(codigo_categoria) + 1 AS codigo";
 			$sql .= "\n FROM categoria";

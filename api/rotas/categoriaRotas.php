@@ -113,14 +113,14 @@ class categoriaRotas
 	
 		});
 
-		$app->post('/categoria', function () use ($app) {
+		$app->post('/categoria/:token', function ($token) use ($app) {
 		  require_once 'classes/categoria.php';	
 		  $categoria    = json_decode($app->request->getBody(), true);
 		  $objCategoria = new Categoria();
 		  $objCategoria->setNome($categoria["txtNome"]);	
 		  
-		  if($objCategoria->inserir()) {
-		  	$categoria["mensagem"] = "Categoria cadastrada com sucesso";	 	
+		  if ($objCategoria->inserir($token)) {
+		  	$categoria["mensagem"] = "Categoria cadastrada com sucesso";
 		  } else {
 		 	$categoria["mensagem"] = "Falha ao cadastrar categoria";	
 		  }
