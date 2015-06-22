@@ -49,17 +49,17 @@
     },
     {
         "name": "respect/validation",
-        "version": "0.9.2",
-        "version_normalized": "0.9.2.0",
+        "version": "0.9.3",
+        "version_normalized": "0.9.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Respect/Validation.git",
-            "reference": "d0f36de3bdb4e6e3850f3aefca5478fc2609cee9"
+            "reference": "403b80e92c9ea3a411bba20fb674c8c67a85647b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Respect/Validation/zipball/d0f36de3bdb4e6e3850f3aefca5478fc2609cee9",
-            "reference": "d0f36de3bdb4e6e3850f3aefca5478fc2609cee9",
+            "url": "https://api.github.com/repos/Respect/Validation/zipball/403b80e92c9ea3a411bba20fb674c8c67a85647b",
+            "reference": "403b80e92c9ea3a411bba20fb674c8c67a85647b",
             "shasum": ""
         },
         "require": {
@@ -69,7 +69,7 @@
             "egulias/email-validator": "~1.2",
             "malkusch/bav": "~1.0",
             "phpunit/phpunit": "~4.0",
-            "symfony/validator": "~2.6",
+            "symfony/validator": "~2.6.9",
             "zendframework/zend-validator": "~2.3"
         },
         "suggest": {
@@ -80,7 +80,7 @@
             "symfony/validator": "Use Symfony validator through Respect\\Validation",
             "zendframework/zend-validator": "Use Zend Framework validator through Respect\\Validation"
         },
-        "time": "2015-05-28 14:29:15",
+        "time": "2015-06-06 13:06:25",
         "type": "library",
         "extra": {
             "branch-alias": {

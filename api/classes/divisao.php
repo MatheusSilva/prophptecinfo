@@ -1,5 +1,5 @@
 <?php
-
+require "classeBase.php";
 
 /**
 * classe Divisao
@@ -7,137 +7,179 @@
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
 */
-class Divisao
+class Divisao extends classeBase
 {
-	private $codigoDivisao;
-	private $nome;
-	
-        function __construct()
-        {
-            require_once '../adm/classes/conexao.php';
+    private $codigoDivisao;
+    private $nome;
+
+    function __construct()
+    {
+        require_once '../adm/classes/conexao.php';
+    }
+
+    public function getCodigo_divisao()
+    {
+        return $this->codigoDivisao;
+    }
+
+    public function setCodigo_divisao($codigo)
+    {
+        $this->codigoDivisao = $codigo;
+    }
+
+    public function getNome()
+    {
+        return $this->nome;
+    }
+
+    public function setNome($nome)
+    {
+        $this->nome = $nome;
+    }
+
+    public function inserir($token)
+    {
+        try {
+            if ($this->tokenEhValido($token) === false) {
+                    return false;
+            }//if ($this->tokenEhValido($token) === false) {
+
+            $nome  = $this->getNome();
+
+            $sql   = "\n INSERT INTO divisao (";
+            $sql  .= "\n nome";
+            $sql  .= "\n ) VALUES (";
+            $sql  .= "\n :nome";
+            $sql  .= "\n )";
+
+            $conexao = Conexao::getConexao(); 
+            $conexao->beginTransaction();
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":nome",$nome);
+            $retorno = $stmt->execute();
+            $conexao->commit();
+            $conexao = null;
+            return $retorno;
+        } catch (PDOException $e) {
+            $conexao = null;
+            return $e->getMessage();
         }
+    }
 
-        public function getCodigo_divisao()
-	{
-		return $this->codigoDivisao;
-	}
-	
-	public function setCodigo_divisao($codigo)
-	{
-		$this->codigoDivisao = $codigo;
-	}
-	
-	public function getNome()
-	{
-		return $this->nome;
-	}
-	
-	public function setNome($nome)
-	{
-		$this->nome = $nome;
-	}
-	
-	public function inserir()
-	{
-		$nome  = $this->getNome();
+    public function alterar($token)
+    {
+        try {
+            if ($this->tokenEhValido($token) === false) {
+                    return false;
+            }//if ($this->tokenEhValido($token) === false) {
 
-		$sql   = "\n INSERT INTO divisao (";
-		$sql  .= "\n nome";
-		$sql  .= "\n ) VALUES (";
-		$sql  .= "\n :nome";
-		$sql  .= "\n )";
+            $codigo = $this->getcodigo_divisao();
+            $nome   = $this->getNome();
 
-		$conexao = Conexao::getConexao(); 
-		$conexao->beginTransaction();
-		$stmt = $conexao->prepare($sql);
-		$stmt->bindParam(":nome",$nome);
-		$retorno = $stmt->execute();
-		$conexao->commit();
-		$conexao = null;
-		return $retorno;
-	}
-	
-	public function alterar()
-	{
-		$codigo = $this->getcodigo_divisao();
-		$nome   = $this->getNome();
+            $sql   = "\n UPDATE divisao";
+            $sql  .= "\n SET nome = :nome";
+            $sql  .= "\n WHERE Codigo_divisao = :codigo";
 
-		$sql   = "\n UPDATE divisao";
-		$sql  .= "\n SET nome = :nome";
-		$sql  .= "\n WHERE Codigo_divisao = :codigo";
-		
-		$conexao = Conexao::getConexao(); 
-		$conexao->beginTransaction();
-		$stmt = $conexao->prepare($sql);
-		$stmt->bindParam(":nome",$nome);
-		$stmt->bindParam(":codigo",$codigo);
-		$retorno = $stmt->execute();
-		$conexao->commit();
-		$conexao = null;
-		return $retorno;
-	}
-	
-	public function excluir()
-	{
-		$codigo = $this->getcodigo_divisao();
+            $conexao = Conexao::getConexao(); 
+            $conexao->beginTransaction();
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":nome",$nome);
+            $stmt->bindParam(":codigo",$codigo);
+            $retorno = $stmt->execute();
+            $conexao->commit();
+            $conexao = null;
+            return $retorno;
+        } catch (PDOException $e) {
+            $conexao = null;
+            return $e->getMessage();
+        }
+    }
 
-		$sql   = "\n DELETE"; 
-		$sql  .= "\n FROM divisao";
-		$sql  .= "\n WHERE codigo_divisao = :codigo";
-		
-		$conexao = Conexao::getConexao(); 
-		$conexao->beginTransaction();
-		$stmt = $conexao->prepare($sql);
-		$stmt->bindParam(":codigo",$codigo);
-		$retorno = $stmt->execute();
-		$conexao->commit();
-		$conexao = null;
-		return $retorno;
-	}
-	
-	public static function listarPorCodigo($codigo)
-	{
-		$sql   = "\n SELECT *";
-		$sql  .= "\n FROM divisao";
-		$sql  .= "\n WHERE codigo_divisao = :codigo";
+    public function excluir($token)
+    {
+        try {
+            if ($this->tokenEhValido($token) !== true) {
+                    return false;
+            }//if ($this->tokenEhValido($token) === false) {
 
-		$conexao = Conexao::getConexao(); 		  
-		$stmt = $conexao->prepare($sql);
-		$stmt->bindParam(":codigo",$codigo);
-		$stmt->execute();
-		$retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
-		$conexao = null;
-		return $retorno;
-	}
+            $codigo = $this->getcodigo_divisao();
 
-	public static function listarPorNome($nome)
-	{
-		$nome .= "%";
-		$sql   = "\n SELECT *";
-		$sql  .= "\n FROM divisao";
-		$sql  .= "\n WHERE nome LIKE :nome";
+            $sql   = "\n DELETE"; 
+            $sql  .= "\n FROM divisao";
+            $sql  .= "\n WHERE codigo_divisao = :codigo";
 
-                require_once '../classes/conexao.php';
-		$conexao = Conexao::getConexao(); 		  
-		$stmt = $conexao->prepare($sql);
-		$stmt->bindParam(":nome",$nome);
-		$stmt->execute();
-		$retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
-		$conexao = null;
-		return $retorno;
-	}
+            $conexao = Conexao::getConexao(); 
+            $conexao->beginTransaction();
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":codigo",$codigo);
+            $retorno = $stmt->execute();
+            $conexao->commit();
+            $conexao = null;
+            return $retorno;
+        } catch (PDOException $e) {
+            $conexao = null;
+            return $e->getMessage();
+        }
+    }
 
-	public static function listarTudo($strRequire = '../adm/classes/conexao.php')
-	{     
-		$sql   = "\n SELECT *";
-		$sql  .= "\n FROM divisao";
-                
-                require_once $strRequire;
-		$conexao = Conexao::getConexao(); 		  
-		$stmt = $conexao->prepare($sql);
-		$stmt->execute();
-		$retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
-		$conexao = null;
-		return $retorno;		
-	}
+    public static function listarPorCodigo($codigo)
+    {
+        try {
+            $sql   = "\n SELECT *";
+            $sql  .= "\n FROM divisao";
+            $sql  .= "\n WHERE codigo_divisao = :codigo";
+
+            $conexao = Conexao::getConexao(); 		  
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":codigo",$codigo);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno;
+        } catch (PDOException $e) {
+            $conexao = null;
+            return $e->getMessage();
+        }
+    }
+
+    public static function listarPorNome($nome)
+    {
+        try {
+            $nome .= "%";
+            $sql   = "\n SELECT *";
+            $sql  .= "\n FROM divisao";
+            $sql  .= "\n WHERE nome LIKE :nome";
+
+            require_once '../classes/conexao.php';
+            $conexao = Conexao::getConexao(); 		  
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":nome",$nome);
+            $stmt->execute();
+            $retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno;
+        } catch (PDOException $e) {
+            $conexao = null;
+            return $e->getMessage();
+        }
+    }
+
+    public static function listarTudo($strRequire = '../adm/classes/conexao.php')
+    {     
+        try {
+            $sql   = "\n SELECT *";
+            $sql  .= "\n FROM divisao";
+
+            require_once $strRequire;
+            $conexao = Conexao::getConexao(); 		  
+            $stmt = $conexao->prepare($sql);
+            $stmt->execute();
+            $retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno;
+        } catch (PDOException $e) {
+            $conexao = null;
+            return $e->getMessage();
+        }
+    }
 }
