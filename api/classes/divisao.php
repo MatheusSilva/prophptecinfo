@@ -101,7 +101,6 @@ class Divisao
 		$sql  .= "\n FROM divisao";
 		$sql  .= "\n WHERE codigo_divisao = :codigo";
 
-                require_once '../classes/conexao.php';
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->bindParam(":codigo",$codigo);

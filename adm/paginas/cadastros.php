@@ -18,7 +18,7 @@
 			<div id="menu_superior">
 				<a href="home.php">Home</a> ::
 				<a href="cadastros.php">Cadastros</a> ::
-				<a href="administrar.php">Administrar</a> ::
+                                <a href="administrar.php">Administrar</a> ::
 				<a href="consultas.php">Consultas</a> ::
 				<a href="../formularios/logout.php">Sair</a>
 			</div>

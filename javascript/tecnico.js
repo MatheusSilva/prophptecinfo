@@ -21,7 +21,7 @@ function consultar()
 			 strHTML = strHTML + '<tr class="linha_impar">';
 		  }	
 		
-		  var detalhes = "<a href=\"../consultas/detalhe.tecnico.php?codigo="
+		  var detalhes = "<a href=\"../consultas/detalhe.tecnico.htm?codigo="
 		  + codigo
 		  + "\">[D]</a>";
 			

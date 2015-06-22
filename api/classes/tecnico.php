@@ -110,11 +110,10 @@ class Tecnico
 	
 	public static function listarPorCodigo($codigo)
 	{
-		$sql   = "\n SELECT *";
+		$sql   = "\n SELECT codigo_tecnico,nome,data_nascimento";
 		$sql  .= "\n FROM tecnico";
 		$sql  .= "\n WHERE codigo_tecnico = :codigo";
 		
-                require_once '../classes/conexao.php';
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->bindParam(":codigo",$codigo);

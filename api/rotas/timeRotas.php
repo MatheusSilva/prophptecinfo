@@ -31,6 +31,7 @@ class timeRotas
 			    $itemArray = array(
 				'codigo' => $row['codigo_time'],
 				'nome' => $row['nome'],
+                                'capa' => "../".$row['capa'],
 			    );
 			    array_push($results, $itemArray);
 			}
@@ -46,7 +47,7 @@ class timeRotas
 		    }
 	
 		});
-
+                
 		// GET route
 		$app->get('/time/:id', function ($id) use ($app) {
 		    require_once 'classes/time.php';

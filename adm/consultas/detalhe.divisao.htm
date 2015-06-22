@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpladmin.dwt.php" codeOutsideHTMLIsLocked="false" -->
+	<head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <title>Cat&aacute;logo de Jogos</title>
+            <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
+            <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+            <script language="javascript" type="text/javascript" src="../../javascript/crypto.js"></script>
+            <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
+            <script language="javascript" type="text/javascript" src="../../javascript/divisao.js"></script>
+            
+            <script type="text/javascript">
+            $(document).ready(function() {
+                location.queryString = {};
+                location.search.substr(1).split("&").forEach(function (pair) {
+                    if (pair === "") return;
+                    var parts = pair.split("=");
+                    location.queryString[parts[0]] = parts[1] &&
+                        decodeURIComponent(parts[1].replace(/\+/g, " "));
+                });
+
+                $.ajax({
+                    type: 'GET',
+                    contentType: 'application/json',
+                    dataType: "json",
+                    url: 'http://localhost/sistemaRest/api/divisao/'+location.queryString.codigo,
+                    beforeSend: function(){
+                      $("#codigo").html("<br /><b>Carregando...</b>");
+                      $("#txtNome").html("<br /><b>Carregando...</b>");
+                    },
+                    success: function(data) {
+                      $("#codigo").val(data.codigo_divisao);
+                      $("#txtNome").val(data.nome);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                      $("#codigo").html("<br /><b>Falha ao carregar divisao!</b>");
+                      $("#txtNome").html("<br /><b>Falha ao carregar divisao!</b>");
+                    }
+                });
+            });
+            </script>
+	</head>
+	
+	<body>
+		<div id="geral">
+			<div id="cabecalho">
+			</div>
+			
+			<div id="menu_superior">
+				<a href="../paginas/home.php">Home</a> ::
+				<a href="../paginas/cadastros.php">Cadastros</a> ::
+				<a href="../paginas/consultas.php">Consultas</a> ::
+				<a href="../formularios/logout.php">Sair</a>
+			</div>
+			
+			<div id="conteudo">
+				<!-- InstanceBeginEditable name="conteudo" -->
+				<h2>Detalhe de divisao</h2>
+                                <label for="codigo">Codigo:</label> <input type="text" readonly id="codigo" class="readonly" />
+                                <br />
+                                <label for="txtNome">Nome:</label> <input type="text" readonly id="txtNome" class="readonly" />
+				<!-- InstanceEndEditable -->
+			</div>
+			
+			<div id="rodape">
+				
+			</div>       	
+		</div>
+	</body>
+	<!-- InstanceEnd -->
+</html>

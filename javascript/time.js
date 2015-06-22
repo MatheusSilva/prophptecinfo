@@ -32,7 +32,7 @@ $(document).ready(function() {
               }	
 
               if (codigo > 0) {
-                var detalhes = "<a href=\"../consultas/detalhe.time.php?codigo="
+                var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
                 + codigo
                 + "\">[D]</a>";
 
@@ -132,7 +132,7 @@ $(document).ready(function() {
             return false;
     });
 });
-    
+        
 function confirmar(codigo)
 {
    var ok = window.confirm("Voce tem certeza que deseja excluir?");
@@ -191,7 +191,7 @@ function listaTodosTimes()
 				 strHTML = strHTML + '<tr class="linha_impar">';
 			  }	
 			
-			  var detalhes = "<a href=\"../consultas/detalhe.time.php?codigo="
+			  var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
 			  + codigo
 			  + "\">[D]</a>";
 				

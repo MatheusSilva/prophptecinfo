@@ -2,6 +2,11 @@ body{
 	background-color:#000000;
 	color:#FFFFFF;
 }
+
+.readonly{
+    background-color:#C0C0C0;
+}
+
 div{
 	font-family:"Courier New", Courier, monospace,arial;
 }

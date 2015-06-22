@@ -207,8 +207,8 @@ class Time
 		$retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$conexao = null;
 		return $retorno;
-	}	
-	
+	}
+        	
 	public static function listarPorCodigo($codigo)
 	{
 		$sql     = "\n SELECT time.codigo_time AS codigotime";
@@ -231,7 +231,6 @@ class Time
 		$sql    .= "\n AND categoria_codigo_categoria = codigo_categoria"; 
 		$sql    .= "\n AND codigo_time 			 	  = :codigo";
                 
-                require_once '../classes/conexao.php';
 		$conexao = Conexao::getConexao(); 		  
 		$stmt = $conexao->prepare($sql);
 		$stmt->bindParam(":codigo", $codigo);
