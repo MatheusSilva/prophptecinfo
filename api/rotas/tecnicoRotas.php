@@ -46,6 +46,47 @@ class tecnicoRotas
             }
         });
 
+        $app->get('/tecnicoTime/:id', function ($id) use ($app) 
+        {
+            require_once 'classes/tecnico.php';
+            $objTecnico = new tecnico();
+            $arrTodosTecnico   = $objTecnico->listarTudo();
+            $arrTecnicoTime   = $objTecnico->listaTecnicoPorTime(null,$id);
+            $results = array();
+            
+            if ($arrTodosTecnico) {
+                // get all results
+                foreach($arrTodosTecnico as $valor) {
+                    
+                    $boolSelected = false;
+                    $idDivisao = $valor['codigo_tecnico'];
+                    
+                    if ($arrTecnicoTime && $idDivisao === $arrTecnicoTime['codigo_tecnico']) {
+                        $boolSelected = true;
+                    }
+                    
+                    $itemArray = array(
+                        'codigo' => $idDivisao,
+                        'nome'   => $valor['nome'],
+                        'selected'   => $boolSelected
+                    );
+                    
+                    array_push($results, $itemArray);
+                }
+                
+                $app->response()->header('Content-Type', 'application/json');
+                $json = "{\"tecnicos\":";
+                $json .= json_encode($results);
+                $json .= "}";
+
+                echo $json;
+            } else {
+                $json = "{\"tecnicos\":";
+                $json .= json_encode(array());
+                $json .= "}";
+            }     
+        });
+        
         // GET route
         $app->get('/tecnico/:id', function ($id) use ($app) 
         {

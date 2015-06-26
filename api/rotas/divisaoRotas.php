@@ -46,6 +46,48 @@ class divisaoRotas
                 $app->response()->status(500);
             }
         });
+        
+        $app->get('/divisaoTime/:id', function ($id) use ($app) 
+        {
+            require_once 'classes/divisao.php';
+            $divisao = new divisao();
+            $arrTodasDivisoes   = $divisao->listarTudo();
+            $arrDivisaoTime   = $divisao->listaDivisaoPorTime(null,$id);
+            $results = array();
+            
+            if ($arrTodasDivisoes) {
+                // get all results
+                foreach($arrTodasDivisoes as $valor) {
+                    
+                    $boolSelected = false;
+                    $idDivisao = $valor['codigo_divisao'];
+                    
+                    if ($arrDivisaoTime && $idDivisao === $arrDivisaoTime['codigo_divisao']) {
+                        $boolSelected = true;
+                    } 
+                    
+                    $itemArray = array(
+                        'codigo' => $idDivisao,
+                        'nome'   => $valor['nome'],
+                        'selected'   => $boolSelected
+                    );
+                    
+                    array_push($results, $itemArray);
+                }
+                
+                $app->response()->header('Content-Type', 'application/json');
+                $json = "{\"divisaos\":";
+                $json .= json_encode($results);
+                $json .= "}";
+
+                echo $json;
+            } else {
+                $json = "{\"divisaos\":";
+                $json .= json_encode(array());
+                $json .= "}";
+            }
+        });
+
 
         // GET route
         $app->get('/divisao/:id', function ($id) use ($app) 
@@ -61,7 +103,7 @@ class divisaoRotas
                 $app->response()->status(500);
             }
         });
-
+        
         // GET route
         $app->get('/divisao/nome/:id', function ($id) use ($app) 
         {

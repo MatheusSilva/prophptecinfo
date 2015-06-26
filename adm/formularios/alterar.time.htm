@@ -1,120 +1,105 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpladmin.dwt.php" codeOutsideHTMLIsLocked="false" -->
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO8859-1" />
-		<title>Cat&aacute;logo de Jogos</title>
-		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-		<script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"> </script>
-		<script language="javascript" type="text/javascript" src="../../javascript/time.js"> </script>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO8859-1" />
+        <title>Cat&aacute;logo de Jogos</title>
+        <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
+        <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+        <script language="javascript" type="text/javascript" src="../../javascript/crypto.js"></script>
+        <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
+        <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
 
-		<script type="text/javascript">
-                    location.queryString = {};
-                    
-                    location.search.substr(1).split("&").forEach(function (pair) {
-                        if (pair === "") return;
-                        var parts = pair.split("=");
-                        location.queryString[parts[0]] = parts[1] &&
-                            decodeURIComponent(parts[1].replace(/\+/g, " "));
-                    });
+        <script type="text/javascript">
+            location.queryString = {};
 
-                    var codigo = location.queryString.codigo;
-                    carregaDivisao(codigo);
-                    carregaCategoria(codigo);
-                    carregaTecnico(codigo);
-                    listaNomePorCodigo(codigo);
-                    
-                    $(document).ready(function() {
-                        $("#codigo").val(codigo);
-                    });
-		</script>
-	</head>
-	
-	<body>
-		<div id="geral">
-			<div id="cabecalho">
-			</div>
-			
-			<div id="menu_superior">
-				<a href="../paginas/home.php">Home</a> ::
-				<a href="../paginas/cadastros.php">Cadastros</a> ::
-				<a href="../paginas/consultas.php">Consultas</a> ::
-				<a href="logout.php">Sair</a>
-			</div>
-			
-			<div id="conteudo">
-				<!-- InstanceBeginEditable name="conteudo" -->
-				
-				<h2>Alterar Dados de Time</h2>
-				
-				
-					
-				<div name="frmCadastro"
-				id="frmCadastro" >
-				
-					<table>
-						<tr>
-							<td>Nome:</td>
-							<td>
-                                                            <input type="text" id="txtNome" name="txtNome" />
-							</td>
-						</tr>
+            location.search.substr(1).split("&").forEach(function (pair) {
+                if (pair === "") return;
+                var parts = pair.split("=");
+                location.queryString[parts[0]] = parts[1] &&
+                    decodeURIComponent(parts[1].replace(/\+/g, " "));
+            });
 
-						<tr>
-							<tr>
-								<td>Capa: </td>
-								<td>
-									<input type="file" name="txtFoto" id="txtFoto" />
-								</td>
-							</tr>
+            var codigo = location.queryString.codigo;
+            carregaDivisao(codigo);
+            carregaCategoria(codigo);
+            carregaTecnico(codigo);
+            listaNomePorCodigo(codigo);
 
-							<td>Divis&atilde;o: </td>
-							
-							<td>
-								<select name="cmbDivisao" id="cmbDivisao">
-								</select>
-							</td>
-						</tr>
-					
-						<tr>
-							<td>Categoria: </td>
-							<td>
-								<select name="cmbCategoria" id="cmbCategoria">
-								</select>
-							</td>
-						</tr>
-						
-						<tr>
-							<td>Tecnico: </td>
-							<td>
-								<select name="cmbTecnico" id="cmbTecnico">
-								</select>
-							</td>                             
-						</tr>
+            $(document).ready(function() {
+                $("#codigo").val(codigo);
+            });
+        </script>
+    </head>
 
-						<tr>
-							<td colspan="2">
-								<input type="hidden" name="acao" value="2" />
-								
-							
-								<input type="submit" name="btnAlterar" 
-									value="Alterar" id="btnAlterar" />
-									
-								<input type="reset" name="btnLimpar"
-									value="Limpar" id="btnLimpar" />
-							</td>
-						</tr>
-					
-					</table>
-                                    
-                                    <input type="hidden" id="codigo" name="codigo" />
-				</div>
-			
-			</div>
-			
-			<div id="rodape">
-				
-			</div>       	
-		</div>
-	</body>
-	<!-- InstanceEnd -->
+    <body>
+        <div id="geral">
+            <div id="cabecalho">
+            </div>
+
+            <div id="menu_superior">
+                <a href="../paginas/home.php">Home</a> ::
+                <a href="../paginas/cadastros.php">Cadastros</a> ::
+                <a href="../paginas/consultas.php">Consultas</a> ::
+                <a href="logout.php">Sair</a>
+            </div>
+
+            <div id="conteudo">
+                <h2>Alterar Dados de Time</h2>
+
+                <div id="frmCadastro" >
+                    <table>
+                        <tr>
+                            <td>Nome:</td>
+                            <td>
+                                <input type="text" id="txtNome" name="txtNome" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <tr>
+                                <td>Capa: </td>
+                                <td>
+                                    <input type="file" name="txtFoto" id="txtFoto" />
+                                </td>
+                            </tr>
+
+                            <td>Divis&atilde;o: </td>
+                            <td>
+                                <select name="cmbDivisao" id="cmbDivisao">
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Categoria: </td>
+                            <td>
+                                <select name="cmbCategoria" id="cmbCategoria">
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Tecnico: </td>
+                            <td>
+                                <select name="cmbTecnico" id="cmbTecnico">
+                                </select>
+                            </td>                             
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <input type="hidden" name="acao" value="2" />
+                                <input type="submit" name="btnAlterar" value="Alterar" id="btnAlterar" />
+                                <input type="reset" name="btnLimpar" value="Limpar" id="btnLimpar" />
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="hidden" id="codigo" name="codigo" />
+                </div>
+            </div>
+
+            <div id="rodape">
+            </div>       	
+        </div>
+    </body>
 </html>

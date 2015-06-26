@@ -72,6 +72,47 @@ class categoriaRotas
             }
         });
 
+        $app->get('/categoriaTime/:id', function ($id) use ($app) 
+        {
+            require_once 'classes/categoria.php';
+            $objCategoria = new Categoria();
+            $arrTodasCategorias   = $objCategoria->listarTudo();
+            $arrCategoriaTime   = $objCategoria->listaCategoriaPorTime(null,$id);
+            $results = array();
+            
+            if ($arrTodasCategorias) {
+                // get all results
+                foreach($arrTodasCategorias as $valor) {
+                    
+                    $boolSelected = false;
+                    $idDivisao = $valor['codigo_categoria'];
+                    
+                    if ($arrCategoriaTime && $idDivisao === $arrCategoriaTime['codigo_categoria']) {
+                        $boolSelected = true;
+                    }
+                    
+                    $itemArray = array(
+                        'codigo' => $idDivisao,
+                        'nome'   => $valor['nome'],
+                        'selected'   => $boolSelected
+                    );
+                    
+                    array_push($results, $itemArray);
+                }
+                
+                $app->response()->header('Content-Type', 'application/json');
+                $json = "{\"categorias\":";
+                $json .= json_encode($results);
+                $json .= "}";
+
+                echo $json;
+            } else {
+                $json = "{\"categorias\":";
+                $json .= json_encode(array());
+                $json .= "}";
+            }     
+        });
+        
         // GET route
         $app->get('/categoria/:id', function ($id) use ($app) 
         {

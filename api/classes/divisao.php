@@ -141,7 +141,7 @@ class Divisao extends classeBase
             return $e->getMessage();
         }
     }
-
+        
     public static function listarPorNome($nome)
     {
         try {
@@ -175,6 +175,28 @@ class Divisao extends classeBase
             $stmt = $conexao->prepare($sql);
             $stmt->execute();
             $retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno;
+        } catch (PDOException $e) {
+            $conexao = null;
+            return $e->getMessage();
+        }
+    }
+    
+    public static function listaDivisaoPorTime($strRequire = '../adm/classes/conexao.php', $intCodigo)
+    {     
+        try {
+            $sql   = "\n SELECT d.codigo_divisao,d.nome";
+            $sql  .= "\n FROM time.time AS t, time.divisao AS d";
+            $sql  .= "\n WHERE  d.codigo_divisao = t.divisao_codigo_divisao";
+            $sql  .= "\n AND t.codigo_time = :codigo";
+
+            //require_once $strRequire;
+            $conexao = Conexao::getConexao(); 		  
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":codigo", $intCodigo);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
             $conexao = null;
             return $retorno;
         } catch (PDOException $e) {

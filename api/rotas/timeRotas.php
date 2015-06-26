@@ -7,7 +7,7 @@
 */
 class timeRotas
 {
-	/**
+    /**
     * metodo construtor da classe timeRotas
     *
     * @access    public
@@ -16,196 +16,209 @@ class timeRotas
     * @since     27/05/2015
     * @version   0.1
     */
-	function __construct($app)
-	{
-		$app->get('/time', function () use ($app) {
-    		require_once 'classes/time.php';
-		    $db = new time();
-		    $items = $db->listarTudo();
-		    $results = array();
-		    
-		    if($items) {
-			// get all results
-			foreach($items as $row) {
-		
-			    $itemArray = array(
-				'codigo' => $row['codigo_time'],
-				'nome' => $row['nome'],
-                                'capa' => "../".$row['capa'],
-			    );
-			    array_push($results, $itemArray);
-			}
-			$app->response()->header('Content-Type', 'application/json');
-			$json = "{\"times\":";
-			$json .= json_encode($results);
-			$json .= "}";
+    function __construct($app)
+    {
+        $app->get('/time', function () use ($app) 
+        {
+            require_once 'classes/time.php';
+            $db      = new time();
+            $items   = $db->listarTudo();
+            $results = array();
 
-
-			echo $json;
-		    } else {
-			$app->response()->status(500);
-		    }
-	
-		});
-                
-		// GET route
-		$app->get('/time/:id', function ($id) use ($app) {
-		    require_once 'classes/time.php';
-		$time = new time();
-				//$time->setNome($nome);
-		    // GET with parameter
-		    $db = new time();
-		    $items = $db->listarPorCodigo($id);
-		    if($items) {
-			$app->response()->header('Content-Type', 'application/json');
-			echo json_encode($items);
-		    }
-		    else {
-			$app->response()->status(500);
-		    }
-	
-		});
-
-		$app->get('/time/nome/:id', function ($id) use ($app) {
-		    require_once 'classes/time.php';
-		    $db    = new time();
-		    $items = $db->listarPorNome($id);
-                    
-		    if (empty($items) === false) {
-			$app->response()->header('Content-Type', 'application/json');
-                        $json = "{\"times\":";
-                        $items[] = array("mensagem" => "");
-			$json .= json_encode($items);
-			$json .= "}";
-			echo $json;
-		    } else {
-                        $app->response()->header('Content-Type', 'application/json');
-                        $json = "{\"times\":";
-                        $arr[] = array("mensagem" => "Nenhum time encontrado");
-			$json .= json_encode($arr);
-			$json .= "}";
-			echo $json;
-		    }
-	
-		});
-
-		$app->post('/time', function () use ($app) {
-                    require_once 'classes/uploadimagem.php';
-                    require_once 'classes/time.php';	
-                  
-                    $time = array(
-                        'txtFoto' => $_FILES["txtFoto"],
-                        'txtNome' => $app->request->post('txtNome'),
-                        'cmbDivisao' => $app->request->post('cmbDivisao'),
-                        'cmbCategoria' => $app->request->post('cmbCategoria'),
-                        'cmbTecnico' => $app->request->post('cmbTecnico'),
-                        'rDesempenhotime' => $app->request->post('rDesempenhotime'),
-                        'rComprarnovojogador' => $app->request->post('rComprarnovojogador'),
+            if ($items) {
+                // get all results
+                foreach($items as $row) {
+                    $itemArray = array(
+                        'codigo' => $row['codigo_time'],
+                        'codigoDivisao' => $row['divisao_codigo_divisao'],
+                        'nome' => $row['nome'],
+                        'capa' => "../".$row['capa'],
                     );
-                   
-                    $foto 		= $time['txtFoto'];
-                    $nome 		= $time['txtNome'];
-                    $codigodivisao      = $time['cmbDivisao'];
-                    $codigocategoria    = $time['cmbCategoria'];
-                    $codigotecnico      = $time['cmbTecnico'];
-                    $desempenhotime     = $time['rDesempenhotime'];
-                    $comprarnovojogador = $time['rComprarnovojogador'];
+                    array_push($results, $itemArray);
+                }
+                //os valores selecionados estao incorretos
+                $app->response()->header('Content-Type', 'application/json');
+                $json  = "{\"times\":";
+                $json .= json_encode($results);
+                $json .= "}";
+                echo $json;
+            } else {
+                $results = array();
+                $json  = "{\"times\":";
+                $json .= json_encode($results);
+                $json .= "}";
+                echo $json;
+            }
+        });
 
-                    $capa = UploadImagem::enviar($nome, $foto);
+        // GET route
+        $app->get('/time/:id', function ($id) use ($app) 
+        {
+            require_once 'classes/time.php';
+            $time = new time();
+                        //$time->setNome($nome);
+            // GET with parameter
+            $db     = new time();
+            $items  = $db->listarPorCodigo($id);
+            
+            if ($items) {
+                $app->response()->header('Content-Type', 'application/json');
+                echo json_encode($items);
+            } else {
+                $app->response()->status(500);
+            }
 
-                    if($capa != '0') {
-                        $objtime = new Time();
-                        $objtime->setNome($nome);
-                        $objtime->setCapa($capa);
-                        $objtime->setCodigo_divisao($codigodivisao);
-                        $objtime->setCodigo_categoria($codigocategoria);
-                        $objtime->setCodigo_tecnico($codigotecnico);
-                        $objtime->setDesempenhotime($desempenhotime);
-                        $objtime->setComprarnovojogador($comprarnovojogador);
+        });
 
-                        //die($capa);
-                        if ($objtime->inserir()) {
-                            $time["mensagem"] = "time cadastrado com sucesso";
-                        } else {
-                            $time["mensagem"] = "Falha ao cadastrar time";
-                        }
+        $app->get('/time/nome/:id', function ($id) use ($app) 
+        {
+            require_once 'classes/time.php';
+            $db    = new time();
+            $items = $db->listarPorNome($id);
 
-                    } else {
-                        $time["mensagem"] = "Problemas ao enviar imagem";
-                    }
-		
-                    $capa = json_encode($time);
-                    echo $capa;
-                    
-		});
+            if (empty($items) === false) {
+                $app->response()->header('Content-Type', 'application/json');
+                $json    = "{\"times\":";
+                $items[] = array("mensagem" => "");
+                $json   .= json_encode($items);
+                $json   .= "}";
+                echo $json;
+            } else {
+                $app->response()->header('Content-Type', 'application/json');
+                $json  = "{\"times\":";
+                $arr[] = array("mensagem" => "Nenhum time encontrado");
+                $json .= json_encode($arr);
+                $json .= "}";
+                echo $json;
+            }
+        });
 
-		$app->post('/time/atualizar/:id', function ($id) use ($app) {
-                    require_once 'classes/uploadimagem.php';
-                    require_once 'classes/time.php';	
-                  
-                    $time = array(
-                        'codigo' => $app->request->post('codigo'),
-                        'txtFoto' => $_FILES["txtFoto"],
-                        'txtNome' => $app->request->post('txtNome'),
-                        'cmbDivisao' => $app->request->post('cmbDivisao'),
-                        'cmbCategoria' => $app->request->post('cmbCategoria'),
-                        'cmbTecnico' => $app->request->post('cmbTecnico'),
-                        'rDesempenhotime' => $app->request->post('rDesempenhotime'),
-                        'rComprarnovojogador' => $app->request->post('rComprarnovojogador'),
-                    );
-                   
-                    $codigo 		= $time['codigo'];
-                    $foto 		= $time['txtFoto'];
-                    $nome 		= $time['txtNome'];
-                    $codigodivisao      = $time['cmbDivisao'];
-                    $codigocategoria    = $time['cmbCategoria'];
-                    $codigotecnico      = $time['cmbTecnico'];
-                    //$desempenhotime     = $time['rDesempenhotime'];
-                    //$comprarnovojogador = $time['rComprarnovojogador'];
+        $app->post('/time/:token', function ($token) use ($app) 
+        {    
+            require_once 'classes/uploadimagem.php';
+            require_once 'classes/time.php';	
 
-                    $capa = UploadImagem::enviar($nome, $foto);
+            $time = array(
+                'txtFoto' => $_FILES["txtFoto"],
+                'txtNome' => $app->request->post('txtNome'),
+                'cmbDivisao' => $app->request->post('cmbDivisao'),
+                'cmbCategoria' => $app->request->post('cmbCategoria'),
+                'cmbTecnico' => $app->request->post('cmbTecnico'),
+                'rDesempenhotime' => $app->request->post('rDesempenhotime'),
+                'rComprarnovojogador' => $app->request->post('rComprarnovojogador'),
+            );
 
-                    if($capa != '0') {
-                        $objtime = new Time();
-                        $objtime->setCodigo_time($codigo);
-                        $objtime->setNome($nome);
-                        $objtime->setCapa($capa);
-                        $objtime->setCodigo_divisao($codigodivisao);
-                        $objtime->setCodigo_categoria($codigocategoria);
-                        $objtime->setCodigo_tecnico($codigotecnico);
-                        //$objtime->setDesempenhotime($desempenhotime);
-                        //$objtime->setComprarnovojogador($comprarnovojogador);
+            $foto 		= $time['txtFoto'];
+            $nome 		= $time['txtNome'];
+            $codigodivisao      = $time['cmbDivisao'];
+            $codigocategoria    = $time['cmbCategoria'];
+            $codigotecnico      = $time['cmbTecnico'];
+            $desempenhotime     = $time['rDesempenhotime'];
+            $comprarnovojogador = $time['rComprarnovojogador'];
 
-                        //die($capa);
-                        if ($objtime->alterar()) {
-                            $time["mensagem"] = "time alterado com sucesso";
-                        } else {
-                            $time["mensagem"] = "Falha ao alterar time";
-                        }
+            $capa = UploadImagem::enviar($nome, $foto);
 
-                    } else {
-                        $time["mensagem"] = "Problemas ao enviar imagem";
-                    }
-		
-                    $capa = json_encode($time);
-                    echo $capa;
-		});
+            if ($capa !== '0') {
+                $objtime = new Time();
+                $objtime->setNome($nome);
+                $objtime->setCapa($capa);
+                $objtime->setCodigo_divisao($codigodivisao);
+                $objtime->setCodigo_categoria($codigocategoria);
+                $objtime->setCodigo_tecnico($codigotecnico);
+                $objtime->setDesempenhotime($desempenhotime);
+                $objtime->setComprarnovojogador($comprarnovojogador);
 
-		$app->delete('/time/:id', function ($id) use ($app) {
-		  require_once 'classes/time.php';	
-		  $time    = json_decode($app->request->getBody(), true);
-		  $objtime = new time();
-		  $objtime->setCodigo_time($id);
+                if ($objtime->inserir($token)) {
+                    $time["mensagem"] = "time cadastrado com sucesso";
+                } else {
+                    $time["mensagem"] = "Falha ao cadastrar time";
+                }
+            } else {
+                $time["mensagem"] = "Problemas ao enviar imagem";
+            }
 
-		  if ($objtime->excluir($id)) {	 	
-		 	$time["mensagem"] = "time excluido com sucesso";	 	
-		  } else {
-		 	$time["mensagem"] = "Falha ao excluir time";	
-		  }
+            $capa = json_encode($time);
+            echo $capa;
+        });
 
-		  $json = json_encode($time);
-		  echo $json;
+        $app->post('/time/atualizar/:id/:token', function ($id, $token) use ($app) 
+        {
+            require_once 'classes/uploadimagem.php';
+            require_once 'classes/time.php';	
+            
+            $txtFoto = '';
+            
+            if(array_key_exists('txtFoto', $_FILES)) {
+                $txtFoto = $_FILES["txtFoto"];     
+            }
+            
+            $time = array(
+                'codigo' => $app->request->post('codigo'),
+                'txtFoto' => $txtFoto,
+                'txtNome' => $app->request->post('txtNome'),
+                'cmbDivisao' => $app->request->post('cmbDivisao'),
+                'cmbCategoria' => $app->request->post('cmbCategoria'),
+                'cmbTecnico' => $app->request->post('cmbTecnico'),
+                'rDesempenhotime' => $app->request->post('rDesempenhotime'),
+                'rComprarnovojogador' => $app->request->post('rComprarnovojogador'),
+            );
 
-		});
-	}
+            $codigo 		= $time['codigo'];
+            $foto 		= $time['txtFoto'];
+            $nome 		= $time['txtNome'];
+            $codigodivisao      = $time['cmbDivisao'];
+            $codigocategoria    = $time['cmbCategoria'];
+            $codigotecnico      = $time['cmbTecnico'];
+            //$desempenhotime     = $time['rDesempenhotime'];
+            //$comprarnovojogador = $time['rComprarnovojogador'];
+            $capa = '';
+            
+            if (!empty($nome) && !empty($foto)) {
+                $capa = UploadImagem::enviar($nome, $foto);
+            }
+            
+            if ($capa != '0') {
+                $objtime = new Time();
+                $objtime->setCodigo_time($codigo);
+                $objtime->setNome($nome);
+                $objtime->setCapa($capa);
+                $objtime->setCodigo_divisao($codigodivisao);
+                $objtime->setCodigo_categoria($codigocategoria);
+                $objtime->setCodigo_tecnico($codigotecnico);
+                //$objtime->setDesempenhotime($desempenhotime);
+                //$objtime->setComprarnovojogador($comprarnovojogador);
+
+                if ($objtime->alterar($token)) {
+                    $time["mensagem"] = "time alterado com sucesso";
+                } else {
+                    $time["mensagem"] = "Falha ao alterar time";
+                }
+            } else {
+                $time["mensagem"] = "Problemas ao enviar imagem";
+            }
+
+            $capa = json_encode($time);
+            echo $capa;
+        });
+
+        $app->post('/time/excluir/:id/:token', function ($id, $token) use ($app) 
+        {   
+            require_once 'classes/time.php';
+            $time    = json_decode($app->request->getBody(), true);
+            $objtime = new time();
+            $objtime->setCodigo_time($id);
+            $retorno = $objtime->excluir($id, $token);
+            
+            if ($retorno === true) {	 	
+                $time["mensagem"] = "Time excluido com sucesso";	 	
+            } else if($retorno !== false) {
+                $time["mensagem"] = $retorno;	
+            } else {
+                $time["mensagem"] = "Falha ao excluir time";	
+            }
+
+            $json = json_encode($time);
+            echo $json;
+        });
+    }
 }

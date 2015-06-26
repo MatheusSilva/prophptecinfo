@@ -329,4 +329,26 @@ class Categoria extends classeBase
             return $e->getMessage();
         }	
     }//public static function listarTudo()
+    
+    public static function listaCategoriaPorTime($strRequire = '../adm/classes/conexao.php', $intCodigo)
+    {     
+        try {
+            $sql   = "\n SELECT c.codigo_categoria,c.nome";
+            $sql  .= "\n FROM time.time AS t, time.categoria AS c";
+            $sql  .= "\n WHERE  c.codigo_categoria = t.categoria_codigo_categoria";
+            $sql  .= "\n AND t.codigo_time = :codigo";
+
+            //require_once $strRequire;
+            $conexao = Conexao::getConexao(); 		  
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":codigo", $intCodigo);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno;
+        } catch (PDOException $e) {
+            $conexao = null;
+            return $e->getMessage();
+        }
+    }
 }

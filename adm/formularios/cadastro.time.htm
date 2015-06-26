@@ -1,113 +1,107 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpladmin.dwt.php" codeOutsideHTMLIsLocked="false" -->
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO8859-1" />
-		<title>Cat&aacute;logo de times</title>
-		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-                <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-                <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
-                <script language="javascript" type="text/javascript">
-                    carregaDivisao();
-                    carregaCategoria();
-                    carregaTecnico();
-                </script>
-	</head>
-	
-	<body>
-		<div id="geral">
-			<div id="cabecalho">
-			</div>
-			
-			<div id="menu_superior">
-				<a href="../paginas/home.php">Home</a> ::
-				<a href="../paginas/cadastros.php">Cadastros</a> ::
-				<a href="../paginas/administrar.php">Administrar</a> ::
-				<a href="../paginas/consultas.php">Consultas</a> ::
-				<a href="logout.php">Sair</a>
-			</div>
-			
-			<div id="conteudo">
-                            <div name="frmCadastro" id="frmCadastro">
-					<table>
-						<tr>
-							<td width="251">Nome do Time: </td>
-							<td width="242">
-								<input type="text" name="txtNome" id="txtNome" />
-							</td>
-						</tr>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO8859-1" />
+        <title>Cat&aacute;logo de times</title>
+        <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
+        <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+        <script language="javascript" type="text/javascript" src="../../javascript/crypto.js"></script>
+        <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
+        <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
+        
+        <script language="javascript" type="text/javascript">
+            carregaDivisao();
+            carregaCategoria();
+            carregaTecnico();
+        </script>
+    </head>
 
-						<tr>
-							<td>Capa: </td>
-							<td>
-								<input type="file" name="txtFoto" id="txtFoto" />
-							</td>
-						</tr>
-						
-						<tr>
-							<td>Divis&atilde;o: </td>
-							<td>
-                                                            <select id="cmbDivisao" name="cmbDivisao"></select>
-							</td>
-						</tr>
-						
-						<tr>
-							<td>Categoria: </td>
-							<td>
-                                                            <select name="cmbCategoria" id="cmbCategoria"></select>
-							</td>
-						</tr>
-						
-						<tr>
-							<td>Tecnico: </td>
-							<td>
-                                                            <select id="cmbTecnico" name="cmbTecnico"></select>
-							</td>                             
-						</tr>
-						
-						<tr> 
-							<td>Desempenho do time:</td>
-								
-							<td>
-								<input name="rDesempenhotime" type="radio" value="Otimo" checked/> <label>Otimo</label> 
-								<input name="rDesempenhotime" type="radio" value="Bom"/> <label>Bom</label> 
-								<input name="rDesempenhotime" type="radio" value="Ruim"/> <label>Ruim</label> 
-							</td>  
-						</tr>
-				
-						<tr> 
-							<td> comprar novos jogadores:</td>
-							<td>
-								<input type="radio" name="rComprarnovojogador" value="Sim" checked/> <label>Sim</label>
-								<input type="radio" name="rComprarnovojogador" value="Nao" /> <label>N�o</label>
-							</td>
-						</tr>
-						
-						<tr>
-							<td height="41" colspan="2">&nbsp;</td>    
-						</tr>
-						
-						<tr>
-							<td colspan="2">
-								<input type="hidden" name="acao" value="1" />
-								
-								<input type="submit" name="btnCadastrar" id="btnCadastrar"
-									value="Cadastrar" />
-									
-								<input type="reset" name="btnLimpar" id="btnLimpar"
-									value="Limpar" />                                 
-							</td>
-						</tr>
-						
-					</table>
-					
-				</div>
-				
-			</div>
-			
-			<div id="rodape">
-				
-			</div>       	
-		</div>
-	</body>
-	<!-- InstanceEnd -->
+    <body>
+        <div id="geral">
+            <div id="cabecalho">
+            </div>
+
+            <div id="menu_superior">
+                <a href="../paginas/home.php">Home</a> ::
+                <a href="../paginas/cadastros.php">Cadastros</a> ::
+                <a href="../paginas/administrar.php">Administrar</a> ::
+                <a href="../paginas/consultas.php">Consultas</a> ::
+                <a href="logout.php">Sair</a>
+            </div>
+
+            <div id="conteudo">
+                <div id="frmCadastro">
+                    <table>
+                        <tr>
+                            <td width="251">Nome do Time: </td>
+                            <td width="242">
+                                <input type="text" name="txtNome" id="txtNome" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Capa: </td>
+                            <td>
+                                <input type="file" name="txtFoto" id="txtFoto" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Divis&atilde;o: </td>
+                            <td>
+                                <select id="cmbDivisao" name="cmbDivisao"></select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Categoria: </td>
+                            <td>
+                                <select name="cmbCategoria" id="cmbCategoria"></select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Tecnico: </td>
+                            <td>
+                                <select id="cmbTecnico" name="cmbTecnico"></select>
+                            </td>                             
+                        </tr>
+
+                        <tr> 
+                            <td>Desempenho do time:</td>
+                            <td>
+                                <input name="rDesempenhotime" type="radio" value="Otimo" checked="true" /> <label>Otimo</label> 
+                                <input name="rDesempenhotime" type="radio" value="Bom"/> <label>Bom</label> 
+                                <input name="rDesempenhotime" type="radio" value="Ruim"/> <label>Ruim</label> 
+                            </td>
+                        </tr>
+
+                        <tr> 
+                            <td> comprar novos jogadores:</td>
+                            <td>
+                                <input type="radio" name="rComprarnovojogador" value="Sim" checked="true" /> <label>Sim</label>
+                                <input type="radio" name="rComprarnovojogador" value="Nao" /> <label>N�o</label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td height="41" colspan="2">&nbsp;</td>    
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <input type="hidden" name="acao" value="1" />
+                                <input type="submit" name="btnCadastrar" id="btnCadastrar" value="Cadastrar" />
+                                <input type="reset" name="btnLimpar" id="btnLimpar" value="Limpar" />                            
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="rodape">
+            </div>       	
+        </div>
+    </body>
+
 </html>

@@ -1,37 +1,216 @@
-$(document).ready(function() {
-
-    $("#btnConsultar").click(function() {
+$(document).ready(function() 
+{
+    $("#btnConsultar").click(function() 
+    {
         var nomeTime = document.getElementById("txtNome").value;
         var consulta = "";
-        
-        if(nomeTime != ""){
+
+        if (nomeTime !== "") {
             consulta = "/"+document.getElementById("txtNome").value;
         } else {
             consulta = "/listaTodosTimes";
         }
+
+        $.getJSON( "http://localhost/sistemaRest/api/time/nome"+consulta, function(json) 
+        {
+            var len         = json.times.length;
+            var mensagem    = "";
+            var strHTML     = '<table width="80%" class="lista">'
+                            + '<tr class="primeira_linha">'
+                            + '<td>C&oacute;digo</td>'
+                            + '<td>Nome</td>'
+                            + '<td>A&ccedil;&otilde;es</td>'
+                            + '</tr>';
+
+            for (var i=0; i < len; i++) {
+                var codigo    = json.times[i].codigo;
+                var nome      = json.times[i].nome;
+
+                if (i % 2 === 0) {
+                    strHTML = strHTML + '<tr class="linha_par">';
+                } else {
+                    strHTML = strHTML + '<tr class="linha_impar">';
+                }
+
+                if (codigo > 0) {
+                    var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
+                    + codigo
+                    + "\">[D]</a>";
+
+                    var alterar = "<a href=\"../formularios/alterar.time.htm?codigo="
+                    + codigo
+                    + "\">[A]</a>";
+
+                    var excluir = "<a href=\"javascript:confirmar("
+                    + codigo
+                    + ")\">[X]</a>";
+
+                    var acao = detalhes+alterar+excluir;
+
+                    strHTML = strHTML + "<td>"+codigo+"</td>"
+                    + "<td>"+nome+"</td>"	
+                    + "<td>"+acao+"</td>"	
+                    + "</tr>";
+                } else {
+                    mensagem = json.times[i].mensagem;
+                }
+            }
+
+            strHTML = strHTML + "</table>";
+
+            if(mensagem !== "") {
+                strHTML = mensagem;
+            }
+
+            $("#tabela").html(strHTML);
+        });
+
+        return false;
+    });
+
+    $("#btnCadastrar").click(function() 
+    {   
+        var jForm = new FormData();
+
+        jForm.append("txtFoto", $('#txtFoto').get(0).files[0]);
+        jForm.append("txtNome", $('#txtNome').val());
+        jForm.append("cmbDivisao", $('#cmbDivisao').val());
+        jForm.append("cmbCategoria", $('#cmbCategoria').val());
+        jForm.append("cmbTecnico", $('#cmbTecnico').val());
+        jForm.append("rDesempenhotime", $("input[name=\"rDesempenhotime\"]:checked").val());
+        jForm.append("rComprarnovojogador", $("input[name=\"rComprarnovojogador\"]:checked").val());
+
+        var token  = getCookie('token');
+        var consulta = "";
+
+        if (token !== "") {
+            consulta = "/"+token;
+        }
         
-        $.getJSON( "http://localhost/sistemaRest/api/time/nome"+consulta, function( json ) {
-            var len               = json.times.length;
-            var mensagem	      = "";
-            var strHTML  	      = '<table width="80%" class="lista">'
-                          + '<tr class="primeira_linha">'
-                          + '<td>C&oacute;digo</td>'
-                          + '<td>Nome</td>'
-                          + '<td>A&ccedil;&otilde;es</td>'
-                          + '</tr>';
+        $.ajax({
+            url: 'http://localhost/sistemaRest/api/time'+consulta,
+            type: 'POST',
+            data: jForm,
+            dataType: 'json',
+            mimeType: 'multipart/form-data',
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (returndata) {
+                alert(returndata.mensagem);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Falha ao cadastrar time!");
+            }
+        });
 
-            for (var i=0; i < len; i++){
-              var codigo   = json.times[i].codigo;
-              var nome     = json.times[i].nome;
+        return false;
+    });
 
+    $("#btnAlterar").click(function() 
+    {
+        var codigo = $("#codigo").val();  
+        var jForm = new FormData();
 
-              if (i % 2 == 0) {
-                     strHTML = strHTML + '<tr class="linha_par">';
-              } else {
-                     strHTML = strHTML + '<tr class="linha_impar">';
-              }	
+        jForm.append("codigo", codigo);
+        jForm.append("txtFoto", $('#txtFoto').get(0).files[0]);
+        jForm.append("txtNome", $('#txtNome').val());
+        jForm.append("cmbDivisao", $('#cmbDivisao').val());
+        jForm.append("cmbCategoria", $('#cmbCategoria').val());
+        jForm.append("cmbTecnico", $('#cmbTecnico').val());
+        jForm.append("rDesempenhotime", $("input[name=\"rDesempenhotime\"]:checked").val());
+        jForm.append("rComprarnovojogador", $("input[name=\"rComprarnovojogador\"]:checked").val());
 
-              if (codigo > 0) {
+        var token  = getCookie('token');
+        var consulta = "";
+
+        if (token !== "") {
+            consulta = "/"+token;
+        }
+        
+        $.ajax({
+            url: 'http://localhost/sistemaRest/api/time/atualizar/'+codigo+consulta,
+            type: 'POST',
+            data: jForm,
+            dataType: 'json',
+            mimeType: 'multipart/form-data',
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (returndata) {
+                alert(returndata.mensagem);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Falha ao atualizar time!");
+            }
+        });
+
+        return false;
+    });
+});
+        
+function confirmar(codigo)
+{
+    var ok = window.confirm("Voce tem certeza que deseja excluir?");
+
+    if (ok) {	
+        var mensagem = "";
+
+        if (codigo === "") {
+            mensagem += "Código invalido";
+        }
+
+        var token  = getCookie('token');
+        var consulta = "";
+
+        if (token !== "") {
+            consulta = "/"+token;
+        }
+  
+        if (mensagem === "") {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: "json",
+                url: 'http://localhost/sistemaRest/api/time/excluir/'+codigo+consulta,
+                success: function(data) {
+                    alert(data.mensagem);
+                    location.reload();				
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown.mensagem);	
+                }
+            });
+        } else {
+            alert(mensagem);
+        } 
+    }
+}
+
+function listaTodosTimes()
+{
+    $(document).ready(function() {
+        $.getJSON( "http://localhost/sistemaRest/api/time", function( json ) 
+        {
+            var len         = json.times.length;
+            var temRegistro = false;
+            var strHTML     = '<table width="80%" class="lista">'
+                            + '<tr class="primeira_linha">'
+                            + '<td>C&oacute;digo</td>'
+                            + '<td>Nome</td>'
+                            + '<td>A&ccedil;&otilde;es</td>'
+                            + '</tr>';
+
+            for (var i=0; i < len; i++) {
+                var codigo   = json.times[i].codigo;
+                var nome     = json.times[i].nome;
+
+                if (i % 2 === 0) {
+                    strHTML = strHTML + '<tr class="linha_par">';
+                } else {
+                    strHTML = strHTML + '<tr class="linha_impar">';
+                }
+
                 var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
                 + codigo
                 + "\">[D]</a>";
@@ -50,348 +229,191 @@ $(document).ready(function() {
                 + "<td>"+nome+"</td>"	
                 + "<td>"+acao+"</td>"	
                 + "</tr>";
-              } else {
-                  mensagem = json.times[i].mensagem;
-              }
-              
+                temRegistro = true;	
             }
+
+            if(temRegistro  === false) {
+                strHTML = "Nenhum time cadastrado";
+            }   
 
             strHTML = strHTML + "</table>";
-            
-            if(mensagem != "") {
-                    strHTML = mensagem;
-            }
-            
+
             $("#tabela").html(strHTML);
         });
-
-        return false;
-    });
-    
-    $("#btnCadastrar").click(function() {   
-              var jForm = new FormData();
-              
-               jForm.append("txtFoto", $('#txtFoto').get(0).files[0]);
-               jForm.append("txtNome", $('#txtNome').val());
-               jForm.append("cmbDivisao", $('#cmbDivisao').val());
-               jForm.append("cmbCategoria", $('#cmbCategoria').val());
-               jForm.append("cmbTecnico", $('#cmbTecnico').val());
-               jForm.append("rDesempenhotime", $("input[name=\"rDesempenhotime\"]:checked").val());
-               jForm.append("rComprarnovojogador", $("input[name=\"rComprarnovojogador\"]:checked").val());
-
-              $.ajax({
-                url: 'http://localhost/sistemaRest/api/time',
-                type: 'POST',
-                data: jForm,
-                dataType: 'json',
-                mimeType: 'multipart/form-data',
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (returndata) {
-                    alert(returndata.mensagem);
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    alert("Falha ao cadastrar time!");
-                }
-              });
-
-              return false;
-    });
-    
-    $("#btnAlterar").click(function() {
-            var codigo = $("#codigo").val();  
-            var jForm = new FormData();
-            
-            jForm.append("codigo", codigo);
-            jForm.append("txtFoto", $('#txtFoto').get(0).files[0]);
-            jForm.append("txtNome", $('#txtNome').val());
-            jForm.append("cmbDivisao", $('#cmbDivisao').val());
-            jForm.append("cmbCategoria", $('#cmbCategoria').val());
-            jForm.append("cmbTecnico", $('#cmbTecnico').val());
-            jForm.append("rDesempenhotime", $("input[name=\"rDesempenhotime\"]:checked").val());
-            jForm.append("rComprarnovojogador", $("input[name=\"rComprarnovojogador\"]:checked").val());
-
-            $.ajax({
-              url: 'http://localhost/sistemaRest/api/time/atualizar/'+codigo,
-              type: 'POST',
-              data: jForm,
-              dataType: 'json',
-              mimeType: 'multipart/form-data',
-              contentType: false,
-              cache: false,
-              processData: false,
-              success: function (returndata) {
-                  alert(returndata.mensagem);
-              },
-              error: function(jqXHR, textStatus, errorThrown){
-                  alert("Falha ao atualizar time!");
-              }
-            });
-
-            return false;
-    });
-});
-        
-function confirmar(codigo)
-{
-   var ok = window.confirm("Voce tem certeza que deseja excluir?");
-
-   if (ok) {		
-		var mensagem = "";
-
-		if (codigo == "") {
-			mensagem += "Código invalido";
-		}
-
-		if(mensagem == "") {
-			$.ajax({
-			  type: 'DELETE',
-			  contentType: 'application/json',
-			  dataType: "json",
-			  url: 'http://localhost/sistemaRest/api/time/'+codigo,
-			  success: function(data) {
-			    alert(data.mensagem);
-			    location.reload();				
-			  },
-			  error: function(jqXHR, textStatus, errorThrown){
-		 	    alert("Falha ao excluir time!");	
-			  }
-			});
-		} else {
-			alert(mensagem);
-		} 
-   }
-}
-
-function listaTodosTimes()
-{
-    $(document).ready(function() {
-	$.getJSON( "http://localhost/sistemaRest/api/time", function( json ) {
-			
-			
-
-			var len               = json.times.length;
-			var temRegistro	      = false;
-		        var strHTML  	      = '<table width="80%" class="lista">'
-			  	      + '<tr class="primeira_linha">'
-			  	      + '<td>C&oacute;digo</td>'
-			  	      + '<td>Nome</td>'
-			  	      + '<td>A&ccedil;&otilde;es</td>'
-				      + '</tr>';
-			
-			for (var i=0; i < len; i++){
-			  var codigo   = json.times[i].codigo;
-			  var nome     = json.times[i].nome;
-			  
-
-			  if (i % 2 == 0) {
-				 strHTML = strHTML + '<tr class="linha_par">';
-			  } else {
-				 strHTML = strHTML + '<tr class="linha_impar">';
-			  }	
-			
-			  var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
-			  + codigo
-			  + "\">[D]</a>";
-				
-		  	  var alterar = "<a href=\"../formularios/alterar.time.htm?codigo="
-			  + codigo
-			  + "\">[A]</a>";
-
-			  var excluir = "<a href=\"javascript:confirmar("
-			  + codigo
-			  + ")\">[X]</a>";
-
-			  var acao = detalhes+alterar+excluir;
-
-			  strHTML = strHTML + "<td>"+codigo+"</td>"
-			  + "<td>"+nome+"</td>"	
-			  + "<td>"+acao+"</td>"	
-			  + "</tr>";
-			  temRegistro = true;	
-			}
-			
-			if(temRegistro  == false) {
-				strHTML = "Nenhum time cadastrado";
-			}   
-			
-			strHTML = strHTML + "</table>";
-			
-			$("#tabela").html(strHTML);
-		});
     });            
 }
 
 function listaNomePorCodigo(codigoParam)
 {
-    $(document).ready(function() {
+    $(document).ready(function() 
+    {
         $.ajax({
-        type: 'GET',
-        contentType: 'application/json',
-        dataType: "json",
-        url: 'http://localhost/sistemaRest/api/time/'+codigoParam,
-        success: function(data) {			
-          $("#txtNome").val(data.nomeTime);			
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-          $("#txtNome").val("Falha ao carregar nome!");	
-        }
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: "json",
+            url: 'http://localhost/sistemaRest/api/time/'+codigoParam,
+            success: function(data) {			
+                $("#txtNome").val(data.nomeTime);			
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                $("#txtNome").val("Falha ao carregar nome!");	
+            }
         });
     });
 }
 
-
-function carregaDivisao(codigoParam)
+function carregaDivisao(codigo)
 {
-    $(document).ready(function() {
-        $.getJSON( "http://localhost/sistemaRest/api/divisao", function( json ) {
-                    var len               = json.divisaos.length;
-                    var temRegistro	      = false;
-                    var strHTML  	      = '';
+    $(document).ready(function()
+    {
+        $.getJSON( "http://localhost/sistemaRest/api/divisaoTime/"+codigo, function( json )
+        {
+            var len         = json.divisaos.length;
+            var temRegistro = false;
+            var strHTML     = '';
 
-                    for (var i=0; i < len; i++){
-                      var codigo   = json.divisaos[i].codigo;
-                      var nome     = json.divisaos[i].nome;
-                      
-                      if(codigoParam != codigo) {
-                        strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
-                      } else {
-                        strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";
-                      }
-                      
-                      temRegistro = true;	
-                    }
+            for (var i=0; i < len; i++) {
+                var codigo  = json.divisaos[i].codigo;
+                var nome    = json.divisaos[i].nome;
+                
+                if(json.divisaos[i].selected) {
+                    strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";   
+                } else {
+                    strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
+                }
 
-                    if(temRegistro  == false) {
-                        strHTML = "<option value=\"\">Nenhuma categoria cadastrada</option>";
-                    }   
+                temRegistro = true;	
+            }
 
-                    $("#cmbDivisao").html(strHTML);
+            if (temRegistro == false) {
+                strHTML = "<option value=\"\">Nenhuma categoria cadastrada</option>";
+            }  
+
+            $("#cmbDivisao").html(strHTML);
         });
     });
 }
 
-
-
-function carregaCategoria(codigoParam)
+function carregaCategoria(codigo)
 {
-    $(document).ready(function() {
-        $.getJSON( "http://localhost/sistemaRest/api/categoria", function( json ) {
-                    var len               = json.categorias.length;
-                    var temRegistro	      = false;
-                    var strHTML  	      = '';
+    $(document).ready(function() 
+    {
+        $.getJSON( "http://localhost/sistemaRest/api/categoriaTime/"+codigo, function( json ) 
+        {
+            var len         = json.categorias.length;
+            var temRegistro = false;
+            var strHTML     = '';
 
-                    for (var i=0; i < len; i++){
-                      var codigo   = json.categorias[i].codigo;
-                      var nome     = json.categorias[i].nome;
-                      
-                      if(codigoParam != codigo) {
-                        strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
-                      } else {
-                        strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";
-                      }
-                      
-                      temRegistro = true;	
-                    }
+            for (var i=0; i < len; i++) {
+                var codigo   = json.categorias[i].codigo;
+                var nome     = json.categorias[i].nome;
 
-                    if(temRegistro  == false) {
-                        strHTML = "<option value=\"\">Nenhuma categoria cadastrada</option>";
-                    }   
+                if(json.categorias[i].selected) {
+                    strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";
+                } else {
+                    strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
+                }
 
-                    $("#cmbCategoria").html(strHTML);
+                temRegistro = true;	
+            }
+
+            if (temRegistro  === false) {
+                strHTML = "<option value=\"\">Nenhuma categoria cadastrada</option>";
+            }   
+
+            $("#cmbCategoria").html(strHTML);
         });
     });
 }
 
-function carregaTecnico(codigoParam)
+function carregaTecnico(codigo)
 {
-    $(document).ready(function() {
-        $.getJSON( "http://localhost/sistemaRest/api/tecnico", function( json ) {
-                    var len               = json.tecnicos.length;
-                    var temRegistro	      = false;
-                    var strHTML  	      = '';
+    $(document).ready(function() 
+    {
+        $.getJSON( "http://localhost/sistemaRest/api/tecnicoTime/"+codigo, function( json ) 
+        {
+            var len         = json.tecnicos.length;
+            var temRegistro = false;
+            var strHTML     = '';
 
-                    for (var i=0; i < len; i++){
-                      var codigo   = json.tecnicos[i].codigo;
-                      var nome     = json.tecnicos[i].nome;
-                      
-                      if(codigoParam != codigo) {
-                        strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
-                      } else {
-                        strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";
-                      }
-                      
-                      temRegistro = true;	
-                    }
+            for (var i=0; i < len; i++) {
+                var codigo   = json.tecnicos[i].codigo;
+                var nome     = json.tecnicos[i].nome;
 
-                    if(temRegistro  == false) {
-                        strHTML = "<option value=\"\">Nenhuma tecnico cadastrado</option>";
-                    }   
+                if(json.tecnicos[i].selected) {
+                    strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";
+                } else {
+                    strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
+                }
 
-                    $("#cmbTecnico").html(strHTML);
+                temRegistro = true;	
+            }
+
+            if(temRegistro  === false) {
+                strHTML = "<option value=\"\">Nenhuma tecnico cadastrado</option>";
+            }   
+
+            $("#cmbTecnico").html(strHTML);
         });
     });
 }
 
 function tudoParaDestino()
 {
-	var select = document.getElementById("origem");
-	var tamanho = select.options.length;
-	var dhtml = "";
-	var valor = "";
-	var texto = "";
+    var select  = document.getElementById("origem");
+    var tamanho = select.options.length;
+    var dhtml   = "";
+    var valor   = "";
+    var texto   = "";
 
-	for (i=0; i< tamanho; i++) {
-		valor = select.options[i].value;
-		texto = select.options[i].text;	
-		dhtml = dhtml + "\n<option value=\""+valor+"\">"+texto+"</option>";
-	}
+    for (i=0; i< tamanho; i++) {
+        valor = select.options[i].value;
+        texto = select.options[i].text;	
+        dhtml = dhtml + "\n<option value=\""+valor+"\">"+texto+"</option>";
+    }
 
-	document.getElementById("destino").innerHTML = dhtml;
+    document.getElementById("destino").innerHTML = dhtml;
 }
 
 function selecionadoParaDestino()
 {
-	var select = document.getElementById("origem");
-	var tamanho = select.options.length;
-	var dhtml = "";
-	var valor = "";
-	var texto = "";
+    var select  = document.getElementById("origem");
+    var tamanho = select.options.length;
+    var valor   = "";
+    var texto   = "";
+    var dhtml   = "";
 
-	for (i=0; i < tamanho; i++) {
-		if (select.options[i].selected == true) { 
-			valor = select.options[i].value;
-			texto = select.options[i].text;
-			dhtml = dhtml + "\n<option value=\""+valor+"\">"+texto+"</option>";	
-		}
-	}
-	
-	document.getElementById("destino").innerHTML = dhtml;
+    for (i=0; i < tamanho; i++) {
+        if (select.options[i].selected === true) { 
+            valor = select.options[i].value;
+            texto = select.options[i].text;
+            dhtml = dhtml + "\n<option value=\""+valor+"\">"+texto+"</option>";	
+        }
+    }
+
+    document.getElementById("destino").innerHTML = dhtml;
 }
-
 
 function limpaDestino()
 {
-	document.getElementById("destino").innerHTML = "";
+    document.getElementById("destino").innerHTML = "";
 }
 
 function limpaSelecionadosDestino()
 {
-	var select = document.getElementById("destino");
-	var tamanho = select.options.length;
-	var dhtml = "";
-	var valor = "";
-	var texto = "";
+    var select  = document.getElementById("destino");
+    var tamanho = select.options.length;
+    var dhtml   = "";
+    var valor   = "";
+    var texto   = "";
 
-	for (i=0; i < tamanho; i++) {
-		if ( select.options[i].selected != true) {
-			valor = select.options[i].value;
-			texto = select.options[i].text;
-			dhtml = dhtml + "\n<option value=\""+valor+"\">"+texto+"</option>";	
-		}
-	}
+    for (i=0; i < tamanho; i++) {
+        if ( select.options[i].selected !== true) {
+            valor = select.options[i].value;
+            texto = select.options[i].text;
+            dhtml = dhtml + "\n<option value=\""+valor+"\">"+texto+"</option>";	
+        }
+    }
 
-	document.getElementById("destino").innerHTML = dhtml;
-
+    document.getElementById("destino").innerHTML = dhtml;
 }

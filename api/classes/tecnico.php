@@ -196,5 +196,27 @@ class Tecnico extends classeBase
             return $e->getMessage();
         }
     }
+    
+    public static function listaTecnicoPorTime($strRequire = '../adm/classes/conexao.php', $intCodigo)
+    {     
+        try {
+            $sql   = "\n SELECT tec.codigo_tecnico,tec.nome";
+            $sql  .= "\n FROM time.time AS t, time.tecnico AS tec";
+            $sql  .= "\n WHERE  tec.codigo_tecnico = t.tecnico_codigo_tecnico";
+            $sql  .= "\n AND t.codigo_time = :codigo";
+
+            //require_once $strRequire;
+            $conexao = Conexao::getConexao(); 		  
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":codigo", $intCodigo);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno;
+        } catch (PDOException $e) {
+            $conexao = null;
+            return $e->getMessage();
+        }
+    }
 }
 	
