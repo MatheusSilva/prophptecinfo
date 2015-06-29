@@ -28,7 +28,7 @@
 				<?php
 					require_once('../classes/Torcedor.php');
 					$codigo = $_GET['codigo'];
-					$dados  = Torcedor :: listarPorCodigo($codigo);
+					$dados  = Torcedor::listarPorCodigo($codigo);
 					
 					if ($dados != 0) {
 						$codigo_torcedor = $dados['codigo_torcedor'];

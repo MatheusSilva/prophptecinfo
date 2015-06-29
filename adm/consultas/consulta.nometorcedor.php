@@ -59,7 +59,7 @@
 					<?php
 					if (isset($_GET['btnConsultar'])) {						
 						require_once('../classes/torcedor.php');
-						$vetor = Torcedor :: listarPorNome($_GET['txtNome']);
+						$vetor = Torcedor::listarPorNome($_GET['txtNome']);
 						
 						if ($vetor != 0) {
 							// lista os torcedores

@@ -1,5 +1,6 @@
 <?php
-require_once('conexao.php');
+namespace sistemaRest\adm\classes;
+use sistemaRest\adm\classes\Conexao;
 
 /**
 * classe Login
@@ -22,7 +23,7 @@ class Login
 		$stmt->bindParam(":torcedor", $torcedor);
 		$stmt->bindParam(":senha", $senha);
 		$stmt->execute();
-		$retornoSelect =  $stmt->fetch(PDO::FETCH_ASSOC);
+		$retornoSelect =  $stmt->fetch(\PDO::FETCH_ASSOC);
                 
 		if (empty($retornoSelect) === false) {
                         $sql   = "\n update torcedor";

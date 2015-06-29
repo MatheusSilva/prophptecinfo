@@ -1,5 +1,7 @@
 <?php
-require "classeBase.php";
+
+namespace sistemaRest\api\classes;
+use sistemaRest\adm\classes\Conexao;
 
 /**
 * classe Categoria
@@ -7,7 +9,7 @@ require "classeBase.php";
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
 */
-class Categoria extends classeBase
+class Categoria extends ClasseBase
 {
     /**
     * @access private
@@ -23,7 +25,8 @@ class Categoria extends classeBase
 
     function __construct()
     {
-        require_once '../adm/classes/conexao.php';
+        $classLoader = new \SplClassLoader('sistemaRest\adm\classes');
+        $classLoader->register();
     }
     
     /**
@@ -123,7 +126,7 @@ class Categoria extends classeBase
             $conexao->commit();
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
@@ -162,7 +165,7 @@ class Categoria extends classeBase
             $conexao->commit();
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
@@ -199,7 +202,7 @@ class Categoria extends classeBase
             $conexao->commit();
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
@@ -224,10 +227,10 @@ class Categoria extends classeBase
 
             $stmt = $conexao->prepare($sql);
             $stmt->execute();
-            $retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
             return $retorno["codigo"];
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
@@ -246,7 +249,6 @@ class Categoria extends classeBase
     public static function listarPorCodigo($codigo)
     {
         try {
-            require_once '../adm/classes/conexao.php';
             $conexao = Conexao::getConexao();
 
             $sql  = "\n SELECT codigo_categoria";
@@ -258,8 +260,8 @@ class Categoria extends classeBase
             $stmt->bindParam(":id",$codigo);
             $stmt->execute();
             $conexao = null;
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }		
@@ -278,7 +280,6 @@ class Categoria extends classeBase
     public static function listarPorNome($nome)
     {
         try {
-            require_once '../classes/conexao.php';
             $nome .= "%";
             $conexao = Conexao::getConexao();
 
@@ -292,8 +293,8 @@ class Categoria extends classeBase
             $stmt->bindParam(":nome",$nome);
             $stmt->execute();
             $conexao = null;
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }	
@@ -311,8 +312,6 @@ class Categoria extends classeBase
     */
     public static function listarTudo($strRequire = '../adm/classes/conexao.php')
     {
-        require_once $strRequire;
-
         try {
             $conexao = Conexao::getConexao();
 
@@ -324,7 +323,7 @@ class Categoria extends classeBase
             $stmt->execute();
             $conexao = null;
             return $stmt->fetchAll();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;	
             return $e->getMessage();
         }	
@@ -338,15 +337,14 @@ class Categoria extends classeBase
             $sql  .= "\n WHERE  c.codigo_categoria = t.categoria_codigo_categoria";
             $sql  .= "\n AND t.codigo_time = :codigo";
 
-            //require_once $strRequire;
             $conexao = Conexao::getConexao(); 		  
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(":codigo", $intCodigo);
             $stmt->execute();
-            $retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }

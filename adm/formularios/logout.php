@@ -1,4 +1,9 @@
 <?php
 // logout.php
-require_once('../classes/login.php');
-Login :: sair();
+use sistemaRest\adm\classes\Login;
+
+require '../../biblioteca/SplClassLoader.php';
+$classLoader = new \SplClassLoader('sistemaRest\adm\classes');
+$classLoader->register();
+        
+Login::sair();

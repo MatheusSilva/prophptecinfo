@@ -1,5 +1,6 @@
 <?php
-require_once('conexao.php');
+namespace sistemaRest\adm\classes;
+use sistemaRest\adm\classes\Conexao;
 
 /**
 * classe Torcedor

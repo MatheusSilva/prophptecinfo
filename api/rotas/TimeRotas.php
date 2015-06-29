@@ -1,11 +1,15 @@
 <?php
+namespace sistemaRest\api\rotas;
+use sistemaRest\api\classes\Time as time;
+use sistemaRest\api\classes\UploadImagem;
+
 /**
 * classe timeRotas
 *
 * @author    Matheus Silva
 * @copyright © Copyright 2015 Matheus Silva. Todos os direitos reservados.
 */
-class timeRotas
+class TimeRotas
 {
     /**
     * metodo construtor da classe timeRotas
@@ -18,9 +22,11 @@ class timeRotas
     */
     function __construct($app)
     {
+        $classLoader = new \SplClassLoader('sistemaRest\api\classes');
+        $classLoader->register();
+        
         $app->get('/time', function () use ($app) 
         {
-            require_once 'classes/time.php';
             $db      = new time();
             $items   = $db->listarTudo();
             $results = array();
@@ -54,7 +60,6 @@ class timeRotas
         // GET route
         $app->get('/time/:id', function ($id) use ($app) 
         {
-            require_once 'classes/time.php';
             $time = new time();
                         //$time->setNome($nome);
             // GET with parameter
@@ -72,7 +77,6 @@ class timeRotas
 
         $app->get('/time/nome/:id', function ($id) use ($app) 
         {
-            require_once 'classes/time.php';
             $db    = new time();
             $items = $db->listarPorNome($id);
 
@@ -94,10 +98,7 @@ class timeRotas
         });
 
         $app->post('/time/:token', function ($token) use ($app) 
-        {    
-            require_once 'classes/uploadimagem.php';
-            require_once 'classes/time.php';	
-
+        {
             $time = array(
                 'txtFoto' => $_FILES["txtFoto"],
                 'txtNome' => $app->request->post('txtNome'),
@@ -143,9 +144,6 @@ class timeRotas
 
         $app->post('/time/atualizar/:id/:token', function ($id, $token) use ($app) 
         {
-            require_once 'classes/uploadimagem.php';
-            require_once 'classes/time.php';	
-            
             $txtFoto = '';
             
             if(array_key_exists('txtFoto', $_FILES)) {
@@ -202,8 +200,7 @@ class timeRotas
         });
 
         $app->post('/time/excluir/:id/:token', function ($id, $token) use ($app) 
-        {   
-            require_once 'classes/time.php';
+        {
             $time    = json_decode($app->request->getBody(), true);
             $objtime = new time();
             $objtime->setCodigo_time($id);

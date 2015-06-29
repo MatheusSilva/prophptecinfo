@@ -1,11 +1,15 @@
 <?php
+
+namespace sistemaRest\api\rotas;
+use sistemaRest\api\classes\Categoria as sisApiClaCategoria;
+
 /**
 * classe categoriaRotas
 *
 * @author    Matheus Silva
 * @copyright © Copyright 2015 Matheus Silva. Todos os direitos reservados.
 */
-class categoriaRotas
+class CategoriaRotas
 {
     /**
     * metodo construtor da classe categoriaRotas
@@ -18,6 +22,9 @@ class categoriaRotas
     */
     function __construct($app)
     {
+        $classLoader = new \SplClassLoader('sistemaRest\api\classes');
+        $classLoader->register();
+        
         $app->get('/categoria', function () use ($app) 
         {
             $url = "cache/todasCategorias.json";
@@ -38,8 +45,8 @@ class categoriaRotas
             }//if (file_exists($cacheFile)) {
 
             if (empty($json)) {
-                require_once 'classes/categoria.php';
-                $objCategoria = new Categoria();
+
+                $objCategoria = new sisApiClaCategoria();
                 $items = $objCategoria->listarTudo();
                 $results = array();
 
@@ -74,8 +81,8 @@ class categoriaRotas
 
         $app->get('/categoriaTime/:id', function ($id) use ($app) 
         {
-            require_once 'classes/categoria.php';
-            $objCategoria = new Categoria();
+
+            $objCategoria = new sisApiClaCategoria();
             $arrTodasCategorias   = $objCategoria->listarTudo();
             $arrCategoriaTime   = $objCategoria->listaCategoriaPorTime(null,$id);
             $results = array();
@@ -116,8 +123,8 @@ class categoriaRotas
         // GET route
         $app->get('/categoria/:id', function ($id) use ($app) 
         {
-            require_once 'classes/categoria.php';
-            $objCategoria = new Categoria();
+
+            $objCategoria = new sisApiClaCategoria();
             $items = $objCategoria->listarPorCodigo($id);
 
             if($items) {
@@ -131,8 +138,8 @@ class categoriaRotas
         // GET route
         $app->get('/categoria/nome/:id', function ($id) use ($app) 
         {
-            require_once 'classes/categoria.php';
-            $objCategoria = new Categoria();
+
+            $objCategoria = new sisApiClaCategoria();
             $items = $objCategoria->listarPorNome($id);
 
             if ($items) {
@@ -145,9 +152,9 @@ class categoriaRotas
 
         $app->post('/categoria/:token', function ($token) use ($app) 
         {
-            require_once 'classes/categoria.php';	
+
             $categoria    = json_decode($app->request->getBody(), true);
-            $objCategoria = new Categoria();
+            $objCategoria = new sisApiClaCategoria();
             $objCategoria->setNome($categoria["txtNome"]);	
 
             if ($objCategoria->inserir($token)) {
@@ -162,9 +169,9 @@ class categoriaRotas
 
         $app->put('/categoria/:id/:token', function ($id, $token) use ($app) 
         {
-            require_once 'classes/categoria.php';
+
             $categoria    = json_decode($app->request->getBody(), true);
-            $objCategoria = new Categoria();
+            $objCategoria = new sisApiClaCategoria();
             $objCategoria->setCodigoCategoria($id);
             $objCategoria->setNome($categoria["txtNome"]);	
 
@@ -180,9 +187,9 @@ class categoriaRotas
 
         $app->delete('/categoria/:id/:token', function ($id, $token) use ($app) 
         {
-            require_once 'classes/categoria.php';	
+	
             $categoria    = json_decode($app->request->getBody(), true);
-            $objCategoria = new Categoria();
+            $objCategoria = new sisApiClaCategoria();
             $objCategoria->setCodigoCategoria($id);
 
             if ($objCategoria->excluir($token)) {	 	

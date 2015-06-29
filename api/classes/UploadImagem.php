@@ -1,5 +1,6 @@
 <?php
-require_once('upload.php');
+
+namespace sistemaRest\api\classes;
 
 /**
 * classe UploadImagem

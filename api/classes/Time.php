@@ -1,5 +1,6 @@
 <?php
-require "classeBase.php";
+namespace sistemaRest\api\classes;
+use sistemaRest\adm\classes\Conexao;
 
 /**
 * classe Time
@@ -7,7 +8,7 @@ require "classeBase.php";
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
 */
-class Time extends classeBase
+class Time extends ClasseBase
 {
     private $codigo_time;
     private $nome;
@@ -20,7 +21,8 @@ class Time extends classeBase
 
     function __construct() 
     {
-        require_once '../adm/classes/conexao.php';
+        $classLoader = new \SplClassLoader('sistemaRest\adm\classes');
+        $classLoader->register();
     }
 
     public function getDesempenhotime() 
@@ -150,7 +152,7 @@ class Time extends classeBase
             $conexao->commit();
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
@@ -200,7 +202,7 @@ class Time extends classeBase
             $conexao->commit();
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
@@ -216,7 +218,7 @@ class Time extends classeBase
         $stmt    = $conexao->prepare($sql);
         $stmt->bindParam(":codigo", $codigo);
         $stmt->execute();
-        $retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
+        $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
         $conexao = null;
         
         if ($retorno["retorno"] == 1 ) {
@@ -251,7 +253,7 @@ class Time extends classeBase
             $conexao->commit();
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
@@ -265,7 +267,7 @@ class Time extends classeBase
         $conexao = Conexao::getConexao(); 		  
         $stmt    = $conexao->prepare($sql);
         $stmt->execute();
-        $retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $conexao = null;
         return $retorno;
     }
@@ -296,7 +298,7 @@ class Time extends classeBase
         $stmt    = $conexao->prepare($sql);
         $stmt->bindParam(":codigo", $codigo);
         $stmt->execute();
-        $retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
+        $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
         $conexao = null;
         return $retorno;
     }
@@ -319,7 +321,7 @@ class Time extends classeBase
         }
 
         $stmt->execute();
-        $retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $conexao = null;
         return $retorno;
     }

@@ -8,16 +8,21 @@ $app->get('/', function () {
   echo "Index ";
 });
 
-require_once 'rotas/categoriaRotas.php';
-$objCategoria = new categoriaRotas($app);
+require '../biblioteca/SplClassLoader.php';
 
-require_once 'rotas/divisaoRotas.php';
-$objDivisao = new divisaoRotas($app);
+$classLoader = new \SplClassLoader('sistemaRest\api\rotas');
+$classLoader->register();
 
-require_once 'rotas/tecnicoRotas.php';
-$objTecnico = new tecnicoRotas($app);
+use sistemaRest\api\rotas\CategoriaRotas as sisApiRotCategoriaRotas;
+$objCategoria = new sisApiRotCategoriaRotas($app);
 
-require_once 'rotas/timeRotas.php';
-$objtimeRotas = new timeRotas($app);
+use sistemaRest\api\rotas\DivisaoRotas as sisApiRotDivisaoRotas;
+$objDivisao = new sisApiRotDivisaoRotas($app);
+
+use sistemaRest\api\rotas\TecnicoRotas as sisApiRotTecnicoRotas;
+$objTecnico = new sisApiRotTecnicoRotas($app);
+
+use sistemaRest\api\rotas\TimeRotas as sisApiRotTimeRotas;
+$objtimeRotas = new sisApiRotTimeRotas($app);
 
 $app->run();

@@ -1,14 +1,21 @@
 <?php
+namespace sistemaRest\api\classes;
+use sistemaRest\adm\classes\Conexao;
 
-class classeBase
+class ClasseBase
 {
+    function __construct() 
+    {
+        $classLoader = new \SplClassLoader('sistemaRest\adm\classes');
+        $classLoader->register();
+    }
+    
     public function tokenEhValido($strToken)
     {
         $sql   = "\n SELECT 1";
         $sql  .= "\n FROM torcedor";
         $sql  .= "\n WHERE token = :token";
 
-        require_once '../adm/classes/conexao.php';
         $conexao = Conexao::getConexao(); 		  
         $stmt = $conexao->prepare($sql);
         $stmt->bindParam(":token",$strToken);

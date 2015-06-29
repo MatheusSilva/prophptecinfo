@@ -1,81 +1,68 @@
 <?php
-require "classeBase.php";
+namespace sistemaRest\api\classes;
+use sistemaRest\adm\classes\Conexao;
 
 /**
-* classe Tecnico
+* classe Divisao
 *
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
 */
-class Tecnico extends classeBase
+class Divisao extends ClasseBase
 {
-    private $codigoTecnico;
+    private $codigoDivisao;
     private $nome;
-    private $data;
 
-    function __construct() 
+    function __construct()
     {
-        require_once '../adm/classes/conexao.php';
+        $classLoader = new \SplClassLoader('sistemaRest\adm\classes');
+        $classLoader->register();
     }
 
-    public function getCodigoTecnico() 
+    public function getCodigo_divisao()
     {
-        return $this->codigoTecnico;
+        return $this->codigoDivisao;
     }
 
-    public function setCodigoTecnico($codigoTecnico) 
+    public function setCodigo_divisao($codigo)
     {
-        $this->codigoTecnico = $codigoTecnico;
+        $this->codigoDivisao = $codigo;
     }
 
-    public function getNome() 
+    public function getNome()
     {
         return $this->nome;
     }
 
-    public function setNome($nome) 
+    public function setNome($nome)
     {
         $this->nome = $nome;
-    }
-
-    public function getData() 
-    {
-        return $this->data;
-    }
-
-    public function setData($data) 
-    {
-        $this->data = $data;
     }
 
     public function inserir($token)
     {
         try {
-            if ($this->tokenEhValido($token) !== true) {
-                return false;
+            if ($this->tokenEhValido($token) === false) {
+                    return false;
             }//if ($this->tokenEhValido($token) === false) {
 
             $nome  = $this->getNome();
-            $data  = $this->getData();
 
-            $sql   = "\n INSERT INTO tecnico(";
-            $sql  .= "\n  nome";
-            $sql  .= "\n ,data_nascimento";
+            $sql   = "\n INSERT INTO divisao (";
+            $sql  .= "\n nome";
             $sql  .= "\n ) VALUES (";
-            $sql  .= "\n  :nome";
-            $sql  .= "\n ,:data";
+            $sql  .= "\n :nome";
             $sql  .= "\n )";
 
             $conexao = Conexao::getConexao(); 
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(":nome",$nome);
-            $stmt->bindParam(":data",$data);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
@@ -84,16 +71,16 @@ class Tecnico extends classeBase
     public function alterar($token)
     {
         try {
-            if ($this->tokenEhValido($token) !== true) {
-                return false;
+            if ($this->tokenEhValido($token) === false) {
+                    return false;
             }//if ($this->tokenEhValido($token) === false) {
-            
-            $codigo = $this->getCodigoTecnico();
-            $nome 		   = $this->getNome();
 
-            $sql   = "\n UPDATE tecnico";
+            $codigo = $this->getcodigo_divisao();
+            $nome   = $this->getNome();
+
+            $sql   = "\n UPDATE divisao";
             $sql  .= "\n SET nome = :nome";
-            $sql  .= "\n WHERE codigo_tecnico = :codigo";
+            $sql  .= "\n WHERE Codigo_divisao = :codigo";
 
             $conexao = Conexao::getConexao(); 
             $conexao->beginTransaction();
@@ -104,7 +91,7 @@ class Tecnico extends classeBase
             $conexao->commit();
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
@@ -114,13 +101,14 @@ class Tecnico extends classeBase
     {
         try {
             if ($this->tokenEhValido($token) !== true) {
-                return false;
+                    return false;
             }//if ($this->tokenEhValido($token) === false) {
-            
-            $codigo = $this->getCodigoTecnico();
-            $sql   = "\n DELETE";
-            $sql  .= "\n FROM tecnico";
-            $sql  .= "\n WHERE codigo_tecnico = :codigo";
+
+            $codigo = $this->getcodigo_divisao();
+
+            $sql   = "\n DELETE"; 
+            $sql  .= "\n FROM divisao";
+            $sql  .= "\n WHERE codigo_divisao = :codigo";
 
             $conexao = Conexao::getConexao(); 
             $conexao->beginTransaction();
@@ -130,7 +118,7 @@ class Tecnico extends classeBase
             $conexao->commit();
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
@@ -139,84 +127,80 @@ class Tecnico extends classeBase
     public static function listarPorCodigo($codigo)
     {
         try {
-            $sql   = "\n SELECT codigo_tecnico,nome,data_nascimento";
-            $sql  .= "\n FROM tecnico";
-            $sql  .= "\n WHERE codigo_tecnico = :codigo";
+            $sql   = "\n SELECT *";
+            $sql  .= "\n FROM divisao";
+            $sql  .= "\n WHERE codigo_divisao = :codigo";
 
             $conexao = Conexao::getConexao(); 		  
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(":codigo",$codigo);
             $stmt->execute();
-            $retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
     }
-
+        
     public static function listarPorNome($nome)
     {
         try {
             $nome .= "%";
             $sql   = "\n SELECT *";
-            $sql  .= "\n FROM tecnico";
+            $sql  .= "\n FROM divisao";
             $sql  .= "\n WHERE nome LIKE :nome";
 
-            require_once '../classes/conexao.php';
             $conexao = Conexao::getConexao(); 		  
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(":nome",$nome);
             $stmt->execute();
-            $retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
     }
 
     public static function listarTudo($strRequire = '../adm/classes/conexao.php')
-    { 
+    {     
         try {
             $sql   = "\n SELECT *";
-            $sql  .= "\n FROM tecnico";
+            $sql  .= "\n FROM divisao";
 
-            require_once $strRequire;
             $conexao = Conexao::getConexao(); 		  
             $stmt = $conexao->prepare($sql);
             $stmt->execute();
-            $retorno =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
     }
     
-    public static function listaTecnicoPorTime($strRequire = '../adm/classes/conexao.php', $intCodigo)
+    public static function listaDivisaoPorTime($strRequire = '../adm/classes/conexao.php', $intCodigo)
     {     
         try {
-            $sql   = "\n SELECT tec.codigo_tecnico,tec.nome";
-            $sql  .= "\n FROM time.time AS t, time.tecnico AS tec";
-            $sql  .= "\n WHERE  tec.codigo_tecnico = t.tecnico_codigo_tecnico";
+            $sql   = "\n SELECT d.codigo_divisao,d.nome";
+            $sql  .= "\n FROM time.time AS t, time.divisao AS d";
+            $sql  .= "\n WHERE  d.codigo_divisao = t.divisao_codigo_divisao";
             $sql  .= "\n AND t.codigo_time = :codigo";
 
-            //require_once $strRequire;
             $conexao = Conexao::getConexao(); 		  
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(":codigo", $intCodigo);
             $stmt->execute();
-            $retorno =  $stmt->fetch(PDO::FETCH_ASSOC);
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
             return $retorno;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conexao = null;
             return $e->getMessage();
         }
     }
 }
-	

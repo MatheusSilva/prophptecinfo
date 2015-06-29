@@ -1,11 +1,15 @@
 <?php
+
+namespace sistemaRest\api\rotas;
+use sistemaRest\api\classes\Divisao as divisao;
+
 /**
 * classe divisaoRotas
 *
 * @author    Matheus Silva
 * @copyright © Copyright 2015 Matheus Silva. Todos os direitos reservados.
 */
-class divisaoRotas
+class DivisaoRotas
 {
     /**
     * metodo construtor da classe divisaoRotas
@@ -18,9 +22,11 @@ class divisaoRotas
     */
     function __construct($app)
     {
+        $classLoader = new \SplClassLoader('sistemaRest\api\classes');
+        $classLoader->register();
+  
         $app->get('/divisao', function () use ($app) 
         {
-            require_once 'classes/divisao.php';
             $divisao = new divisao();
             $db      = new divisao();
             $items   = $db->listarTudo();
@@ -49,7 +55,6 @@ class divisaoRotas
         
         $app->get('/divisaoTime/:id', function ($id) use ($app) 
         {
-            require_once 'classes/divisao.php';
             $divisao = new divisao();
             $arrTodasDivisoes   = $divisao->listarTudo();
             $arrDivisaoTime   = $divisao->listaDivisaoPorTime(null,$id);
@@ -92,7 +97,6 @@ class divisaoRotas
         // GET route
         $app->get('/divisao/:id', function ($id) use ($app) 
         {
-            require_once 'classes/divisao.php';
             $divisao = new divisao();
             $items   = $divisao->listarPorCodigo($id);
             
@@ -107,7 +111,6 @@ class divisaoRotas
         // GET route
         $app->get('/divisao/nome/:id', function ($id) use ($app) 
         {
-            require_once 'classes/divisao.php';
             $divisao = new divisao();
             $items   = $divisao->listarPorNome($id);
             
@@ -120,8 +123,7 @@ class divisaoRotas
         });
 
         $app->post('/divisao/:token', function ($token) use ($app) 
-        {
-            require_once 'classes/divisao.php';	
+        {	
             $divisao    = json_decode($app->request->getBody(), true);
             $objdivisao = new divisao();
             $objdivisao->setNome($divisao["txtNome"]);	
@@ -137,8 +139,7 @@ class divisaoRotas
         });
 
         $app->put('/divisao/:id/:token', function ($id, $token) use ($app) 
-        {
-            require_once 'classes/divisao.php';	
+        {	
             $divisao    = json_decode($app->request->getBody(), true);
             $objdivisao = new divisao();
             $objdivisao->setCodigo_divisao($id);
@@ -156,8 +157,7 @@ class divisaoRotas
         });
 
         $app->delete('/divisao/:id/:token', function ($id, $token) use ($app) 
-        {
-            require_once 'classes/divisao.php';	
+        {	
             $divisao    = json_decode($app->request->getBody(), true);
             $objdivisao = new divisao();
             $objdivisao->setCodigo_divisao($id);

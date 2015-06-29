@@ -1,11 +1,15 @@
 <?php
+
+namespace sistemaRest\api\rotas;
+use sistemaRest\api\classes\Tecnico as tecnico;
+
 /**
 * classe tecnicoRotas
 *
 * @author    Matheus Silva
 * @copyright © Copyright 2015 Matheus Silva. Todos os direitos reservados.
 */
-class tecnicoRotas
+class TecnicoRotas
 {
     /**
     * metodo construtor da classe tecnicoRotas
@@ -18,9 +22,11 @@ class tecnicoRotas
     */
     function __construct($app)
     {
+        $classLoader = new \SplClassLoader('sistemaRest\api\classes');
+        $classLoader->register();
+        
         $app->get('/tecnico', function () use ($app) 
         {
-            require_once 'classes/tecnico.php';
             $tecnico = new tecnico();
             $items   = $tecnico->listarTudo();
             $results = array();
@@ -48,7 +54,6 @@ class tecnicoRotas
 
         $app->get('/tecnicoTime/:id', function ($id) use ($app) 
         {
-            require_once 'classes/tecnico.php';
             $objTecnico = new tecnico();
             $arrTodosTecnico   = $objTecnico->listarTudo();
             $arrTecnicoTime   = $objTecnico->listaTecnicoPorTime(null,$id);
@@ -90,7 +95,6 @@ class tecnicoRotas
         // GET route
         $app->get('/tecnico/:id', function ($id) use ($app) 
         {
-            require_once 'classes/tecnico.php';
             $tecnico = new tecnico();
             $items = $tecnico->listarPorCodigo($id);
             
@@ -105,7 +109,6 @@ class tecnicoRotas
         // GET route
         $app->get('/tecnico/nome/:id', function ($id) use ($app) 
         {
-            require_once 'classes/tecnico.php';
             $tecnico = new tecnico();
             $items   = $tecnico->listarPorNome($id);
             
@@ -118,8 +121,7 @@ class tecnicoRotas
         });
         
         $app->post('/tecnico/:token', function ($token) use ($app)
-        {
-            require_once 'classes/tecnico.php';	
+        {	
             $tecnico    = json_decode($app->request->getBody(), true);
             $objtecnico = new tecnico();
             $objtecnico->setNome($tecnico["txtNome"]);	
@@ -141,8 +143,7 @@ class tecnicoRotas
         });
 
         $app->put('/tecnico/:id/:token', function ($id, $token) use ($app)
-        {
-            require_once 'classes/tecnico.php';	
+        {	
             $tecnico    = json_decode($app->request->getBody(), true);
             $objtecnico = new tecnico();
             $objtecnico->setCodigoTecnico($id);
@@ -160,8 +161,7 @@ class tecnicoRotas
         });
 
         $app->delete('/tecnico/:id/:token', function ($id, $token) use ($app)    
-        {
-            require_once 'classes/tecnico.php';	
+        {	
             $tecnico    = json_decode($app->request->getBody(), true);
             $objtecnico = new tecnico();
             $objtecnico->setCodigoTecnico($id);

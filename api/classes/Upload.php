@@ -1,4 +1,6 @@
 <?php
+namespace sistemaRest\api\classes;
+
 /**
 * classe Upload
 *

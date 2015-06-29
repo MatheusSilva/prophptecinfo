@@ -1,6 +1,11 @@
 <?php
-//adaptador.torcedor.php
-require_once('../classes/torcedor.php');
+namespace sistemaRest\adm\adaptadores;
+use sistemaRest\adm\classes\Torcedor;
+
+require '../../biblioteca/SplClassLoader.php';
+$classLoader = new \SplClassLoader('sistemaRest\adm\classes');
+$classLoader->register();
+
 $acao = $_REQUEST['acao'];
 
 switch ($acao) {
