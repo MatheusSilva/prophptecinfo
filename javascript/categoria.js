@@ -1,7 +1,13 @@
 function consultar()
 {
-    $.getJSON( "http://localhost/sistemaRest/api/categoria", function( json ) 
-    {
+    var pesquisa = '';
+
+    if ($("#txtNome").val() != undefined) {
+        pesquisa = $("#txtNome").val();
+    }
+
+    $.getJSON( "http://localhost/sistemaRest/api/v1/categoria/index.php?a=3", { p: pesquisa })
+    .done(function( json ) {
         var len         = json.categorias.length;
         var temRegistro = false;
         
@@ -11,9 +17,9 @@ function consultar()
                         +'<td>Nome</td>'
                         +'<td>A&ccedil;&otilde;es</td>'
                         +'</tr>';
-
+                        
         for (var i=0; i < len; i++) {
-            var codigo    = json.categorias[i].codigo;
+            var codigo    = json.categorias[i].codigo_categoria;
             var nome      = json.categorias[i].nome;
 
             if (i % 2 == 0) {
@@ -57,7 +63,7 @@ function formToJSON()
 {
     return JSON.stringify({
         "codigo": $("#codigo").val(),
-	"txtNome": $("#txtNome").val()
+        "txtNome": $("#txtNome").val()
     });
 }
 
@@ -69,14 +75,16 @@ function confirmar(codigo)
         var mensagem = "";
 
         if (codigo == "") {
-                mensagem += "Código invalido";
+            mensagem += "Código invalido";
+        } else {
+            codigo = "&id="+codigo;
         }
 
         var token  = getCookie('token');
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
                 
         if(mensagem == "") {
@@ -84,13 +92,13 @@ function confirmar(codigo)
                 type: 'DELETE',
                 contentType: 'application/json',
                 dataType: "json",
-                url: 'http://localhost/sistemaRest/api/categoria/'+codigo+consulta,
+                url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=6'+codigo+consulta,
                 success: function(data) {
-                  alert(data.mensagem);
-                  location.reload();				
+                    alert(data.mensagem);
+                    location.reload();				
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                  alert("Falha ao excluir categoria!");	
+                    alert("Falha ao excluir categoria!");	
                 }
             });
         } else {
@@ -117,7 +125,7 @@ $(document).ready(function() {
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
 
         if (mensagem == "") {
@@ -125,16 +133,16 @@ $(document).ready(function() {
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: "json",
-                url: 'http://localhost/sistemaRest/api/categoria'+consulta,
+                url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=4'+consulta,
                 data: formToJSON(),
                 beforeSend: function(){
-                  $("#mensagem").html("<br /><b>Carregando...</b>");
+                    $("#mensagem").html("<br /><b>Carregando...</b>");
                 },
                 success: function(data) {
-                  $("#mensagem").html(data.mensagem);				
+                    $("#mensagem").html(data.mensagem);				
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                  $("#mensagem").html("<br /><b>Falha ao cadastrar categoria!</b>");	
+                    $("#mensagem").html("<br /><b>Falha ao cadastrar categoria!</b>");	
                 }
             }).done(function( data ) {
                 $("#txtNome").val("");		 	     	
@@ -145,39 +153,45 @@ $(document).ready(function() {
     });
 
     $("#btnAtualizar").click(function() {
-            var codigo = $("#codigo").val();
-            var mensagem = "";
+        var codigo = $("#codigo").val();
+        var mensagem = "";
 
-            if ($("#txtNome").val() == "") {
-                mensagem += "<br /><b>Você não preencheu a Categoria</b>";
-            }
+        if (codigo == "") {
+            mensagem += "Código invalido";
+        } else {
+            codigo = "&id="+codigo;
+        }
+        
+        if ($("#txtNome").val() == "") {
+            mensagem += "<br /><b>Você não preencheu a Categoria</b>";
+        }
 
-            var token  = getCookie('token');
-            var consulta = "";
+        var token  = getCookie('token');
+        var consulta = "";
 
-            if (token !== "") {
-                consulta = "/"+token;
-            }
+        if (token !== "") {
+            consulta = "&tk="+token;
+        }
 
-            if(mensagem == "") {
-                $.ajax({
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    dataType: "json",
-                    url: 'http://localhost/sistemaRest/api/categoria/'+codigo+consulta,
-                    data: formToJSON(),
-                    beforeSend: function(){
-                      $("#mensagem").html("<br /><b>Carregando...</b>");
-                    },
-                    success: function(data) {
-                      $("#mensagem").html("<br /><b>"+data.mensagem+"</br>");			
-                    },
-                    error: function(jqXHR, textStatus, errorThrown){
-                      $("#mensagem").html("<br /><b>Falha ao alterar categoria!</b>");	
-                    }
-                });
-            } else {
-                $("#mensagem").html(mensagem);
-            } 
+        if(mensagem == "") {
+            $.ajax({
+                type: 'PUT',
+                contentType: 'application/json',
+                dataType: "json",
+                url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=5'+codigo+consulta,
+                data: formToJSON(),
+                beforeSend: function(){
+                    $("#mensagem").html("<br /><b>Carregando...</b>");
+                },
+                success: function(data) {
+                    $("#mensagem").html("<br /><b>"+data.mensagem+"</br>");			
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    $("#mensagem").html("<br /><b>Falha ao alterar categoria!</b>");	
+                }
+            });
+        } else {
+            $("#mensagem").html(mensagem);
+        } 
     });
 });

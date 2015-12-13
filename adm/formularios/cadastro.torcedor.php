@@ -1,14 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpladmin.dwt.php" codeOutsideHTMLIsLocked="false" -->
+<!DOCTYPE html> 
+<html lang="pt-br">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script language="javascript" type="text/javascript" src="../../javascript/valida_torcedor.js"> </script>
-		<!-- InstanceBeginEditable name="doctitle" -->
 		<title>Cat&aacute;logo de Times</title>
-		<!-- InstanceEndEditable -->
-		<!-- InstanceBeginEditable name="head" -->
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-		<!-- InstanceEndEditable -->
+		<script language="javascript" type="text/javascript" src="../../javascript/valida_torcedor.js"> </script>
 	</head>
 	
 	<body>
@@ -16,17 +12,17 @@
 			<div id="cabecalho">
 			</div>
 			
-			<div id="menu_superior">
-			<a href="../../site/paginas/home.php">Home</a> ::
-            <a href="../formularios/cadastro.torcedor.php">Cadastrar-se</a> ::
-            <a href="../../site/consultas/lista.time.php">Consultas</a> ::            
-            <a href="../../adm/paginas/home.php">Entrar</a>
+			<header>
+                <nav id="menu_superior">
+                    <a href="../../site/paginas/home.php">Home</a> ::
+		            <a href="../formularios/cadastro.torcedor.php">Cadastrar-se</a> ::
+		            <a href="../../site/consultas/lista.time.php">Consultas</a> ::            
+		            <a href="../../adm/paginas/home.php">Entrar</a>
+                </nav>
+            </header>
 			
-			</div>
-			
-			<div id="conteudo">
-				<!-- InstanceBeginEditable name="conteudo" -->
-				<h2>Cadastro de Torcedores</h2>
+			<div id="conteudo" class="form">
+				<h2 class="titulo">Cadastro de Torcedores</h2>
 					
 				<form method="post" 
 				action="../adaptadores/adaptador.torcedor.php"
@@ -81,13 +77,11 @@
 						echo urldecode($_GET['msg']);
 					}	
 				?>
-				<!-- InstanceEndEditable -->
+
 			</div>
 			
-			<div id="rodape">
-				
-			</div>       	
+			<footer id="rodape">
+            </footer>       	
 		</div>
 	</body>
-	<!-- InstanceEnd -->
 </html>

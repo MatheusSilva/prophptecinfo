@@ -1,10 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html> 
+<html lang="pt-br">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO8859-1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Cat&aacute;logo de Jogos</title>
         <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-        <script language="javascript" type="text/javascript" src="../../javascript/time.min.js"></script>
+        <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
+        <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
 
         <script type="text/javascript">
             location.queryString = {};
@@ -33,17 +35,19 @@
             <div id="cabecalho">
             </div>
 
-            <div id="menu_superior">
-                <a href="../paginas/home.php">Home</a> ::
-                <a href="../paginas/cadastros.php">Cadastros</a> ::
-                <a href="../paginas/consultas.php">Consultas</a> ::
-                <a href="logout.php">Sair</a>
-            </div>
+            <header>
+                <nav id="menu_superior">
+                    <a href="../paginas/home.php">Home</a> ::
+                    <a href="../paginas/cadastros.php">Cadastros</a> ::
+                    <a href="../paginas/consultas.php">Consultas</a> ::
+                    <a href="logout.php">Sair</a>
+                </nav>
+            </header>
 
             <div id="conteudo">
-                <h2>Alterar Dados de Time</h2>
+                <h2 class="titulo">Alterar Dados de Time</h2>
 
-                <div id="frmCadastro" >
+                <div id="frmCadastro" class="form">
                     <table>
                         <tr>
                             <td>Nome:</td>
@@ -95,8 +99,8 @@
                 </div>
             </div>
 
-            <div id="rodape">
-            </div>       	
+            <footer id="rodape">
+            </footer>       	
         </div>
     </body>
 </html>

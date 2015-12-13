@@ -22,7 +22,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
     
     public function testTokenInvalidoCategoria()
     {
-        $url = 'http://localhost/sistemaRest/api/categoria/asdasd';
+        $url = 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=4&tk=asdasd';
         $data = array('txtNome' => 'NBI');
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Falha ao cadastrar categoria', $result["mensagem"]);
@@ -30,7 +30,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
     
     public function testNomeEmBrancoCategoria()
     {
-        $url = 'http://localhost/sistemaRest/api/categoria/698dc19d489c4e4db73e28a713eab07be10adc3949ba59abbe56e057f20f883e';
+        $url = 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=4&tk=698dc19d489c4e4db73e28a713eab07be10adc3949ba59abbe56e057f20f883e';
         $data = array('txtNome' => '');
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Falha ao cadastrar categoria', $result["mensagem"]);
@@ -38,7 +38,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
     
     public function testNomeValidoCategoria()
     {
-        $url = 'http://localhost/sistemaRest/api/categoria/698dc19d489c4e4db73e28a713eab07be10adc3949ba59abbe56e057f20f883e';
+        $url = 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=4&tk=698dc19d489c4e4db73e28a713eab07be10adc3949ba59abbe56e057f20f883e';
         $data = array('txtNome' => 'testephpunit');
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Categoria cadastrada com sucesso', $result["mensagem"]);

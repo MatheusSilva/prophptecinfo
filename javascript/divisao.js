@@ -1,7 +1,13 @@
 function consultar()
 {
-    $.getJSON( "http://localhost/sistemaRest/api/divisao", function( json ) 
-    {
+    var pesquisa = '';
+
+    if ($("#txtNome").val() != undefined) {
+        pesquisa = $("#txtNome").val();
+    }
+
+    $.getJSON( "http://localhost/sistemaRest/api/v1/divisao/index.php?a=3", { p: pesquisa })
+    .done(function( json ) {
         var len         = json.divisaos.length;
         var temRegistro = false;
         var strHTML  	= '<table width="80%" class="lista">'
@@ -12,7 +18,7 @@ function consultar()
                         + '</tr>';
 
         for (var i=0; i < len; i++) {
-            var codigo  = json.divisaos[i].codigo;
+            var codigo  = json.divisaos[i].codigo_divisao;
             var nome    = json.divisaos[i].nome;
 
             if (i % 2 == 0) {
@@ -69,13 +75,15 @@ function confirmar(codigo)
 
         if (codigo == "") {
             mensagem += "Código invalido";
+        } else {
+            codigo = "&id="+codigo;
         }
 
         var token  = getCookie('token');
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
 
         if(mensagem == "") {
@@ -83,7 +91,7 @@ function confirmar(codigo)
                 type: 'DELETE',
                 contentType: 'application/json',
                 dataType: "json",
-                url: 'http://localhost/sistemaRest/api/divisao/'+codigo+consulta,
+                url: 'http://localhost/sistemaRest/api/v1/divisao/index.php?a=6'+codigo+consulta,
                 success: function(data) {
                     alert(data.mensagem);
                     location.reload();				
@@ -117,7 +125,7 @@ $(document).ready(function() {
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
                 
         if (mensagem == "") {
@@ -125,16 +133,16 @@ $(document).ready(function() {
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: "json",
-                url: 'http://localhost/sistemaRest/api/divisao'+consulta,
+                url: 'http://localhost/sistemaRest/api/v1/divisao/index.php?a=4'+consulta,
                 data: formToJSON(),
                 beforeSend: function(){
-                  $("#mensagem").html("<br /><b>Carregando...</b>");
+                    $("#mensagem").html("<br /><b>Carregando...</b>");
                 },
                 success: function(data) {
-                  $("#mensagem").html(data.mensagem);				
+                    $("#mensagem").html(data.mensagem);				
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                  $("#mensagem").html("<br /><b>Falha ao cadastrar divisao!</b>");	
+                    $("#mensagem").html("<br /><b>Falha ao cadastrar divisao!</b>");	
                 }
                 }).done(function( data ) {
                     $("#txtNome").val("");		 	     	
@@ -148,6 +156,12 @@ $(document).ready(function() {
         var codigo = $("#codigo").val();
         var mensagem = "";
 
+        if (codigo == "") {
+            mensagem += "Código invalido";
+        } else {
+            codigo = "&id="+codigo;
+        }
+
         if ($("#txtNome").val() == "") {
             mensagem += "<br /><b>Você não preencheu a divisao</b>";
         }
@@ -156,7 +170,7 @@ $(document).ready(function() {
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
 
         if(mensagem == "") {
@@ -164,16 +178,16 @@ $(document).ready(function() {
                 type: 'PUT',
                 contentType: 'application/json',
                 dataType: "json",
-                url: 'http://localhost/sistemaRest/api/divisao/'+codigo+consulta,
+                url: 'http://localhost/sistemaRest/api/v1/divisao/index.php?a=5'+codigo+consulta,
                 data: formToJSON(),
                 beforeSend: function(){
-                  $("#mensagem").html("<br /><b>Carregando...</b>");
+                    $("#mensagem").html("<br /><b>Carregando...</b>");
                 },
                 success: function(data) {
-                  $("#mensagem").html("<br /><b>"+data.mensagem+"</br>");			
+                    $("#mensagem").html("<br /><b>"+data.mensagem+"</br>");			
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                  $("#mensagem").html("<br /><b>Falha ao alterar divisao!</b>");	
+                    $("#mensagem").html("<br /><b>Falha ao alterar divisao!</b>");	
                 }
             });
         } else {

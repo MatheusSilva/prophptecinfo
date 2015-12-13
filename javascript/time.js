@@ -1,21 +1,39 @@
+function limpacamposCadastro()
+{
+    document.getElementById("txtFoto").value = '';
+    document.getElementById("txtNome").value = '';
+    document.getElementById("cmbDivisao").options.length = 0;
+    document.getElementById("cmbCategoria").options.length = 0;
+    document.getElementById("cmbTecnico").options.length = 0;
+    
+    var rDesempenhotime = document.getElementsByName("rDesempenhotime");
+    rDesempenhotime[0].checked = true;
+
+    var rComprarnovojogador = document.getElementsByName("rComprarnovojogador");
+    rComprarnovojogador[0].checked = true;
+
+}
+
 $(document).ready(function() 
 {
     $("#btnConsultar").click(function() 
     {
-        var nomeTime = document.getElementById("txtNome").value;
-        var consulta = "";
+        var pesquisa = '';
 
-        if (nomeTime !== "") {
-            consulta = "/"+document.getElementById("txtNome").value;
-        } else {
-            consulta = "/listaTodosTimes";
+        if ($("#txtNome").val() != undefined) {
+            pesquisa = $("#txtNome").val();
         }
 
-        $.getJSON( "http://localhost/sistemaRest/api/time/nome"+consulta, function(json) 
+        $.getJSON( "http://localhost/sistemaRest/api/v1/time/index.php?a=2", { p: pesquisa })
+        .done(function( json ) 
         {
-            var len         = json.times.length;
-            var mensagem    = "";
-            var strHTML     = '<table width="80%" class="lista">'
+            var len         = 0;
+
+            if (json.times != undefined) {
+                var len     = json.times.length;
+            }
+
+            var strHTML = '<table width="80%" class="lista">'
                             + '<tr class="primeira_linha">'
                             + '<td>C&oacute;digo</td>'
                             + '<td>Nome</td>'
@@ -31,8 +49,6 @@ $(document).ready(function()
                 } else {
                     strHTML = strHTML + '<tr class="linha_impar">';
                 }
-
-                if (codigo > 0) {
                     var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
                     + codigo
                     + "\">[D]</a>";
@@ -48,18 +64,15 @@ $(document).ready(function()
                     var acao = detalhes+alterar+excluir;
 
                     strHTML = strHTML + "<td>"+codigo+"</td>"
-                    + "<td>"+nome+"</td>"	
-                    + "<td>"+acao+"</td>"	
+                    + "<td>"+nome+"</td>"   
+                    + "<td>"+acao+"</td>"   
                     + "</tr>";
-                } else {
-                    mensagem = json.times[i].mensagem;
-                }
             }
 
             strHTML = strHTML + "</table>";
-
-            if(mensagem !== "") {
-                strHTML = mensagem;
+            
+            if (json.times == undefined && json.mensagem != undefined) {
+                strHTML = "<p>"+json.mensagem+"</p>";
             }
 
             $("#tabela").html(strHTML);
@@ -84,20 +97,22 @@ $(document).ready(function()
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
         
         $.ajax({
-            url: 'http://localhost/sistemaRest/api/time'+consulta,
+            url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=3'+consulta,
             type: 'POST',
             data: jForm,
             dataType: 'json',
-            mimeType: 'multipart/form-data',
+            mimeType: 'application/json',
             contentType: false,
             cache: false,
             processData: false,
             success: function (returndata) {
+                limpacamposCadastro();
                 alert(returndata.mensagem);
+                location.reload();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert("Falha ao cadastrar time!");
@@ -110,6 +125,13 @@ $(document).ready(function()
     $("#btnAlterar").click(function() 
     {
         var codigo = $("#codigo").val();  
+
+        if (codigo == "") {
+            mensagem += "Código invalido";
+        } else {
+            codigo = "&id="+codigo;
+        }
+        
         var jForm = new FormData();
 
         jForm.append("codigo", codigo);
@@ -125,15 +147,15 @@ $(document).ready(function()
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
         
         $.ajax({
-            url: 'http://localhost/sistemaRest/api/time/atualizar/'+codigo+consulta,
+            url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=4'+codigo+consulta,
             type: 'POST',
             data: jForm,
             dataType: 'json',
-            mimeType: 'multipart/form-data',
+            mimeType: 'application/json',
             contentType: false,
             cache: false,
             processData: false,
@@ -156,15 +178,17 @@ function confirmar(codigo)
     if (ok) {	
         var mensagem = "";
 
-        if (codigo === "") {
+        if (codigo == "") {
             mensagem += "Código invalido";
+        } else {
+            codigo = "&id="+codigo;
         }
 
         var token  = getCookie('token');
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
   
         if (mensagem === "") {
@@ -172,7 +196,7 @@ function confirmar(codigo)
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: "json",
-                url: 'http://localhost/sistemaRest/api/time/excluir/'+codigo+consulta,
+                url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=5'+codigo+consulta,
                 success: function(data) {
                     alert(data.mensagem);
                     location.reload();				
@@ -190,10 +214,14 @@ function confirmar(codigo)
 function listaTodosTimes()
 {
     $(document).ready(function() {
-        $.getJSON( "http://localhost/sistemaRest/api/time", function( json ) 
+        $.getJSON( "http://localhost/sistemaRest/api/v1/time/index.php", function( json ) 
         {
-            var len         = json.times.length;
-            var temRegistro = false;
+            var len         = 0;
+
+            if (json.times != undefined) {
+                var len     = json.times.length;
+            }
+
             var strHTML     = '<table width="80%" class="lista">'
                             + '<tr class="primeira_linha">'
                             + '<td>C&oacute;digo</td>'
@@ -229,15 +257,14 @@ function listaTodosTimes()
                 + "<td>"+nome+"</td>"	
                 + "<td>"+acao+"</td>"	
                 + "</tr>";
-                temRegistro = true;	
             }
-
-            if(temRegistro  === false) {
-                strHTML = "Nenhum time cadastrado";
-            }   
-
+            
             strHTML = strHTML + "</table>";
 
+            if (json.times == undefined && json.mensagem != undefined) {
+                strHTML = "<p>"+json.mensagem+"</p>";
+            }
+            
             $("#tabela").html(strHTML);
         });
     });            
@@ -251,7 +278,7 @@ function listaNomePorCodigo(codigoParam)
             type: 'GET',
             contentType: 'application/json',
             dataType: "json",
-            url: 'http://localhost/sistemaRest/api/time/'+codigoParam,
+            url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=1&id='+codigoParam,
             success: function(data) {			
                 $("#txtNome").val(data.nomeTime);			
             },
@@ -266,7 +293,7 @@ function carregaDivisao(codigo)
 {
     $(document).ready(function()
     {
-        $.getJSON( "http://localhost/sistemaRest/api/divisaoTime/"+codigo, function( json )
+        $.getJSON( "http://localhost/sistemaRest/api/v1/divisao/index.php?a=1&id="+codigo, function( json )
         {
             var len         = json.divisaos.length;
             var temRegistro = false;
@@ -298,7 +325,7 @@ function carregaCategoria(codigo)
 {
     $(document).ready(function() 
     {
-        $.getJSON( "http://localhost/sistemaRest/api/categoriaTime/"+codigo, function( json ) 
+        $.getJSON( "http://localhost/sistemaRest/api/v1/categoria/index.php?a=1&id="+codigo, function( json ) 
         {
             var len         = json.categorias.length;
             var temRegistro = false;
@@ -330,7 +357,7 @@ function carregaTecnico(codigo)
 {
     $(document).ready(function() 
     {
-        $.getJSON( "http://localhost/sistemaRest/api/tecnicoTime/"+codigo, function( json ) 
+        $.getJSON( "http://localhost/sistemaRest/api/v1/tecnico/index.php?a=1&id="+codigo, function( json ) 
         {
             var len         = json.tecnicos.length;
             var temRegistro = false;

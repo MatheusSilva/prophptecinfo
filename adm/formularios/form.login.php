@@ -1,10 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html> 
+<html lang="pt-br">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO8859-1" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Cat&aacute;logo de Jogos</title>
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-                <script language="javascript" src="../../javascript/login.min.js"></script>
+		<script language="javascript" src="../../javascript/login.min.js"></script>
 	</head>
 	
 	<body>
@@ -12,17 +12,17 @@
 			<div id="cabecalho">
 			</div>
 			
-			<div id="menu_superior">
-				<div id="menu_superior">
-				<a href="../../site/paginas/home.php">Home</a> ::
-            	<a href="../formularios/cadastro.torcedor.php">Cadastrar-se</a> ::
-           	 	<a href="../../site/consultas/lista.time.php">Consultas</a> ::   
-				 <a href="../../adm/paginas/home.php">Entrar</a>
-			</div>
+			<header>
+                <nav id="menu_superior">
+                    <a href="../../site/paginas/home.php">Home</a> ::
+	            	<a href="../formularios/cadastro.torcedor.php">Cadastrar-se</a> ::
+	           	 	<a href="../../site/consultas/lista.time.php">Consultas</a> ::   
+					<a href="../../adm/paginas/home.php">Entrar</a>
+                </nav>
+            </header>
 			
-			<div id="conteudo">
-				<!-- InstanceBeginEditable name="conteudo" -->
-				<h2>Login</h2>
+			<div id="conteudo" class="form">
+				<h2 class="titulo">Login</h2>
 				
 				<form method="post" 
 				action="../adaptadores/adaptador.login.php"
@@ -60,13 +60,11 @@
 						echo urldecode($_GET['msg']);
 					}	
 				?>
-				<!-- InstanceEndEditable -->
+				
 			</div>
 			
-			<div id="rodape">
-				
-			</div>       	
+			<footer id="rodape">
+            </footer>       	
 		</div>
 	</body>
-	<!-- InstanceEnd -->
 </html>

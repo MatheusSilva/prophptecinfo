@@ -1,11 +1,8 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/tpladmin.dwt.php" codeOutsideHTMLIsLocked="false" -->
+﻿<!DOCTYPE html> 
+<html lang="pt-br">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<!-- InstanceBeginEditable name="doctitle" -->
 		<title>Cat&aacute;logo de Jogos</title>
-		<!-- InstanceEndEditable -->
-		<!-- InstanceBeginEditable name="head" -->
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
 		
 		<script language="javascript" type="text/javascript">
@@ -18,7 +15,6 @@
 				}	
 			}
 		</script>
-		<!-- InstanceEndEditable -->
 	</head>
 	
 	<body>
@@ -26,16 +22,17 @@
 			<div id="cabecalho">
 			</div>
 			
-			<div id="menu_superior">
-				<a href="../paginas/home.php">Home</a> ::
-				<a href="../paginas/cadastros.php">Cadastros</a> ::
-				<a href="../paginas/consultas.php">Consultas</a> ::
-				<a href="../formularios/logout.php">Sair</a>
-			</div>
+			<header>
+                <nav id="menu_superior">
+                    <a href="../paginas/home.php">Home</a> ::
+					<a href="../paginas/cadastros.php">Cadastros</a> ::
+					<a href="../paginas/consultas.php">Consultas</a> ::
+					<a href="../formularios/logout.php">Sair</a>
+                </nav>
+            </header>
 			
 			<div id="conteudo">
-				<!-- InstanceBeginEditable name="conteudo" -->
-				<h2>Consulta por nome dos torcedores</h2>
+				<h2 class="titulo">Consulta por nome dos torcedores</h2>
 				
 				<form method="get" action="consulta.nometorcedor.php"
 						name="frmConsulta" id="frmConsulta">
@@ -62,7 +59,6 @@
 						$vetor = Torcedor::listarPorNome($_GET['txtNome']);
 						
 						if ($vetor != 0) {
-							// lista os torcedores
 							$linha = 0;
 							
 							foreach ($vetor as $info) {								
@@ -90,14 +86,11 @@
 					}
 					?>
 				</table>
-					
-				<!-- InstanceEndEditable -->
+
 			</div>
 			
-			<div id="rodape">
-				
-			</div>       	
+			<footer id="rodape">
+            </footer>        	
 		</div>
 	</body>
-	<!-- InstanceEnd -->
 </html>

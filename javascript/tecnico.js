@@ -1,7 +1,13 @@
 function consultar()
 {
-    $.getJSON( "http://localhost/sistemaRest/api/tecnico", function( json ) 
-    {
+    var pesquisa = '';
+
+    if ($("#txtNome").val() != undefined) {
+        pesquisa = $("#txtNome").val();
+    }
+    
+    $.getJSON( "http://localhost/sistemaRest/api/v1/tecnico/index.php?a=3", { p: pesquisa })
+    .done(function( json ) {
         var len         = json.tecnicos.length;
         var temRegistro = false;
         var strHTML     = '<table width="80%" class="lista">'
@@ -12,13 +18,13 @@ function consultar()
                         + '</tr>';
 
         for (var i=0; i < len; i++) {
-            var codigo   = json.tecnicos[i].codigo;
+            var codigo   = json.tecnicos[i].codigo_tecnico;
             var nome     = json.tecnicos[i].nome;
 
             if (i % 2 == 0) {
-              strHTML = strHTML + '<tr class="linha_par">';
+                strHTML = strHTML + '<tr class="linha_par">';
             } else {
-              strHTML = strHTML + '<tr class="linha_impar">';
+                strHTML = strHTML + '<tr class="linha_impar">';
             }	
 
             var detalhes = "<a href=\"../consultas/detalhe.tecnico.htm?codigo="
@@ -42,9 +48,9 @@ function consultar()
             temRegistro = true;	
         }
 
-        if(temRegistro  == false) {
+        if (temRegistro  == false) {
             strHTML = "Nenhuma tecnico cadastrada";
-        }   
+        }
 
         strHTML = strHTML + "</table>";
 
@@ -72,13 +78,15 @@ function confirmar(codigo)
 
         if (codigo == "") {
             mensagem += "Código invalido";
+        } else {
+            codigo = "&id="+codigo;
         }
 
         var token  = getCookie('token');
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
         
         if(mensagem == "") {
@@ -86,7 +94,7 @@ function confirmar(codigo)
                 type: 'DELETE',
                 contentType: 'application/json',
                 dataType: "json",
-                url: 'http://localhost/sistemaRest/api/tecnico/'+codigo+consulta,
+                url: 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6'+codigo+consulta,
                 success: function(data) {
                     alert(data.mensagem);
                     location.reload();				
@@ -119,7 +127,7 @@ $(document).ready(function() {
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
         
         if (mensagem == "") {
@@ -127,16 +135,16 @@ $(document).ready(function() {
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: "json",
-                url: 'http://localhost/sistemaRest/api/tecnico'+consulta,
+                url: 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=4'+consulta,
                 data: formToJSON(),
-                beforeSend: function(){
-                  $("#mensagem").html("<br /><b>Carregando...</b>");
+                beforeSend: function() {
+                    $("#mensagem").html("<br /><b>Carregando...</b>");
                 },
                 success: function(data) {
-                  $("#mensagem").html(data.mensagem);				
+                    $("#mensagem").html(data.mensagem);				
                 },
-                error: function(jqXHR, textStatus, errorThrown){
-                  $("#mensagem").html("<br /><b>Falha ao cadastrar tecnico!</b>");	
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $("#mensagem").html("<br /><b>Falha ao cadastrar tecnico!</b>");	
                 }
             }).done(function( data ) {
                 $("#txtNome").val("");		 	     	
@@ -150,6 +158,12 @@ $(document).ready(function() {
         var codigo = $("#codigo").val();
         var mensagem = "";
 
+        if (codigo == "") {
+            mensagem += "Código invalido";
+        } else {
+            codigo = "&id="+codigo;
+        }
+        
         if ($("#txtNome").val() == "") {
             mensagem += "<br /><b>Você não preencheu a tecnico</b>";
         }
@@ -158,7 +172,7 @@ $(document).ready(function() {
         var consulta = "";
 
         if (token !== "") {
-            consulta = "/"+token;
+            consulta = "&tk="+token;
         }
         
         if(mensagem == "") {
@@ -166,7 +180,7 @@ $(document).ready(function() {
                 type: 'PUT',
                 contentType: 'application/json',
                 dataType: "json",
-                url: 'http://localhost/sistemaRest/api/tecnico/'+codigo+consulta,
+                url: 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5'+codigo+consulta,
                 data: formToJSON(),
                 beforeSend: function(){
                     $("#mensagem").html("<br /><b>Carregando...</b>");

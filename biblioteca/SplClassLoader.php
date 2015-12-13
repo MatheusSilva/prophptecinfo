@@ -135,9 +135,10 @@ class SplClassLoader
             $fileName = str_replace("//", "/", $fileName);
             
             $fileName = str_replace("var/www/", "", $fileName);
-            $fileName = str_replace("sistemaRest/", "/var/www/sistemaRest/", $fileName);
-            
-            require_once $fileName;
+            //$fileName = str_replace("sistemaRest/", "/var/www/sistemaRest/", $fileName);
+            $fileName = str_replace("sistemaRest/", "C:/wamp/www/sistemaRest/", $fileName);
+			
+            //require_once $fileName;
         }
     }
 }

@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'sistemaRest/tests' => array($baseDir . '/'),
-    'Slim' => array($vendorDir . '/slim/slim'),
 );

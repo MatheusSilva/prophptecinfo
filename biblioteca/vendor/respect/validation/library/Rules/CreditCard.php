@@ -1,4 +1,14 @@
 <?php
+
+/*
+ * This file is part of Respect/Validation.
+ *
+ * (c) Alexandre Gomes Gaigalas <alexandre@gaigalas.net>
+ *
+ * For the full copyright and license information, please view the "LICENSE.md"
+ * file that was distributed with this source code.
+ */
+
 namespace Respect\Validation\Rules;
 
 class CreditCard extends AbstractRule
@@ -17,7 +27,7 @@ class CreditCard extends AbstractRule
     {
         $sum = 0;
         $input = strrev($input);
-        for ($i = 0; $i < strlen($input); $i++) {
+        for ($i = 0; $i < strlen($input); ++$i) {
             $current = substr($input, $i, 1);
             if ($i % 2 == 1) {
                 $current *= 2;

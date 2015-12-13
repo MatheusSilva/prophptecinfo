@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildpath>
+	<buildpathentry kind="src" path="adm/adaptadores"/>
+	<buildpathentry kind="src" path="adm/admin"/>
+	<buildpathentry kind="src" path="adm/classes"/>
+	<buildpathentry kind="src" path="adm/consultas"/>
+	<buildpathentry kind="src" path="adm/formularios"/>
+	<buildpathentry kind="src" path="adm/paginas"/>
+	<buildpathentry kind="src" path="api"/>
+	<buildpathentry kind="src" path="biblioteca"/>
+	<buildpathentry kind="src" path="site/consultas"/>
+	<buildpathentry kind="src" path="site/paginas"/>
+	<buildpathentry kind="src" path="Templates"/>
+	<buildpathentry kind="src" path="tests/api"/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+</buildpath>

@@ -1,73 +1,26 @@
 [
     {
-        "name": "slim/slim",
-        "version": "2.6.2",
-        "version_normalized": "2.6.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/slimphp/Slim.git",
-            "reference": "20a02782f76830b67ae56a5c08eb1f563c351a37"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/slimphp/Slim/zipball/20a02782f76830b67ae56a5c08eb1f563c351a37",
-            "reference": "20a02782f76830b67ae56a5c08eb1f563c351a37",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "suggest": {
-            "ext-mcrypt": "Required for HTTP cookie encryption"
-        },
-        "time": "2015-03-08 18:41:17",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Slim": "."
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Josh Lockhart",
-                "email": "info@joshlockhart.com",
-                "homepage": "http://www.joshlockhart.com/"
-            }
-        ],
-        "description": "Slim Framework, a PHP micro framework",
-        "homepage": "http://github.com/codeguy/Slim",
-        "keywords": [
-            "microframework",
-            "rest",
-            "router"
-        ]
-    },
-    {
         "name": "respect/validation",
-        "version": "0.9.3",
-        "version_normalized": "0.9.3.0",
+        "version": "1.0.3",
+        "version_normalized": "1.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Respect/Validation.git",
-            "reference": "403b80e92c9ea3a411bba20fb674c8c67a85647b"
+            "reference": "0c536453114987b7e0f6f72369d3be0af8dd1109"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Respect/Validation/zipball/403b80e92c9ea3a411bba20fb674c8c67a85647b",
-            "reference": "403b80e92c9ea3a411bba20fb674c8c67a85647b",
+            "url": "https://api.github.com/repos/Respect/Validation/zipball/0c536453114987b7e0f6f72369d3be0af8dd1109",
+            "reference": "0c536453114987b7e0f6f72369d3be0af8dd1109",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.0"
+            "php": ">=5.4"
         },
         "require-dev": {
             "egulias/email-validator": "~1.2",
             "malkusch/bav": "~1.0",
+            "mikey179/vfsstream": "^1.5",
             "phpunit/phpunit": "~4.0",
             "symfony/validator": "~2.6.9",
             "zendframework/zend-validator": "~2.3"
@@ -76,15 +29,16 @@
             "egulias/email-validator": "Strict (RFC compliant) email validation",
             "ext-bcmath": "Arbitrary Precision Mathematics",
             "ext-mbstring": "Multibyte String Functions",
+            "fabpot/php-cs-fixer": "Fix PSR2 and other coding style issues",
             "malkusch/bav": "German bank account validation",
             "symfony/validator": "Use Symfony validator through Respect\\Validation",
             "zendframework/zend-validator": "Use Zend Framework validator through Respect\\Validation"
         },
-        "time": "2015-06-06 13:06:25",
+        "time": "2015-11-25 20:03:11",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "0.9-dev"
+                "dev-master": "1.0-dev"
             }
         },
         "installation-source": "dist",

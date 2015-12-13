@@ -1,10 +1,13 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html> 
+<html lang="pt-br">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Cat&aacute;logo de Jogos</title>
         <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-        <script language="javascript" type="text/javascript" src="../../javascript/categoria.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
+        <script language="javascript" type="text/javascript" src="../../javascript/categoria.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function() {
@@ -20,7 +23,7 @@
                     type: 'GET',
                     contentType: 'application/json',
                     dataType: "json",
-                    url: 'http://localhost/sistemaRest/api/categoria/'+location.queryString.codigo,
+                    url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=2&id='+location.queryString.codigo,
                     beforeSend: function(){
                       $("#txtNome").html("<br /><b>Carregando...</b>");
                     },
@@ -41,17 +44,19 @@
             <div id="cabecalho">
             </div>
 
-            <div id="menu_superior">
+            <header>
+                <nav id="menu_superior">
                     <a href="../paginas/home.php">Home</a> ::
                     <a href="../paginas/cadastros.php">Cadastros</a> ::
                     <a href="../paginas/consultas.php">Consultas</a> ::
                     <a href="logout.php">Sair</a>
-            </div>
+                </nav>
+            </header>
 
             <div id="conteudo">
-                <h2>Alterar Dados de Categoria</h2>
+                <h2 class="titulo">Alterar Dados de Categoria</h2>
 
-                <div id="form">
+                <div class="form">
                     <table>
                         <tr>
                             <td>Nome:</td>
@@ -72,9 +77,8 @@
                 <div id="mensagem" name="mensagem"></div>
             </div>
 
-            <div id="rodape">
-
-            </div>       	
+            <footer id="rodape">
+            </footer>
         </div>
     </body>
 </html>

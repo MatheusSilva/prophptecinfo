@@ -1,6 +1,4 @@
 <?php
-namespace sistemaRest\adm\classes;
-use sistemaRest\adm\classes\Conexao;
 
 /**
 * classe Torcedor
@@ -14,6 +12,11 @@ class Torcedor
 	private $nome;
 	private $login;		
 	private $senha;	
+	
+	public function __construct()
+	{
+	    require_once "../classes/Conexao.php";
+	}
 	
 	public function getCodigoTorcedor()
 	{
