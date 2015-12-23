@@ -4,9 +4,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Cat&aacute;logo de Jogos</title>
         <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-        <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-    <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
-        <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
+        
+        <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/login.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/scripts.min.js"></script>
 
         <script type="text/javascript">
             location.queryString = {};
@@ -19,10 +24,10 @@
             });
 
             var codigo = location.queryString.codigo;
-            carregaDivisao(codigo);
-            carregaCategoria(codigo);
-            carregaTecnico(codigo);
-            listaNomePorCodigo(codigo);
+            Time.carregaDivisao(codigo);
+            Time.carregaCategoria(codigo);
+            Time.carregaTecnico(codigo);
+            Time.listaNomePorCodigo(codigo);
 
             $(document).ready(function() {
                 $("#codigo").val(codigo);
@@ -47,7 +52,7 @@
             <div id="conteudo">
                 <h2 class="titulo">Alterar Dados de Time</h2>
 
-                <div id="frmCadastro" class="form">
+                <form id="frmTime" name="frmTime" class="form">
                     <table>
                         <tr>
                             <td>Nome:</td>
@@ -90,13 +95,13 @@
                         <tr>
                             <td colspan="2">
                                 <input type="hidden" name="acao" value="2" />
-                                <input type="submit" name="btnAlterar" value="Alterar" id="btnAlterar" />
+                                <input type="submit" name="btnAlterar" value="Alterar" id="btnAlterar" onclick="Time.atualizar(frmTime)" />
                                 <input type="reset" name="btnLimpar" value="Limpar" id="btnLimpar" />
                             </td>
                         </tr>
                     </table>
                     <input type="hidden" id="codigo" name="codigo" />
-                </div>
+                </form>
             </div>
 
             <footer id="rodape">

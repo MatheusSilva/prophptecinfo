@@ -11,7 +11,6 @@ if (isset($_REQUEST["a"]) && empty($_REQUEST["a"]) === false) {
     $acao  = $_REQUEST["a"];        
 }
 
-
 if (isset($_REQUEST["id"]) && empty($_REQUEST["id"]) === false) {
     $id  = $_REQUEST["id"];        
 }
@@ -31,7 +30,7 @@ if (empty($acao)) {
     $items   = $tecnico->listarTudo();
     $results = array();
 
-    if ($items) {
+    if(!empty($items)) {
         // get all results
         foreach($items as $row) {
             $itemArray = array(
@@ -52,8 +51,8 @@ if (empty($acao)) {
     $arrTodosTecnico   = $objTecnico->listarTudo();
     $arrTecnicoTime   = $objTecnico->listaTecnicoPorTime(null,$id);
     $results = array();
-    
-    if ($arrTodosTecnico) {
+
+    if(!empty($arrTodosTecnico)) {
         // get all results
         foreach($arrTodosTecnico as $valor) {
             
@@ -97,18 +96,21 @@ if (empty($acao)) {
     $tecnico = new tecnico();
     $items = $tecnico->listarPorCodigo($id);
     
-    if ($items) {
+    if(!empty($items)) {
         echo json_encode($items);
     } 
 } else if ($acao == 3) {
     $tecnico = new tecnico();
     $items   = $tecnico->listarPorNome($p);
     
-    if($items) {
+    if(!empty($items)) {
         $json = "{\"tecnicos\":";
         $json .= json_encode($items);
         $json .= "}";
         echo $json;
+    } else {
+        $json["mensagem"] = "Nenhum tecnico cadastrado.";
+        echo json_encode($json);
     }
 
 } else if ($acao == 4) {	

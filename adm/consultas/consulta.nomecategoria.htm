@@ -1,12 +1,17 @@
 <!DOCTYPE html> 
 <html lang="pt-br">
 	<head>
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <title>Cat&aacute;logo de Jogos</title>
-            <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-            <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-    <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
-        <script language="javascript" type="text/javascript" src="../../javascript/categoria.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Cat&aacute;logo de Jogos</title>
+        <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
+        
+        <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/login.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/scripts.min.js"></script>
 	</head>
 	
 	<body>
@@ -27,10 +32,10 @@
 			<div id="conteudo">
 				<h2 class="titulo">Consulta por nome as categorias</h2>
 				<p>As alterações são realizadas instantaneamente porem pode levar ate 10 minutos para que as alterações sejam visualizadas pois o sistema esta utilizando cache)</p>
-				<div class="form" >
+				<form class="form" id="frmCategoria" name="frmCategoria">
 					Nome: <input type="text" name="txtNome" id="txtNome" />
-					<input type="button" id="btnConsultar" name="btnConsultar" value="Consultar" />
-				</div>             
+					<input type="button" id="btnConsultar" name="btnConsultar" value="Consultar" onclick="Categoria.consultar(frmCategoria)" />
+				</form>         
 				
 				<div id="tabela" name="tabela"></div>	
 			</div>

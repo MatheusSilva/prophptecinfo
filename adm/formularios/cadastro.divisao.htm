@@ -4,9 +4,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Cat&aacute;logo de Jogos</title>
         <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-        <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-    <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
-        <script language="javascript" type="text/javascript" src="../../javascript/divisao.js"></script>
+        
+        <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/login.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/scripts.min.js"></script>
     </head>
 
     <body>
@@ -27,7 +32,7 @@
             <div id="conteudo">
                 <h2 class="titulo">Cadastro de Divisão</h2>
 
-                <div class="form">
+                <form class="form" id="frmDivisao" name="frmDivisao">
                     <table>
                         <tr>
                             <td>Nome:</td>
@@ -38,11 +43,11 @@
 
                         <tr>
                             <td colspan="2">
-                                <input id="btnCadastrar" type="button" value="Cadastrar" />
+                                <input id="btnCadastrar" type="button" value="Cadastrar" onclick="Divisao.cadastrar(frmDivisao)" />
                             </td>
                         </tr>
                     </table>
-                </div>
+                </form>
 
                 <div id="mensagem"></div>
             </div>

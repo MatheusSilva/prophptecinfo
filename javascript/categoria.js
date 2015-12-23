@@ -1,123 +1,159 @@
-function consultar()
-{
-    var pesquisa = '';
+let linkReq = '';
 
-    if ($("#txtNome").val() != undefined) {
-        pesquisa = $("#txtNome").val();
+class Categoria
+{
+    static consultar(form)
+    {
+        var pesquisa = '';
+
+        if (form != null && form.txtNome.value != undefined) {
+            pesquisa = form.txtNome.value;
+        }
+
+        linkReq = Ajax.criaRequest();
+        if(linkReq != undefined){
+          //Montar requisição
+          linkReq.open("POST","http://localhost/sistemaRest/api/v1/categoria/index.php?a=3",true);
+          linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          linkReq.onreadystatechange = Categoria.listaCategoria;
+
+          var params = "{ \"p\": \""+pesquisa+"\" }"; 
+
+          //Enviar
+          linkReq.send(params); 
+        }
     }
 
-    $.getJSON( "http://localhost/sistemaRest/api/v1/categoria/index.php?a=3", { p: pesquisa })
-    .done(function( json ) {
-        var len         = json.categorias.length;
-        var temRegistro = false;
-        
-        var strHTML     = '<table width="80%" class="lista">'
-                        +'<tr class="primeira_linha">'
-                        +'<td>C&oacute;digo</td>'
-                        +'<td>Nome</td>'
-                        +'<td>A&ccedil;&otilde;es</td>'
-                        +'</tr>';
-                        
-        for (var i=0; i < len; i++) {
-            var codigo    = json.categorias[i].codigo_categoria;
-            var nome      = json.categorias[i].nome;
+    static listaCategoria()
+    {
+        //Verificar pelo estado "4" de pronto.
+        if (linkReq.readyState == '4') {
+            //Pegar dados da resposta json
+            var json = JSON.parse(linkReq.responseText);
+            
+            // Pega a tabela.
+            var table = document.getElementById("tabela");
+            
+            // Limpa toda a INNER da tabela.
+            table.innerHTML = "";
+            
+            var len = 0;
 
-            if (i % 2 == 0) {
-                strHTML = strHTML + '<tr class="linha_par">';
-            } else {
-                strHTML = strHTML + '<tr class="linha_impar">';
+            if (json.categorias != null) {
+                len         = json.categorias.length;
             }
 
-            var detalhes = "<a href=\"../consultas/detalhe.categoria.htm?codigo="
-            + codigo
-            + "\">[D]</a>";
+            var temRegistro = false;
+            
+            var strHTML     = '<table width="80%" class="lista">'
+                            +'<tr class="primeira_linha">'
+                            +'<td>C&oacute;digo</td>'
+                            +'<td>Nome</td>'
+                            +'<td>A&ccedil;&otilde;es</td>'
+                            +'</tr>';
+                            
+            for (var i=0; i < len; i++) {
+                var codigo    = json.categorias[i].codigo_categoria;
+                var nome      = json.categorias[i].nome;
 
-            var alterar = "<a href=\"../formularios/alterar.categoria.htm?codigo="
-            + codigo
-            + "\">[A]</a>";
-
-            var excluir = "<a href=\"javascript:confirmar("
-            + codigo
-            + ")\">[X]</a>";
-
-            var acao = detalhes+alterar+excluir;
-
-            strHTML = strHTML + "<td>"+codigo+"</td>"
-            + "<td>"+nome+"</td>"	
-            + "<td>"+acao+"</td>"	
-            + "</tr>";
-            temRegistro = true;	
-        }
-
-        if(temRegistro  == false) {
-            strHTML = "Nenhuma categoria cadastrada";
-        }   
-
-        strHTML = strHTML + "</table>";
-
-        $("#tabela").html(strHTML);
-    });
-}
-
-function formToJSON() 
-{
-    return JSON.stringify({
-        "codigo": $("#codigo").val(),
-        "txtNome": $("#txtNome").val()
-    });
-}
-
-function confirmar(codigo)
-{
-    var ok = window.confirm("Voce tem certeza que deseja excluir?");
-
-    if (ok) {	
-        var mensagem = "";
-
-        if (codigo == "") {
-            mensagem += "Código invalido";
-        } else {
-            codigo = "&id="+codigo;
-        }
-
-        var token  = getCookie('token');
-        var consulta = "";
-
-        if (token !== "") {
-            consulta = "&tk="+token;
-        }
-                
-        if(mensagem == "") {
-            $.ajax({
-                type: 'DELETE',
-                contentType: 'application/json',
-                dataType: "json",
-                url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=6'+codigo+consulta,
-                success: function(data) {
-                    alert(data.mensagem);
-                    location.reload();				
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    alert("Falha ao excluir categoria!");	
+                if (i % 2 == 0) {
+                    strHTML = strHTML + '<tr class="linha_par">';
+                } else {
+                    strHTML = strHTML + '<tr class="linha_impar">';
                 }
-            });
-        } else {
-            alert(mensagem);
+
+                var detalhes = "<a href=\"../consultas/detalhe.categoria.htm?codigo="
+                + codigo
+                + "\">[D]</a>";
+
+                var alterar = "<a href=\"../formularios/alterar.categoria.htm?codigo="
+                + codigo
+                + "\">[A]</a>";
+
+                var excluir = "<a href=\"javascript:Categoria.confirmar("
+                + codigo
+                + ")\">[X]</a>";
+
+                var acao = detalhes+alterar+excluir;
+
+                strHTML = strHTML + "<td>"+codigo+"</td>"
+                + "<td>"+nome+"</td>"   
+                + "<td>"+acao+"</td>"   
+                + "</tr>";
+                temRegistro = true; 
+            }
+
+            if(temRegistro  == false) {
+                strHTML = json.mensagem;
+            }   
+
+            strHTML = strHTML + "</table>";
+
+            table.innerHTML = strHTML;
         }
-   }
-}
+    }
 
-$(document).ready(function() {
-    $("#mensagem").html("");
+    static formToJSON(form) 
+    {
+        var codigo = "";
 
-    $("#btnConsultar").click(function() {
-        consultar();
-    });
+        if (form.codigo != undefined) {
+            codigo = form.codigo.value;
+        }
 
-    $("#btnCadastrar").click(function() {
+
+        return JSON.stringify({
+            "codigo": codigo,
+            "txtNome": form.txtNome.value
+        });
+    }
+
+    static confirmar(codigo)
+    {
+        var ok = window.confirm("Voce tem certeza que deseja excluir?");
+
+        if (ok) {	
+            var mensagem = "";
+
+            if (codigo == "") {
+                mensagem += "Código invalido";
+            } else {
+                codigo = "&id="+codigo;
+            }
+
+            var token  = getCookie('token');
+            var consulta = "";
+
+            if (token !== "") {
+                consulta = "&tk="+token;
+            }
+                    
+            if(mensagem == "") {
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: "json",
+                    url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=6'+codigo+consulta,
+                    success: function(data) {
+                        alert(data.mensagem);
+                        location.reload();				
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert("Falha ao excluir categoria!");	
+                    }
+                });
+            } else {
+                alert(mensagem);
+            }
+       }
+    }
+
+    static cadastrar(form) 
+    {
+        //$("#mensagem").html("");
         var mensagem = "";
 
-        if ($("#txtNome").val() == "") {
+        if (form.txtNome.value == "") {
             mensagem += "<br /><b>Você não preencheu a categoria</b>";
         }
 
@@ -134,26 +170,27 @@ $(document).ready(function() {
                 contentType: 'application/json',
                 dataType: "json",
                 url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=4'+consulta,
-                data: formToJSON(),
-                beforeSend: function(){
-                    $("#mensagem").html("<br /><b>Carregando...</b>");
+                data: Categoria.formToJSON(form),
+                beforeSend: function() {
+                    document.getElementById("mensagem").innerHTML = "<br /><b>Carregando...</b>";
                 },
                 success: function(data) {
-                    $("#mensagem").html(data.mensagem);				
+                    document.getElementById("mensagem").innerHTML = data.mensagem;				
                 },
-                error: function(jqXHR, textStatus, errorThrown){
-                    $("#mensagem").html("<br /><b>Falha ao cadastrar categoria!</b>");	
+                error: function(jqXHR, textStatus, errorThrown) {
+                    document.getElementById("mensagem").innerHTML = "<br /><b>Falha ao cadastrar categoria!</b>";	
                 }
             }).done(function( data ) {
-                $("#txtNome").val("");		 	     	
+                document.getElementById("txtNome").value = "";	 	     	
             });
         } else {
-            $("#mensagem").html(mensagem);
+            document.getElementById("mensagem").innerHTML = mensagem;
         } 
-    });
+    }
 
-    $("#btnAtualizar").click(function() {
-        var codigo = $("#codigo").val();
+    static atualizar(form) 
+    {
+        var codigo = form.codigo.value;
         var mensagem = "";
 
         if (codigo == "") {
@@ -175,23 +212,23 @@ $(document).ready(function() {
 
         if(mensagem == "") {
             $.ajax({
-                type: 'PUT',
+                type: 'POST',
                 contentType: 'application/json',
                 dataType: "json",
                 url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=5'+codigo+consulta,
-                data: formToJSON(),
+                data: Categoria.formToJSON(form),
                 beforeSend: function(){
-                    $("#mensagem").html("<br /><b>Carregando...</b>");
+                    document.getElementById("mensagem").innerHTML = "<br /><b>Carregando...</b>";
                 },
                 success: function(data) {
-                    $("#mensagem").html("<br /><b>"+data.mensagem+"</br>");			
+                    document.getElementById("mensagem").innerHTML = "<br /><b>"+data.mensagem+"</br>";			
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    $("#mensagem").html("<br /><b>Falha ao alterar categoria!</b>");	
+                    document.getElementById("mensagem").innerHTML = "<br /><b>Falha ao alterar categoria!</b>";
                 }
             });
         } else {
-            $("#mensagem").html(mensagem);
+            document.getElementById("mensagem").innerHTML = mensagem;
         } 
-    });
-});
+    }
+}

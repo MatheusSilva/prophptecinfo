@@ -26,13 +26,13 @@ class Login
 		$retornoSelect =  $stmt->fetch(\PDO::FETCH_ASSOC);
                 
 		if (empty($retornoSelect) === false) {
-	        $sql   = "\n update torcedor";
-	        $sql  .= "\n set token = :token";
+	        $sql   = "\n UPDATE torcedor";
+	        $sql  .= "\n SET token   = :token";
 	        $sql  .= "\n WHERE login = :torcedor";
-	        $sql  .= "\n AND senha = :senha";
+	        $sql  .= "\n AND senha   = :senha";
 
-	        $token  = md5($torcedor);
-	        $token .= $senha;		  
+	        $token  = md5(($torcedor.$senha));
+
 	        $stmt = $conexao->prepare($sql);
 	        $stmt->bindParam(":token", $token);
 	        $stmt->bindParam(":torcedor", $torcedor);
@@ -72,9 +72,9 @@ class Login
 	public static function sair()
 	{
 	    require_once "../classes/Conexao.php";
-        $sql   = "\n update torcedor";
-        $sql  .= "\n set token = :token";
-        $sql  .= "\n WHERE login = :torcedor";
+        $sql   = "\n UPDATE torcedor";
+        $sql  .= "\n SET    token = :token";
+        $sql  .= "\n WHERE  login = :torcedor";
         
         $token = "h";
         

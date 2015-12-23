@@ -5,12 +5,17 @@
         <title>Cat&aacute;logo de Jogos</title>
         <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
 
-        <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-    <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
-        <script language="javascript" type="text/javascript" src="../../javascript/categoria.js"></script>
+        <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/login.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/scripts.min.js"></script>
+        
 
         <script type="text/javascript">
-            $(document).ready(function() {
+            jQuery(document).ready(function() {
                 location.queryString = {};
                 location.search.substr(1).split("&").forEach(function (pair) {
                     if (pair === "") return;
@@ -19,7 +24,7 @@
                         decodeURIComponent(parts[1].replace(/\+/g, " "));
                 });
 
-                $.ajax({
+                jQuery.ajax({
                     type: 'GET',
                     contentType: 'application/json',
                     dataType: "json",
@@ -56,7 +61,7 @@
             <div id="conteudo">
                 <h2 class="titulo">Alterar Dados de Categoria</h2>
 
-                <div class="form">
+                <form class="form" id="frmCategoria" name="frmCategoria">
                     <table>
                         <tr>
                             <td>Nome:</td>
@@ -68,11 +73,11 @@
                         <tr>
                             <td colspan="2">
                                 <input type="hidden" name="codigo" id="codigo" value="" />
-                                <input id="btnAtualizar" name="btnAtualizar" type="button" value="Alterar" />	
+                                <input id="btnAtualizar" name="btnAtualizar" type="button" value="Alterar" onclick="Categoria.atualizar(frmCategoria)" />	
                             </td>
                         </tr>
                     </table>
-                </div>
+                </form>
 
                 <div id="mensagem" name="mensagem"></div>
             </div>

@@ -5,9 +5,13 @@
 		<title>Cat&aacute;logo de Jogos</title>
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
 
-                <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-    <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
-        <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
+        <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/login.min.js"></script>
+
+        <script language="javascript" type="text/javascript" src="../../javascript/scripts.min.js"></script>
 	</head>
 	
 	<body>
@@ -28,10 +32,10 @@
 			<div id="conteudo">
 				<h2 class="titulo">Consulta por nome os times</h2>
 				
-                                <div class="form">
+                <form class="form" id="frmTime" name="frmTime">
 					Nome: <input type="text" name="txtNome" id="txtNome" />
-					<input type="button" id="btnConsultar" name="btnConsultar" value="Consultar" />
-				</div>                             
+					<input type="button" id="btnConsultar" name="btnConsultar" value="Consultar" onclick="Time.consultar(frmTime)" />
+				</form>                             
 	
 				<div id="tabela" name="tabela">
 				</div>

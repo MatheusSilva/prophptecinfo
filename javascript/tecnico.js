@@ -1,125 +1,201 @@
-function consultar()
+class Tecnico
 {
-    var pesquisa = '';
+    static valida()
+    {
+        var strErro = '';
 
-    if ($("#txtNome").val() != undefined) {
-        pesquisa = $("#txtNome").val();
-    }
-    
-    $.getJSON( "http://localhost/sistemaRest/api/v1/tecnico/index.php?a=3", { p: pesquisa })
-    .done(function( json ) {
-        var len         = json.tecnicos.length;
-        var temRegistro = false;
-        var strHTML     = '<table width="80%" class="lista">'
-                        + '<tr class="primeira_linha">'
-                        + '<td>C&oacute;digo</td>'
-                        + '<td>Nome</td>'
-                        + '<td>A&ccedil;&otilde;es</td>'
-                        + '</tr>';
-
-        for (var i=0; i < len; i++) {
-            var codigo   = json.tecnicos[i].codigo_tecnico;
-            var nome     = json.tecnicos[i].nome;
-
-            if (i % 2 == 0) {
-                strHTML = strHTML + '<tr class="linha_par">';
-            } else {
-                strHTML = strHTML + '<tr class="linha_impar">';
-            }	
-
-            var detalhes = "<a href=\"../consultas/detalhe.tecnico.htm?codigo="
-            + codigo
-            + "\">[D]</a>";
-
-            var alterar = "<a href=\"../formularios/alterar.tecnico.htm?codigo="
-            + codigo
-            + "\">[A]</a>";
-
-            var excluir = "<a href=\"javascript:confirmar("
-            + codigo
-            + ")\">[X]</a>";
-
-            var acao = detalhes+alterar+excluir;
-
-            strHTML = strHTML + "<td>"+codigo+"</td>"
-            + "<td>"+nome+"</td>"	
-            + "<td>"+acao+"</td>"	
-            + "</tr>";
-            temRegistro = true;	
-        }
-
-        if (temRegistro  == false) {
-            strHTML = "Nenhuma tecnico cadastrada";
-        }
-
-        strHTML = strHTML + "</table>";
-
-        $("#tabela").html(strHTML);
-    });
-}
-
-function formToJSON() 
-{
-    return JSON.stringify({
-        "codigo": $("#codigo").val(),
-        "cmbDia": $("#cmbDia option:selected").val(),
-        "cmbMes": $("#cmbMes option:selected").val(),
-        "cmbAno": $("#cmbAno option:selected").val(),
-        "txtNome": $("#txtNome").val()
-    });
-}
-
-function confirmar(codigo)
-{
-    var ok = window.confirm("Voce tem certeza que deseja excluir?");
-
-    if (ok) {		
-        var mensagem = "";
-
-        if (codigo == "") {
-            mensagem += "Código invalido";
-        } else {
-            codigo = "&id="+codigo;
-        }
-
-        var token  = getCookie('token');
-        var consulta = "";
-
-        if (token !== "") {
-            consulta = "&tk="+token;
+        if (document.getElementById("txtNome").value == "") {
+            strErro = strErro + "\nVoce Nao Preencheu o Nome";
         }
         
-        if(mensagem == "") {
-            $.ajax({
-                type: 'DELETE',
-                contentType: 'application/json',
-                dataType: "json",
-                url: 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6'+codigo+consulta,
-                success: function(data) {
-                    alert(data.mensagem);
-                    location.reload();				
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    alert("Falha ao excluir tecnico!");	
-                }
-            });
-        } else {
-            alert(mensagem);
-        } 
-   }
-}
+        if (document.getElementById("cmbDia").value == "Dia") {
+            strErro = strErro + "\nVoce Nao Preencheu o Dia";
+        }
+        
+        if (document.getElementById("cmbMes").value == "Mes") {
+            strErro = strErro + "\nVoce Nao Preencheu o Mes";
+        }
+        
+        if (document.getElementById("cmbAno").value == "Ano") {
+            strErro = strErro + "\nVoce Nao Preencheu o Ano";
+        }
+        
+        if (document.getElementById("cmbDia").value == "31") {
+            if (document.getElementById("cmbMes").value == "04" 
+            || document.getElementById("cmbMes").value  == "06" 
+            || document.getElementById("cmbMes").value  == "09" 
+            || document.getElementById("cmbMes").value  == "11") {
+                strErro = strErro + "\no Mes que voce escolheu nao possui mais de 30 dias";
+            }
+        }
+         
+        if ((document.getElementById("cmbDia").value == "29") && (document.getElementById("cmbMes").value == "02")) {
+            if ((document.getElementById("cmbAno").value%4 != "0") || (document.getElementById("cmbAno").value%100 != "0") || (document.getElementById("cmbAno").value%400 != "0")) {
+                strErro = strErro + "\nEste ano nao e bissexto";
+            }
+        }
+        
+        if ((document.getElementById("cmbDia").value == "30") || (document.getElementById("cmbDia").value == "31") && (document.getElementById("cmbMes").value == "02")) {
+            strErro = strErro + "\nfevereiro nao tem mais que 29 dias";
+        }
 
-$(document).ready(function() {
-    $("#mensagem").html("");
+        if(strErro != "") {
+            alert(strErro);
+            return false;
+        }
+    }
 
-    $("#btnConsultar").click(function() {
-        consultar();
-    });
+    static consultar(form)
+    {
+        var pesquisa = '';
 
-    $("#btnCadastrar").click(function() {
+        if (form != null && form.txtNome != undefined) {
+            pesquisa = form.txtNome.value;
+        }
+        
+        jQuery.getJSON( "http://localhost/sistemaRest/api/v1/tecnico/index.php?a=3", { p: pesquisa })
+        .done(function( json ) {
+            var len = 0;
+            
+            if (json.tecnicos != null) {
+                len         = json.tecnicos.length;
+            }
+            
+            var temRegistro = false;
+            var strHTML     = '<table width="80%" class="lista">'
+                            + '<tr class="primeira_linha">'
+                            + '<td>C&oacute;digo</td>'
+                            + '<td>Nome</td>'
+                            + '<td>A&ccedil;&otilde;es</td>'
+                            + '</tr>';
+
+            for (var i=0; i < len; i++) {
+                var codigo   = json.tecnicos[i].codigo_tecnico;
+                var nome     = json.tecnicos[i].nome;
+
+                if (i % 2 == 0) {
+                    strHTML = strHTML + '<tr class="linha_par">';
+                } else {
+                    strHTML = strHTML + '<tr class="linha_impar">';
+                }	
+
+                var detalhes = "<a href=\"../consultas/detalhe.tecnico.htm?codigo="
+                + codigo
+                + "\">[D]</a>";
+
+                var alterar = "<a href=\"../formularios/alterar.tecnico.htm?codigo="
+                + codigo
+                + "\">[A]</a>";
+
+                var excluir = "<a href=\"javascript:Tecnico.confirmar("
+                + codigo
+                + ")\">[X]</a>";
+
+                var acao = detalhes+alterar+excluir;
+
+                strHTML = strHTML + "<td>"+codigo+"</td>"
+                + "<td>"+nome+"</td>"	
+                + "<td>"+acao+"</td>"	
+                + "</tr>";
+                temRegistro = true;	
+            }
+
+            if (temRegistro  == false) {
+                strHTML = json.mensagem;
+            }
+
+            strHTML = strHTML + "</table>";
+            document.getElementById("tabela").innerHTML = strHTML;
+        });
+    }
+
+    static formToJSON(form) 
+    {
+        var codigo  = '';
+        var txtNome = '';
+        var cmbDia  = '';
+        var cmbMes  = '';
+        var cmbAno  = '';
+
+        if (form.codigo != undefined) {
+            codigo = form.codigo.value;
+        }
+
+        if (form.txtNome != undefined) {
+            txtNome = form.txtNome.value;
+        }
+
+        if (form.cmbDia != undefined) {
+            cmbDia = form.cmbDia.options[form.cmbDia.selectedIndex].value;
+        }
+
+        if (form.cmbMes != undefined) {
+            cmbMes = form.cmbMes.options[form.cmbMes.selectedIndex].value;
+        }
+
+        if (form.cmbAno != undefined) {
+            cmbAno = form.cmbAno.options[form.cmbAno.selectedIndex].value;
+        }
+
+        return JSON.stringify({
+            "codigo":  codigo,
+            "cmbDia":  cmbDia,
+            "cmbMes":  cmbMes,
+            "cmbAno":  cmbAno,
+            "txtNome": txtNome
+        });
+    }
+
+    static confirmar(codigo)
+    {
+        var ok = window.confirm("Voce tem certeza que deseja excluir?");
+
+        if (ok) {		
+            var mensagem = "";
+
+            if (codigo == "") {
+                mensagem += "Código invalido";
+            } else {
+                codigo = "&id="+codigo;
+            }
+
+            var token  = getCookie('token');
+            var consulta = "";
+
+            if (token !== "") {
+                consulta = "&tk="+token;
+            }
+            
+            if(mensagem == "") {
+                jQuery.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: "json",
+                    url: 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6'+codigo+consulta,
+                    success: function(data) {
+                        alert(data.mensagem);
+                        location.reload();				
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert("Falha ao excluir tecnico!");	
+                    }
+                });
+            } else {
+                alert(mensagem);
+            } 
+       }
+    }
+
+    static cadastrar(form) 
+    {
+        if (Tecnico.valida() == false) {
+            return false;
+        }
+        
+        document.getElementById("mensagem").innerHTML = "";
         var mensagem = "";
 
-        if ($("#txtNome").val() == "") {
+        if (form.txtNome.value == "") {
             mensagem += "<br /><b>Você não preencheu a tecnico</b>";
         }
 
@@ -131,31 +207,33 @@ $(document).ready(function() {
         }
         
         if (mensagem == "") {
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: "json",
                 url: 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=4'+consulta,
-                data: formToJSON(),
+                data: Tecnico.formToJSON(form),
                 beforeSend: function() {
-                    $("#mensagem").html("<br /><b>Carregando...</b>");
+                    document.getElementById("mensagem").innerHTML = "<br /><b>Carregando...</b>";
                 },
                 success: function(data) {
-                    $("#mensagem").html(data.mensagem);				
+                    document.getElementById("mensagem").innerHTML = data.mensagem;				
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    $("#mensagem").html("<br /><b>Falha ao cadastrar tecnico!</b>");	
+                    document.getElementById("mensagem").innerHTML = "<br /><b>Falha ao cadastrar tecnico!</b>";	
                 }
             }).done(function( data ) {
-                $("#txtNome").val("");		 	     	
+                document.getElementById("txtNome").value = "";
             });
         } else {
-            $("#mensagem").html(mensagem);
+            document.getElementById("mensagem").innerHTML = mensagem;
         } 
-    });
+    }
 
-    $("#btnAtualizar").click(function() {
-        var codigo = $("#codigo").val();
+    static atualizar(form) 
+    {
+
+        var codigo = form.codigo.value;
         var mensagem = "";
 
         if (codigo == "") {
@@ -163,8 +241,9 @@ $(document).ready(function() {
         } else {
             codigo = "&id="+codigo;
         }
-        
-        if ($("#txtNome").val() == "") {
+
+
+        if (form.txtNome.value == "") {
             mensagem += "<br /><b>Você não preencheu a tecnico</b>";
         }
 
@@ -174,27 +253,26 @@ $(document).ready(function() {
         if (token !== "") {
             consulta = "&tk="+token;
         }
-        
+
         if(mensagem == "") {
-            $.ajax({
-                type: 'PUT',
+            jQuery.ajax({
+                type: 'POST',
                 contentType: 'application/json',
                 dataType: "json",
                 url: 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5'+codigo+consulta,
-                data: formToJSON(),
+                data: Tecnico.formToJSON(form),
                 beforeSend: function(){
-                    $("#mensagem").html("<br /><b>Carregando...</b>");
+                    document.getElementById("mensagem").innerHTML = "<br /><b>Carregando...</b>";
                 },
                 success: function(data) {
-                    $("#mensagem").html("<br /><b>"+data.mensagem+"</br>");			
+                    document.getElementById("mensagem").innerHTML = "<br /><b>"+data.mensagem+"</br>";			
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    $("#mensagem").html("<br /><b>Falha ao alterar tecnico!</b>");	
+                    document.getElementById("mensagem").innerHTML = "<br /><b>Falha ao alterar tecnico!</b>";	
                 }
             });
         } else {
-            $("#mensagem").html(mensagem);
+            document.getElementById("mensagem").innerHTML = mensagem;
         } 
-    });
-
-});
+    }
+}

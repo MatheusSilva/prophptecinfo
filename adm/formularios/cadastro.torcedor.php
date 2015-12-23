@@ -4,7 +4,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Cat&aacute;logo de Times</title>
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-		<script language="javascript" type="text/javascript" src="../../javascript/valida_torcedor.js"> </script>
+		<script language="javascript" type="text/javascript" src="../../javascript/scripts.min.js"> </script>
 	</head>
 	
 	<body>
@@ -27,7 +27,7 @@
 				<form method="post" 
 				action="../adaptadores/adaptador.torcedor.php"
 				name="frmCadastro"
-				id="frmCadastro" onSubmit="return valida(this);">
+				id="frmCadastro" onSubmit="return Torcedor.valida(this);">
 					<table>
 						<tr>
 							<td>Nome:</td>

@@ -1,5 +1,4 @@
 <?php
-
 require_once "Categoria.php";
 
 $acao  = "";
@@ -108,7 +107,13 @@ if (empty($acao)) {
         echo json_encode($json);
     }    
 } else if ($acao == 3) {
-
+    $request_body = file_get_contents('php://input');
+    $json    = json_decode($request_body, true);
+    
+    if (isset($json["p"]) && !empty($json["p"])) {
+        $p = $json["p"];
+    }
+    
     $objCategoria = new Categoria();
     $items = $objCategoria->listarPorNome($p);
 

@@ -3,9 +3,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Cat&aacute;logo de Jogos</title>
         <link rel="stylesheet" type="text/css" href="../../css/layoutgeral.css" />
-        <script language="javascript" type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-        <script language="javascript" type="text/javascript" src="../../javascript/crypto.js"></script>
-        <script language="javascript" type="text/javascript" src="../../javascript/valida_login.js"></script>
+        <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script language="javascript" type="text/javascript" src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+        <script language="javascript" type="text/javascript" src="../../javascript/login.min.js"></script>
         <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
