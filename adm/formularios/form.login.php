@@ -6,7 +6,7 @@
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
 			
 		<script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.2.0.js"></script>
-		<script language="javascript" src="../../javascript/login.min.js"></script>
+		<script language="javascript" src="../../javascript/scripts.min.js"></script>
 	</head>
 	
 	<body>
@@ -29,7 +29,7 @@
 				<form method="post" 
 				action="../adaptadores/adaptador.login.php"
 				name="frmLogin"
-				id="frmLogin" onsubmit="valida()">
+				id="frmLogin" onsubmit="return Login.valida()">
 					<table>
 						<tr>
 							<td>Login:</td>
