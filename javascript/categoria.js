@@ -121,7 +121,7 @@ class Categoria
                 codigo = "&id="+codigo;
             }
 
-            var token  = getCookie('token');
+            var token  = Login.getCookie('token');
             var consulta = "";
 
             if (token !== "") {
@@ -157,7 +157,7 @@ class Categoria
             mensagem += "<br /><b>Você não preencheu a categoria</b>";
         }
 
-        var token  = getCookie('token');
+        var token  = Login.getCookie('token');
         var consulta = "";
 
         if (token !== "") {
@@ -203,9 +203,9 @@ class Categoria
             mensagem += "<br /><b>Você não preencheu a Categoria</b>";
         }
 
-        var token  = getCookie('token');
+        var token  = Login.getCookie('token');
         var consulta = "";
-
+        
         if (token !== "") {
             consulta = "&tk="+token;
         }

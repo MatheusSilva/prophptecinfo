@@ -55,7 +55,9 @@ class Torcedor
 	
 	public function setSenha($senha)
 	{
-		$this->senha = md5($senha);
+		$salt1 = "15353oiwHSDDKFJNGmfnsjfjqbhdgkjk";
+	    $salt2 = "NSBDFSDBFisoetiihskkdfgjfdkj56767";
+		$this->senha = hash('sha512', $salt1.$senha.$salt2);
 	}
 	
 	public function inserir()

@@ -67,17 +67,17 @@
     },
     {
         "name": "matthiasmullie/path-converter",
-        "version": "1.0.5",
-        "version_normalized": "1.0.5.0",
+        "version": "1.0.7",
+        "version_normalized": "1.0.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/matthiasmullie/path-converter.git",
-            "reference": "b1e31c51e8c207ad6114f5b4ac4e652bc936c380"
+            "reference": "83609c1bb251b2540eba912615571a501a0a06a6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/matthiasmullie/path-converter/zipball/b1e31c51e8c207ad6114f5b4ac4e652bc936c380",
-            "reference": "b1e31c51e8c207ad6114f5b4ac4e652bc936c380",
+            "url": "https://api.github.com/repos/matthiasmullie/path-converter/zipball/83609c1bb251b2540eba912615571a501a0a06a6",
+            "reference": "83609c1bb251b2540eba912615571a501a0a06a6",
             "shasum": ""
         },
         "require": {
@@ -85,10 +85,10 @@
             "php": ">=5.3.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "4.3.*",
-            "satooshi/php-coveralls": "dev-master"
+            "phpunit/phpunit": "~4.8",
+            "satooshi/php-coveralls": "~1.0"
         },
-        "time": "2015-06-01 15:20:30",
+        "time": "2016-01-07 00:41:13",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -119,17 +119,17 @@
     },
     {
         "name": "matthiasmullie/minify",
-        "version": "1.3.29",
-        "version_normalized": "1.3.29.0",
+        "version": "1.3.32",
+        "version_normalized": "1.3.32.0",
         "source": {
             "type": "git",
             "url": "https://github.com/matthiasmullie/minify.git",
-            "reference": "58fa692aeffa9cbafacdd1e7b3c5b0e65cd76108"
+            "reference": "140c714688908afcecde87338c8309233bdc2519"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/58fa692aeffa9cbafacdd1e7b3c5b0e65cd76108",
-            "reference": "58fa692aeffa9cbafacdd1e7b3c5b0e65cd76108",
+            "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/140c714688908afcecde87338c8309233bdc2519",
+            "reference": "140c714688908afcecde87338c8309233bdc2519",
             "shasum": ""
         },
         "require": {
@@ -140,9 +140,9 @@
         "require-dev": {
             "matthiasmullie/scrapbook": "~1.0",
             "phpunit/phpunit": "~4.8",
-            "satooshi/php-coveralls": "dev-master"
+            "satooshi/php-coveralls": "~1.0"
         },
-        "time": "2015-12-17 21:38:16",
+        "time": "2016-01-11 02:10:11",
         "bin": [
             "bin/minifycss",
             "bin/minifyjs"

@@ -1,6 +1,5 @@
 var js1  = [
-    '/var/www/sistemaRest/javascript/jquery-2.1.4.min.js'
-    ,'/var/www/sistemaRest/javascript/crypto.js'
+    '/var/www/sistemaRest/javascript/crypto.js'
 ];
 
 var js2  = [

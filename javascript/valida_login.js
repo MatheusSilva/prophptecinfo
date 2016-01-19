@@ -1,4 +1,6 @@
-    function createCookie(name, value, days) 
+class Login
+{
+    static createCookie(name, value, days) 
     {
         var expires;
         
@@ -13,13 +15,13 @@
         document.cookie = name + "=" + value + expires + "; path=/";
     }
 
-    function getCookie(c_name) 
+    static getCookie(c_name) 
     {
         if (document.cookie.length > 0) {
-            c_start = document.cookie.indexOf(c_name + "=");
+            var c_start = document.cookie.indexOf(c_name + "=");
             if (c_start != -1) {
                 c_start = c_start + c_name.length + 1;
-                c_end = document.cookie.indexOf(";", c_start);
+                var c_end = document.cookie.indexOf(";", c_start);
                 if (c_end == -1) {
                     c_end = document.cookie.length;
                 }
@@ -29,7 +31,7 @@
         return "";
     }
 
-    function valida()
+    static valida()
     {
         var strErro = ""; 
         var usuario = document.getElementById("txtTorcedor").value;
@@ -46,11 +48,6 @@
         if(strErro !== "") {
             alert(strErro);
             return false;
-        } else {
-            var hash = CryptoJS.MD5((usuario+""+senha));
-            
-            if(getCookie('token') === "") {
-                createCookie('token', hash, 1);
-            }
         }
     }
+}

@@ -12,7 +12,13 @@ class Login
 	public static function entrar($torcedor, $senha)
 	{
 	    require_once "../classes/Conexao.php";
-		$senha = md5($senha);
+	    require_once "../classes/Torcedor.php";
+
+	    $objTorcedor = new Torcedor();
+
+	    $objTorcedor->setSenha($senha);
+	    $senha = $objTorcedor->getSenha();
+
 		$sql   = "\n SELECT nome, login";
 		$sql  .= "\n FROM torcedor";
 		$sql  .= "\n WHERE login = :torcedor";
@@ -31,7 +37,11 @@ class Login
 	        $sql  .= "\n WHERE login = :torcedor";
 	        $sql  .= "\n AND senha   = :senha";
 
-	        $token  = md5(($torcedor.$senha));
+	        $salt1 = "jcxzknhxjajduhlJHDGHAQZkhyhmnk789553";
+	        $salt2 = "893343hjgsjhbjlAHLKJHIDJiertokrjtkr";
+	        $rand = uniqid(rand(), true);
+
+	        $token = hash('sha256', $salt1.$rand.$senha.$salt2);
 
 	        $stmt = $conexao->prepare($sql);
 	        $stmt->bindParam(":token", $token);
@@ -42,10 +52,11 @@ class Login
 
 	        if ($retornoUpdate) {
 	            session_start();
-	            $_SESSION['logado'] 	  = 'ok';
+	            $_SESSION['logado'] 	  	  = 'ok';
 	            $_SESSION['u']                = $retornoSelect['login'];
 	            $_SESSION['nomeTorcedor']     = $retornoSelect['nome'];
 	            $conexao = null;
+	            setcookie("token", $token, time()+900, "/");
 	            header('location:../paginas/home.php');
 	        } else {
 	            $msg = urlencode('Login falhou! Verifique seus dados');

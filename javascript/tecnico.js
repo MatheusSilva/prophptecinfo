@@ -159,7 +159,7 @@ class Tecnico
                 codigo = "&id="+codigo;
             }
 
-            var token  = getCookie('token');
+            var token  = Login.getCookie('token');
             var consulta = "";
 
             if (token !== "") {
@@ -199,7 +199,7 @@ class Tecnico
             mensagem += "<br /><b>Você não preencheu a tecnico</b>";
         }
 
-        var token  = getCookie('token');
+        var token  = Login.getCookie('token');
         var consulta = "";
 
         if (token !== "") {
@@ -246,8 +246,9 @@ class Tecnico
         if (form.txtNome.value == "") {
             mensagem += "<br /><b>Você não preencheu a tecnico</b>";
         }
-
-        var token  = getCookie('token');
+        
+        var token  = Login.getCookie('token');
+        
         var consulta = "";
 
         if (token !== "") {

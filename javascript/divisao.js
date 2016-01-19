@@ -92,7 +92,7 @@ class Divisao
                 codigo = "&id="+codigo;
             }
 
-            var token  = getCookie('token');
+            var token  = Login.getCookie('token');
             var consulta = "";
 
             if (token !== "") {
@@ -128,7 +128,7 @@ class Divisao
             mensagem += "<br /><b>Você não preencheu a divisao</b>";
         }
 
-        var token  = getCookie('token');
+        var token  = Login.getCookie('token');
         var consulta = "";
 
         if (token !== "") {
@@ -174,7 +174,7 @@ class Divisao
             mensagem += "<br /><b>Você não preencheu a divisao</b>";
         }
 
-        var token  = getCookie('token');
+        var token  = Login.getCookie('token');
         var consulta = "";
 
         if (token !== "") {

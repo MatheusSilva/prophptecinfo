@@ -5,8 +5,7 @@
 		<title>Cat&aacute;logo de Jogos</title>
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
 			
-		<script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script language="javascript" type="text/javascript" src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+		<script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.2.0.js"></script>
 		<script language="javascript" src="../../javascript/login.min.js"></script>
 	</head>
 	

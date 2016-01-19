@@ -115,7 +115,7 @@ class Time
         jForm.append("rDesempenhotime", $("input[name=\"rDesempenhotime\"]:checked").val());
         jForm.append("rComprarnovojogador", $("input[name=\"rComprarnovojogador\"]:checked").val());
 
-        var token  = getCookie('token');
+        var token  = Login.getCookie('token');
         var consulta = "";
 
         if (token !== "") {
@@ -165,7 +165,7 @@ class Time
         jForm.append("rDesempenhotime", $("input[name=\"rDesempenhotime\"]:checked").val());
         jForm.append("rComprarnovojogador", $("input[name=\"rComprarnovojogador\"]:checked").val());
 
-        var token  = getCookie('token');
+        var token  = Login.getCookie('token');
         var consulta = "";
 
         if (token !== "") {
@@ -206,7 +206,7 @@ class Time
                 codigo = "&id="+codigo;
             }
 
-            var token  = getCookie('token');
+            var token  = Login.getCookie('token');
             var consulta = "";
 
             if (token !== "") {

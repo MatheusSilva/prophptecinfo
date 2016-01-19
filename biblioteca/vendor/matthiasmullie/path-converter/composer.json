@@ -18,8 +18,8 @@
         "ext-pcre": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.3.*",
-        "satooshi/php-coveralls": "dev-master"
+        "phpunit/phpunit": "~4.8",
+        "satooshi/php-coveralls": "~1.0"
     },
     "autoload": {
         "psr-4": {
