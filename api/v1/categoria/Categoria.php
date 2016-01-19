@@ -118,15 +118,18 @@ class Categoria extends ClasseBase
             $conexao = Conexao::getConexao();	
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id",$id);
-            $stmt->bindParam(":nome",$nome);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 30);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
             return $retorno;
         } catch (\PDOException $e) {
             $conexao = null;
-            return $e->getMessage();
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }
     }//public function inserir()
 	
@@ -157,15 +160,18 @@ class Categoria extends ClasseBase
             $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id",$codigo);
-            $stmt->bindParam(":nome",$nome);
+            $stmt->bindParam(":id", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 30);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
             return $retorno;
         } catch (\PDOException $e) {
             $conexao = null;
-            return $e->getMessage();
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }
     }//public function alterar($codigo)
 	
@@ -195,14 +201,17 @@ class Categoria extends ClasseBase
             $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id",$codigo);
+            $stmt->bindParam(":id", $codigo, PDO::PARAM_INT);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
             return $retorno;
         } catch (\PDOException $e) {
             $conexao = null;
-            return $e->getMessage();
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }
     }//public function excluir($codigo)
 	
@@ -230,7 +239,10 @@ class Categoria extends ClasseBase
             return $retorno["codigo"];
         } catch (\PDOException $e) {
             $conexao = null;
-            return $e->getMessage();
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }
     }//public static function ultimoCodigo()
 
@@ -250,18 +262,21 @@ class Categoria extends ClasseBase
             $conexao = Conexao::getConexao();
 
             $sql  = "\n SELECT codigo_categoria";
-            $sql .= "\n , nome";
+            $sql .= "\n ,nome";
             $sql .= "\n FROM categoria";
             $sql .= "\n WHERE codigo_categoria = :id";
              
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id",$codigo);
+            $stmt->bindParam(":id", $codigo, PDO::PARAM_INT);
             $stmt->execute();
             $conexao = null;
             return $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             $conexao = null;
-            return $e->getMessage();
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }		
     }//public static function listarPorCodigo($codigo)
 	
@@ -282,19 +297,22 @@ class Categoria extends ClasseBase
             $conexao = Conexao::getConexao();
 
             $sql  = "\n SELECT codigo_categoria";
-            $sql .= "\n , nome";
+            $sql .= "\n ,nome";
             $sql .= "\n FROM categoria";
             $sql .= "\n WHERE nome LIKE :nome";
 
 
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":nome",$nome);
+            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 30);
             $stmt->execute();
             $conexao = null;
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             $conexao = null;
-            return $e->getMessage();
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }	
     }//public static function listarPorNome($nome)
 
@@ -315,7 +333,7 @@ class Categoria extends ClasseBase
             $conexao = Conexao::getConexao();
 
             $sql  = "\n SELECT codigo_categoria";
-            $sql .= "\n , nome";
+            $sql .= "\n ,nome";
             $sql .= "\n FROM categoria";
 
             $stmt = $conexao->prepare($sql);
@@ -323,29 +341,37 @@ class Categoria extends ClasseBase
             $conexao = null;
             return $stmt->fetchAll();
         } catch (\PDOException $e) {
-            $conexao = null;	
-            return $e->getMessage();
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }	
     }//public static function listarTudo()
     
     public static function listaCategoriaPorTime($strRequire = '../lib/Conexao.php', $intCodigo)
     {     
         try {
-            $sql   = "\n SELECT c.codigo_categoria,c.nome";
-            $sql  .= "\n FROM time.time AS t, time.categoria AS c";
+            $sql   = "\n SELECT c.codigo_categoria";
+            $sql  .= "\n ,c.nome";
+            $sql  .= "\n FROM time.time AS t";
+            $sql  .= "\n ,time.categoria AS c";
             $sql  .= "\n WHERE  c.codigo_categoria = t.categoria_codigo_categoria";
             $sql  .= "\n AND t.codigo_time = :codigo";
 
             $conexao = Conexao::getConexao(); 		  
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":codigo", $intCodigo);
+            $stmt->bindParam(":codigo", $intCodigo, PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
             return $retorno;
         } catch (\PDOException $e) {
             $conexao = null;
-            return $e->getMessage();
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }
     }
 }

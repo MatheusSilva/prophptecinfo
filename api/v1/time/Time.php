@@ -140,23 +140,23 @@ class Time extends ClasseBase
             $conexao = Conexao::getConexao(); 
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":nome", $nome);
-            $stmt->bindParam(":capa", $capa);
-            $stmt->bindParam(":codigo_divisao", $codigo_divisao);
-            $stmt->bindParam(":codigo_categoria", $codigo_categoria);
-            $stmt->bindParam(":codigo_tecnico", $codigo_tecnico);
-            $stmt->bindParam(":desempenhotime", $desempenhotime);
-            $stmt->bindParam(":comprarnovojogador", $comprarnovojogador);
+            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 35);
+            $stmt->bindParam(":capa", $capa, PDO::PARAM_STR, 100);
+            $stmt->bindParam(":codigo_divisao", $codigo_divisao, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_categoria", $codigo_categoria, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_tecnico", $codigo_tecnico, PDO::PARAM_INT);
+            $stmt->bindParam(":desempenhotime", $desempenhotime, PDO::PARAM_STR, 5);
+            $stmt->bindParam(":comprarnovojogador", $comprarnovojogador, PDO::PARAM_STR, 3);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
             return $retorno;
         } catch (\PDOException $e) {
             $conexao = null;
-            $fp = fopen('mmhdjgdngsrekj.log', 'a');
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
-            return $e->getMessage();
+            return false;
         }
     }
 	
@@ -190,46 +190,57 @@ class Time extends ClasseBase
             $conexao = Conexao::getConexao(); 
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":nome", $nome);
+            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 35);
             
             if (!empty($capa)) {
                 $stmt->bindParam(":capa", $capa);
                 $arrRetorno = self::listarPorCodigo($codigo);
-                unlink("../".$arrRetorno["capa"]);
+                unlink("../".$arrRetorno["capa"], PDO::PARAM_STR, 100);
             }
             
-            $stmt->bindParam(":codigo_divisao", $codigo_divisao);
-            $stmt->bindParam(":codigo_categoria", $codigo_categoria);
-            $stmt->bindParam(":codigo_tecnico", $codigo_tecnico);
-            $stmt->bindParam(":codigo_time", $codigo);
+            $stmt->bindParam(":codigo_divisao", $codigo_divisao, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_categoria", $codigo_categoria, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_tecnico", $codigo_tecnico, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_time", $codigo, PDO::PARAM_INT);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
             return $retorno;
         } catch (\PDOException $e) {
             $conexao = null;
-            return $e->getMessage();
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }
     }
     
     public function existeTime($codigo)
     {
-        $sql     = "\n SELECT 1 as retorno";
-        $sql    .= "\n FROM time";
-        $sql    .= "\n WHERE codigo_time    = :codigo";
+        try {
+            $sql     = "\n SELECT 1 as retorno";
+            $sql    .= "\n FROM time";
+            $sql    .= "\n WHERE codigo_time    = :codigo";
 
-        $conexao = Conexao::getConexao(); 		  
-        $stmt    = $conexao->prepare($sql);
-        $stmt->bindParam(":codigo", $codigo);
-        $stmt->execute();
-        $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-        $conexao = null;
-        
-        if ($retorno["retorno"] == 1 ) {
-            return true;
+            $conexao = Conexao::getConexao(); 		  
+            $stmt    = $conexao->prepare($sql);
+            $stmt->bindParam(":codigo", $codigo, PDO::PARAM_INT);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+            $conexao = null;
+            
+            if ($retorno["retorno"] == 1 ) {
+                return true;
+            }
+            
+            return false;
+        } catch (\PDOException $e) {
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }
-        
-        return false;
     }
     
     public function excluir($codigo, $token)
@@ -252,7 +263,7 @@ class Time extends ClasseBase
             $conexao = Conexao::getConexao(); 
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":codigo", $codigo);
+            $stmt->bindParam(":codigo", $codigo, PDO::PARAM_INT);
 
             if (!$stmt->execute()) {
                 $retorno = "Não foi possivel excluir este time.";
@@ -264,74 +275,105 @@ class Time extends ClasseBase
             return $retorno;
         } catch (\PDOException $e) {
             $conexao = null;
-            return $e->getMessage();
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }
     }
 
     public static function listarTudo()
     {
-        $sql     = "\n SELECT codigo_time,divisao_codigo_divisao,nome,capa ";
-        $sql    .= "\n FROM time";
+        try {
+            $sql     = "\n SELECT codigo_time";
+            $sql    .= "\n ,divisao_codigo_divisao";
+            $sql    .= "\n ,nome";
+            $sql    .= "\n ,capa";
+            $sql    .= "\n FROM time";
 
-        $conexao = Conexao::getConexao(); 		  
-        $stmt    = $conexao->prepare($sql);
-        $stmt->execute();
-        $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $conexao = null;
-        return $retorno;
+            $conexao = Conexao::getConexao(); 		  
+            $stmt    = $conexao->prepare($sql);
+            $stmt->execute();
+            $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno;
+        } catch (\PDOException $e) {
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
     }
         	
     public static function listarPorCodigo($codigo)
     {
-        $sql     = "\n SELECT time.codigo_time AS codigotime";
-        $sql    .= "\n ,time.nome AS nomeTime";
-        $sql    .= "\n ,time.tecnico_codigo_tecnico AS codigoTecnico";
-        $sql    .= "\n ,capa";
-        $sql    .= "\n ,divisao.codigo_divisao AS codigoDivisao";
-        $sql    .= "\n ,divisao.nome AS nomeDivisao";
-        $sql    .= "\n ,tecnico.nome AS nomeTecnico";
-        $sql    .= "\n ,categoria.codigo_categoria AS codigoCategoria";
-        $sql    .= "\n ,categoria.nome AS nomeCategoria";
-        $sql    .= "\n ,time.desempenho_time AS nomeDesempenhoTime";
-        $sql    .= "\n ,time.comprar_novo_jogador AS NomeComprarNovoJogador";
-        $sql    .= "\n FROM time";
-        $sql    .= "\n , divisao";
-        $sql    .= "\n , tecnico";
-        $sql    .= "\n , categoria";
-        $sql    .= "\n WHERE divisao_codigo_divisao   = codigo_divisao"; 
-        $sql    .= "\n AND tecnico_codigo_tecnico     = codigo_tecnico"; 
-        $sql    .= "\n AND categoria_codigo_categoria = codigo_categoria"; 
-        $sql    .= "\n AND codigo_time 			 	  = :codigo";
+        try {
+            $sql     = "\n SELECT time.codigo_time AS codigotime";
+            $sql    .= "\n ,time.nome AS nomeTime";
+            $sql    .= "\n ,time.tecnico_codigo_tecnico AS codigoTecnico";
+            $sql    .= "\n ,capa";
+            $sql    .= "\n ,divisao.codigo_divisao AS codigoDivisao";
+            $sql    .= "\n ,divisao.nome AS nomeDivisao";
+            $sql    .= "\n ,tecnico.nome AS nomeTecnico";
+            $sql    .= "\n ,categoria.codigo_categoria AS codigoCategoria";
+            $sql    .= "\n ,categoria.nome AS nomeCategoria";
+            $sql    .= "\n ,time.desempenho_time AS nomeDesempenhoTime";
+            $sql    .= "\n ,time.comprar_novo_jogador AS NomeComprarNovoJogador";
+            $sql    .= "\n FROM time";
+            $sql    .= "\n , divisao";
+            $sql    .= "\n , tecnico";
+            $sql    .= "\n , categoria";
+            $sql    .= "\n WHERE divisao_codigo_divisao   = codigo_divisao"; 
+            $sql    .= "\n AND tecnico_codigo_tecnico     = codigo_tecnico"; 
+            $sql    .= "\n AND categoria_codigo_categoria = codigo_categoria"; 
+            $sql    .= "\n AND codigo_time 			 	  = :codigo";
 
-        $conexao = Conexao::getConexao(); 		  
-        $stmt    = $conexao->prepare($sql);
-        $stmt->bindParam(":codigo", $codigo);
-        $stmt->execute();
-        $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-        $conexao = null;
-        return $retorno;
+            $conexao = Conexao::getConexao(); 		  
+            $stmt    = $conexao->prepare($sql);
+            $stmt->bindParam(":codigo", $codigo, PDO::PARAM_INT);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno;
+        } catch (\PDOException $e) {
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
     }
 	
     public static function listarPorNome($nome)
     {
-        $sql     = "\n SELECT time.codigo_time AS codigo,time.nome AS nome";
-        $sql    .= "\n FROM time"; 
+        try {
+            $sql     = "\n SELECT time.codigo_time AS codigo";
+            $sql    .= "\n ,time.nome AS nome";
+            $sql    .= "\n FROM time";
 
-        if ($nome !== "listaTodosTimes") {
-            $sql    .= "\n WHERE nome LIKE :nome";
-            $nome   = $nome."%";
+            if ($nome !== "listaTodosTimes") {
+                $sql   .= "\n WHERE nome LIKE :nome";
+                $nome   = $nome."%";
+            }
+
+            $conexao = Conexao::getConexao(); 		  
+            $stmt    = $conexao->prepare($sql);
+
+            if ($nome !== "listaTodosTimes") {
+                $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 35);
+            }
+
+            $stmt->execute();
+            $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno;
+        } catch (\PDOException $e) {
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
         }
-
-        $conexao = Conexao::getConexao(); 		  
-        $stmt    = $conexao->prepare($sql);
-
-        if ($nome !== "listaTodosTimes") {
-            $stmt->bindParam(":nome", $nome);
-        }
-
-        $stmt->execute();
-        $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $conexao = null;
-        return $retorno;
     }
 }
