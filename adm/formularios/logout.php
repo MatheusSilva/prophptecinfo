@@ -1,4 +1,3 @@
 <?php
-
-require_once('../classes/Login.php');
+require_once "../../api/v1/lib/Login.php";
 Login::sair();

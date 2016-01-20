@@ -146,12 +146,17 @@ if (empty($acao)) {
 } else if ($acao == 5) {
     $request_body = file_get_contents('php://input');
     $categoria    = json_decode($request_body, true);
+
     $objCategoria = new Categoria();
     $objCategoria->setCodigoCategoria($id);
     $objCategoria->setNome($categoria["txtNome"]);	
 
-    if ($objCategoria->alterar($token)) {	 	
+    $boolRetorno = $objCategoria->alterar($token);
+
+    if ($boolRetorno === true) {	 	
           $categoria["mensagem"] = "Categoria atualizada com sucesso";	 	
+    } else if ($boolRetorno == 999) {      
+          $categoria["mensagem"] = "Sua sessão expirou. Faça o login novamente.";      
     } else {
           $categoria["mensagem"] = "Falha ao atualizar categoria";	
     }

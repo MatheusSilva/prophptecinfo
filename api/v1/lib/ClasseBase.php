@@ -1,15 +1,20 @@
 <?php
 
-
 class ClasseBase
 {
     function __construct() 
     {
-	   require_once "../adm/classes/Conexao.php";
+	   require_once "Conexao.php";
+       require_once "Login.php";
+       Login::verificar(false);
     }
     
     public function tokenEhValido($strToken)
     {
+        if (empty($strToken)) {
+            return false;
+        }
+
         $sql   = "\n SELECT 1";
         $sql  .= "\n FROM torcedor";
         $sql  .= "\n WHERE token = :token";

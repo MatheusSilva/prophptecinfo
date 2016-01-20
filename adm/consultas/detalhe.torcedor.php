@@ -23,6 +23,7 @@
 			<div id="menu_superior">
 				<a href="../paginas/home.php">Home</a> ::
 				<a href="../paginas/cadastros.php">Cadastros</a> ::
+				<a href="../paginas/administrar.php">Administrar</a> ::
 				<a href="../paginas/consultas.php">Consultas</a> ::
 				<a href="logout.php">Sair</a>
 			</div>
@@ -30,7 +31,7 @@
 			<div id="conteudo">
 				<h2 class="titulo">Detalhe de Torcedor</h2>
 				<?php
-					require_once('../classes/Torcedor.php');
+					require_once "../../api/v1/Torcedor/torcedor.php";
 					$codigo = $_GET['codigo'];
 					$dados  = Torcedor::listarPorCodigo($codigo);
 					

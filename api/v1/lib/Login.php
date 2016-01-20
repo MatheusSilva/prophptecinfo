@@ -11,8 +11,8 @@ class Login
     
 	public static function entrar($torcedor, $senha)
 	{
-	    require_once "../classes/Conexao.php";
-	    require_once "../classes/Torcedor.php";
+	    require_once "Conexao.php";
+	    require_once "../../api/v1/torcedor/Torcedor.php";
 
 	    $objTorcedor = new Torcedor();
 
@@ -51,7 +51,10 @@ class Login
 	        
 
 	        if ($retornoUpdate) {
-	            session_start();
+	            if (!isset($_SESSION))  {
+					session_start();
+				}
+
 	            $_SESSION['logado'] 	  	  = 'ok';
 	            $_SESSION['u']                = $retornoSelect['login'];
 	            $_SESSION['nomeTorcedor']     = $retornoSelect['nome'];
@@ -70,26 +73,44 @@ class Login
 		}
 	}
 	
-	public static function verificar()
+	public static function verificar($redirecionar = true)
 	{
-		session_start();
+		if (!isset($_SESSION))  {
+			session_start();
+		}
 		
-		if (!isset($_SESSION['logado']) || $_SESSION['logado'] != 'ok') {
-			$msg = urlencode('Acesso restrito. Efetue login para continuar');
-			header("location:../formularios/form.login.php?msg=$msg");
+		if (!isset($_SESSION['logado']) 
+		|| $_SESSION['logado'] != 'ok' 
+		|| !isset($_COOKIE['token'])) {
+			self::sair($redirecionar);
+
+			if ($redirecionar) {
+				$msg = urlencode('Acesso restrito. Efetue login para continuar');
+				header("location:../formularios/form.login.php?msg=$msg");
+			}
+
+		} else {
+			$token = $_COOKIE["token"];
+			setcookie("token", $token, time()+900, "/");
 		}
 	}
 	
-	public static function sair()
+	public static function sair($redirecionar = true)
 	{
-	    require_once "../classes/Conexao.php";
+		if (!isset($_SESSION))  {
+			session_start();
+		}
+
+		setcookie('token', null, -1, '/');
+		$_SESSION['logado'] = '';
+	    
         $sql   = "\n UPDATE torcedor";
         $sql  .= "\n SET    token = :token";
         $sql  .= "\n WHERE  login = :torcedor";
         
         $token = "h";
         
-        session_start();
+        require_once 'Conexao.php';
         $conexao = Conexao::getConexao();
         $stmt = $conexao->prepare($sql);
         $stmt->bindParam(":torcedor", $_SESSION['u']);
@@ -97,6 +118,10 @@ class Login
         $stmt->execute();
         $conexao = null;
 		session_destroy();
-		header('location:../../site/paginas/home.php');
+
+		if ($redirecionar) {
+			header('location:../../site/paginas/home.php');
+		}
+
 	}
 }

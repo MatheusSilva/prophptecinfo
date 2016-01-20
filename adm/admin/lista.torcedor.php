@@ -45,7 +45,7 @@
 						<td>A&ccedil;&otilde;es</td>
 					</tr>
 					<?php
-						require_once('../classes/torcedor.php');
+						require_once "../../api/v1/Torcedor/torcedor.php";
 						$vetor = Torcedor::listarTudo();
 						
 						if ($vetor != 0) {

@@ -26,6 +26,7 @@
                 <nav id="menu_superior">
                     <a href="../paginas/home.php">Home</a> ::
 					<a href="../paginas/cadastros.php">Cadastros</a> ::
+					<a href="../paginas/administrar.php">Administrar</a> ::
 					<a href="../paginas/consultas.php">Consultas</a> ::
 					<a href="../formularios/logout.php">Sair</a>
                 </nav>
@@ -55,7 +56,7 @@
 					
 					<?php
 					if (isset($_GET['btnConsultar'])) {						
-						require_once('../classes/torcedor.php');
+						require_once "../../api/v1/Torcedor/torcedor.php";
 						$vetor = Torcedor::listarPorNome($_GET['txtNome']);
 						
 						if ($vetor != 0) {

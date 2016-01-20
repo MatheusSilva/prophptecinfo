@@ -15,6 +15,7 @@
                 <nav id="menu_superior">
                     <a href="../paginas/home.php">Home</a> ::
 					<a href="../paginas/cadastros.php">Cadastros</a> ::
+					<a href="../paginas/administrar.php">Administrar</a> ::
 					<a href="../paginas/consultas.php">Consultas</a> ::
 					<a href="logout.php">Sair</a>
                 </nav>
@@ -25,7 +26,7 @@
 				
 				<?php
 					$codigo = $_GET['codigo'];
-					require_once('../classes/torcedor.php');
+					require_once "../../api/v1/Torcedor/torcedor.php";
 					$dados = Torcedor :: listarPorCodigo($codigo);
 				?>
 				

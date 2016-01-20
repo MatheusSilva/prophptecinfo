@@ -1,15 +1,19 @@
 <?php
 
-require_once "../lib/ClasseBase.php";
-
 /**
 * classe Categoria
 *
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
 */
-class Categoria extends ClasseBase
+class Categoria 
 {
+    /**
+    * @access private
+    * @var integer Armazena o codigo da categoria
+    */
+    private $objClasseBase;
+
     /**
     * @access private
     * @var integer Armazena o codigo da categoria
@@ -25,6 +29,8 @@ class Categoria extends ClasseBase
     function __construct()
     {
 		require_once "../lib/Conexao.php";
+        require_once "../lib/ClasseBase.php";
+        $this->objClasseBase = new ClasseBase();
     }
     
     /**
@@ -100,9 +106,9 @@ class Categoria extends ClasseBase
     public function inserir($token)
     {
         try {
-            if ($this->tokenEhValido($token) === false) {
-                return false;
-            }//if ($this->tokenEhValido($token) === false) {
+            if ($this->objClasseBase->tokenEhValido($token) === false) {
+                return 999;
+            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
         
             $nome  = $this->getNome();
             $id    = $this->ultimoCodigo();
@@ -146,9 +152,10 @@ class Categoria extends ClasseBase
     public function alterar($token)
     {
         try {
-            if ($this->tokenEhValido($token) === false) {
-                return false;
-            }//if ($this->tokenEhValido($token) === false) {
+
+            if ($this->objClasseBase->tokenEhValido($token) === false) {
+                return 999;
+            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
 
             $codigo  = $this->getCodigoCategoria();
             $nome    = $this->getNome();
@@ -188,9 +195,9 @@ class Categoria extends ClasseBase
     public function excluir($token)
     {
         try {
-            if ($this->tokenEhValido($token) === false) {
-                return false;
-            }//if ($this->tokenEhValido($token) === false) {
+            if ($this->objClasseBase->tokenEhValido($token) === false) {
+                return 999;
+            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
             
             $codigo  = $this->getCodigoCategoria();
             $nome    = $this->getNome();
@@ -259,6 +266,7 @@ class Categoria extends ClasseBase
     public static function listarPorCodigo($codigo)
     {
         try {
+            require_once "../lib/Conexao.php";
             $conexao = Conexao::getConexao();
 
             $sql  = "\n SELECT codigo_categoria";
