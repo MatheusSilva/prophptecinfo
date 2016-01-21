@@ -1,7 +1,7 @@
 <?php
 
 $acao = $_REQUEST['acao'];
-require_once "../../api/v1/Torcedor/torcedor.php";
+require_once "../../api/v1/torcedor/Torcedor.php";
 
 if ($acao == 1) {
 	// inserir

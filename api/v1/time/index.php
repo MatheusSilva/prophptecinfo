@@ -108,9 +108,8 @@ if (empty($acao)) {
     } else {
         $time["mensagem"] = "Problemas ao enviar imagem";
     }
-
-    $capa = json_encode($time);
-    echo $capa;
+    
+    echo json_encode($time);
 } else if ($acao == 4) {
     $foto = "";
 

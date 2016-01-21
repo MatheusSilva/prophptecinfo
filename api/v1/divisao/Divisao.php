@@ -160,7 +160,7 @@ class Divisao extends ClasseBase
     {
         try {
             $nome .= "%";
-            $sql  .= "\n SELECT codigo_divisao";
+            $sql   = "\n SELECT codigo_divisao";
             $sql  .= "\n ,nome";
             $sql  .= "\n FROM divisao";
             $sql  .= "\n WHERE nome LIKE :nome";

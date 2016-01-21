@@ -26,7 +26,7 @@
 				
 				<?php
 					$codigo = $_GET['codigo'];
-					require_once "../../api/v1/Torcedor/torcedor.php";
+					require_once "../../api/v1/torcedor/Torcedor.php";
 					$dados = Torcedor :: listarPorCodigo($codigo);
 				?>
 				

@@ -17,10 +17,8 @@ class Categoria
           linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
           linkReq.onreadystatechange = Categoria.listaCategoria;
 
-          var params = "{ \"p\": \""+pesquisa+"\" }"; 
-
           //Enviar
-          linkReq.send(params); 
+          linkReq.send("p="+pesquisa); 
         }
     }
 
@@ -129,7 +127,7 @@ class Categoria
             }
                     
             if(mensagem == "") {
-                $.ajax({
+                jQuery.ajax({
                     type: 'POST',
                     contentType: 'application/json',
                     dataType: "json",
@@ -150,7 +148,6 @@ class Categoria
 
     static cadastrar(form) 
     {
-        //$("#mensagem").html("");
         var mensagem = "";
 
         if (form.txtNome.value == "") {
@@ -165,7 +162,7 @@ class Categoria
         }
 
         if (mensagem == "") {
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: "json",
@@ -199,7 +196,7 @@ class Categoria
             codigo = "&id="+codigo;
         }
         
-        if ($("#txtNome").val() == "") {
+        if (document.getElementById("txtNome").value == "") {
             mensagem += "<br /><b>Você não preencheu a Categoria</b>";
         }
 
@@ -211,7 +208,7 @@ class Categoria
         }
 
         if(mensagem == "") {
-            $.ajax({
+            jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: "json",

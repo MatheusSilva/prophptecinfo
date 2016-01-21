@@ -31,7 +31,7 @@
 			<div id="conteudo">
 				<h2 class="titulo">Detalhe de Torcedor</h2>
 				<?php
-					require_once "../../api/v1/Torcedor/torcedor.php";
+					require_once "../../api/v1/torcedor/Torcedor.php";
 					$codigo = $_GET['codigo'];
 					$dados  = Torcedor::listarPorCodigo($codigo);
 					

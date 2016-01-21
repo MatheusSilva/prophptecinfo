@@ -56,7 +56,7 @@
 					
 					<?php
 					if (isset($_GET['btnConsultar'])) {						
-						require_once "../../api/v1/Torcedor/torcedor.php";
+						require_once "../../api/v1/torcedor/Torcedor.php";
 						$vetor = Torcedor::listarPorNome($_GET['txtNome']);
 						
 						if ($vetor != 0) {

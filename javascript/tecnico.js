@@ -49,35 +49,59 @@ class Tecnico
     {
         var pesquisa = '';
 
-        if (form != null && form.txtNome != undefined) {
+        if (form != null && form.txtNome.value != undefined) {
             pesquisa = form.txtNome.value;
         }
-        
-        jQuery.getJSON( "http://localhost/sistemaRest/api/v1/tecnico/index.php?a=3", { p: pesquisa })
-        .done(function( json ) {
-            var len = 0;
+
+        linkReq = Ajax.criaRequest();
+        if(linkReq != undefined){
+          //Montar requisição
+          linkReq.open("POST","http://localhost/sistemaRest/api/v1/tecnico/index.php?a=3",true);
+          linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          linkReq.onreadystatechange = Tecnico.listaTecnico;
+
+          //Enviar
+          linkReq.send("p="+pesquisa); 
+        }
+    }
+
+    static listaTecnico()
+    {
+        //Verificar pelo estado "4" de pronto.
+        if (linkReq.readyState == '4') {
+            //Pegar dados da resposta json
+            var json = JSON.parse(linkReq.responseText);
             
+            // Pega a tabela.
+            var table = document.getElementById("tabela");
+            
+            // Limpa toda a INNER da tabela.
+            table.innerHTML = "";
+            
+            var len = 0;
+
             if (json.tecnicos != null) {
                 len         = json.tecnicos.length;
             }
-            
-            var temRegistro = false;
-            var strHTML     = '<table width="80%" class="lista">'
-                            + '<tr class="primeira_linha">'
-                            + '<td>C&oacute;digo</td>'
-                            + '<td>Nome</td>'
-                            + '<td>A&ccedil;&otilde;es</td>'
-                            + '</tr>';
 
+            var temRegistro = false;
+            
+            var strHTML     = '<table width="80%" class="lista">'
+                            +'<tr class="primeira_linha">'
+                            +'<td>C&oacute;digo</td>'
+                            +'<td>Nome</td>'
+                            +'<td>A&ccedil;&otilde;es</td>'
+                            +'</tr>';
+                            
             for (var i=0; i < len; i++) {
-                var codigo   = json.tecnicos[i].codigo_tecnico;
-                var nome     = json.tecnicos[i].nome;
+                var codigo    = json.tecnicos[i].codigo_tecnico;
+                var nome      = json.tecnicos[i].nome;
 
                 if (i % 2 == 0) {
                     strHTML = strHTML + '<tr class="linha_par">';
                 } else {
                     strHTML = strHTML + '<tr class="linha_impar">';
-                }	
+                }
 
                 var detalhes = "<a href=\"../consultas/detalhe.tecnico.htm?codigo="
                 + codigo
@@ -94,19 +118,20 @@ class Tecnico
                 var acao = detalhes+alterar+excluir;
 
                 strHTML = strHTML + "<td>"+codigo+"</td>"
-                + "<td>"+nome+"</td>"	
-                + "<td>"+acao+"</td>"	
+                + "<td>"+nome+"</td>"   
+                + "<td>"+acao+"</td>"   
                 + "</tr>";
-                temRegistro = true;	
+                temRegistro = true; 
             }
 
-            if (temRegistro  == false) {
+            if(temRegistro  == false) {
                 strHTML = json.mensagem;
-            }
+            }   
 
             strHTML = strHTML + "</table>";
-            document.getElementById("tabela").innerHTML = strHTML;
-        });
+
+            table.innerHTML = strHTML;
+        }
     }
 
     static formToJSON(form) 

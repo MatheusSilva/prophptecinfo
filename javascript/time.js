@@ -33,72 +33,95 @@ class Time
         rComprarnovojogador[0].checked = true;
     }
 
-    
     static consultar(form)
     {
         var pesquisa = '';
 
-        if ($("#txtNome").val() != undefined) {
-            pesquisa = $("#txtNome").val();
+        if (form != null && form.txtNome.value != undefined) {
+            pesquisa = form.txtNome.value;
         }
 
-        $.getJSON( "http://localhost/sistemaRest/api/v1/time/index.php?a=2", { p: pesquisa })
-        .done(function( json ) 
-        {
-            var len         = 0;
+        linkReq = Ajax.criaRequest();
+        if(linkReq != undefined){
+          //Montar requisição
+          linkReq.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=2",true);
+          linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          linkReq.onreadystatechange = Time.listaTime;
 
-            if (json.times != undefined) {
-                var len     = json.times.length;
+          //Enviar
+          linkReq.send("p="+pesquisa); 
+        }
+    }
+
+    static listaTime()
+    {
+        //Verificar pelo estado "4" de pronto.
+        if (linkReq.readyState == '4') {
+            //Pegar dados da resposta json
+            var json = JSON.parse(linkReq.responseText);
+            
+            // Pega a tabela.
+            var table = document.getElementById("tabela");
+            
+            // Limpa toda a INNER da tabela.
+            table.innerHTML = "";
+            
+            var len = 0;
+
+            if (json.times != null) {
+                len         = json.times.length;
             }
 
-            var strHTML = '<table width="80%" class="lista">'
-                            + '<tr class="primeira_linha">'
-                            + '<td>C&oacute;digo</td>'
-                            + '<td>Nome</td>'
-                            + '<td>A&ccedil;&otilde;es</td>'
-                            + '</tr>';
-
+            var temRegistro = false;
+            
+            var strHTML     = '<table width="80%" class="lista">'
+                            +'<tr class="primeira_linha">'
+                            +'<td>C&oacute;digo</td>'
+                            +'<td>Nome</td>'
+                            +'<td>A&ccedil;&otilde;es</td>'
+                            +'</tr>';
+                            
             for (var i=0; i < len; i++) {
                 var codigo    = json.times[i].codigo;
                 var nome      = json.times[i].nome;
 
-                if (i % 2 === 0) {
+                if (i % 2 == 0) {
                     strHTML = strHTML + '<tr class="linha_par">';
                 } else {
                     strHTML = strHTML + '<tr class="linha_impar">';
                 }
-                    var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
-                    + codigo
-                    + "\">[D]</a>";
 
-                    var alterar = "<a href=\"../formularios/alterar.time.htm?codigo="
-                    + codigo
-                    + "\">[A]</a>";
+                var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
+                + codigo
+                + "\">[D]</a>";
 
-                    var excluir = "<a href=\"javascript:Time.confirmar("
-                    + codigo
-                    + ")\">[X]</a>";
+                var alterar = "<a href=\"../formularios/alterar.time.htm?codigo="
+                + codigo
+                + "\">[A]</a>";
 
-                    var acao = detalhes+alterar+excluir;
+                var excluir = "<a href=\"javascript:Time.confirmar("
+                + codigo
+                + ")\">[X]</a>";
 
-                    strHTML = strHTML + "<td>"+codigo+"</td>"
-                    + "<td>"+nome+"</td>"   
-                    + "<td>"+acao+"</td>"   
-                    + "</tr>";
+                var acao = detalhes+alterar+excluir;
+
+                strHTML = strHTML + "<td>"+codigo+"</td>"
+                + "<td>"+nome+"</td>"   
+                + "<td>"+acao+"</td>"   
+                + "</tr>";
+                temRegistro = true; 
             }
+
+            if(temRegistro  == false) {
+                strHTML = json.mensagem;
+            }   
 
             strHTML = strHTML + "</table>";
-            
-            if (json.times == undefined && json.mensagem != undefined) {
-                strHTML = "<p>"+json.mensagem+"</p>";
-            }
 
-            $("#tabela").html(strHTML);
-        });
-
-        return false;
+            table.innerHTML = strHTML;
+        }
     }
-
+    
     static cadastrar(form) 
     {
         if (Time.valida() == false) {
@@ -107,13 +130,23 @@ class Time
 
         var jForm = new FormData();
 
-        jForm.append("txtFoto", $('#txtFoto').get(0).files[0]);
-        jForm.append("txtNome", $('#txtNome').val());
-        jForm.append("cmbDivisao", $('#cmbDivisao').val());
-        jForm.append("cmbCategoria", $('#cmbCategoria').val());
-        jForm.append("cmbTecnico", $('#cmbTecnico').val());
-        jForm.append("rDesempenhotime", $("input[name=\"rDesempenhotime\"]:checked").val());
-        jForm.append("rComprarnovojogador", $("input[name=\"rComprarnovojogador\"]:checked").val());
+        var e = document.getElementById("cmbDivisao");
+        var cmbDivisao = e.options[e.selectedIndex].value;
+
+        var e = document.getElementById("cmbCategoria");
+        var cmbCategoria = e.options[e.selectedIndex].value;
+
+        var e = document.getElementById("cmbTecnico");
+        var cmbTecnico = e.options[e.selectedIndex].value;
+
+        jForm.append("txtFoto", jQuery('#txtFoto').get(0).files[0]);
+        jForm.append("txtNome", document.getElementById("txtNome").value);
+        jForm.append("cmbDivisao", cmbDivisao);
+        jForm.append("cmbCategoria", cmbCategoria);
+        jForm.append("cmbTecnico", cmbTecnico);
+        jForm.append("rDesempenhotime", document.querySelector('input[name="rDesempenhotime"]:checked').value);
+        jForm.append("rComprarnovojogador", document.querySelector('input[name="rComprarnovojogador"]:checked').value);
+
 
         var token  = Login.getCookie('token');
         var consulta = "";
@@ -122,7 +155,7 @@ class Time
             consulta = "&tk="+token;
         }
         
-        $.ajax({
+        jQuery.ajax({
             url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=3'+consulta,
             type: 'POST',
             data: jForm,
@@ -130,15 +163,11 @@ class Time
             mimeType: 'application/json',
             contentType: false,
             cache: false,
-            processData: false,
-            success: function (returndata) {
-                limpacamposCadastro();
-                alert(returndata.mensagem);
-                location.reload();
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert("Falha ao cadastrar time!");
-            }
+            processData: false
+        }).always(function(returndata) {
+            limpacamposCadastro();
+            alert(returndata.mensagem);
+            location.reload();
         });
 
         return false;
@@ -146,7 +175,7 @@ class Time
 
     static atualizar(form)
     {
-        var codigo = $("#codigo").val();  
+        var codigo = document.getElementById("codigo").value;  
 
         if (codigo == "") {
             mensagem += "Código invalido";
@@ -156,14 +185,24 @@ class Time
         
         var jForm = new FormData();
 
+        var e = document.getElementById("cmbDivisao");
+        var cmbDivisao = e.options[e.selectedIndex].value;
+
+        var e = document.getElementById("cmbCategoria");
+        var cmbCategoria = e.options[e.selectedIndex].value;
+
+        var e = document.getElementById("cmbTecnico");
+        var cmbTecnico = e.options[e.selectedIndex].value;
+
+
         jForm.append("codigo", codigo);
-        jForm.append("txtFoto", $('#txtFoto').get(0).files[0]);
-        jForm.append("txtNome", $('#txtNome').val());
-        jForm.append("cmbDivisao", $('#cmbDivisao').val());
-        jForm.append("cmbCategoria", $('#cmbCategoria').val());
-        jForm.append("cmbTecnico", $('#cmbTecnico').val());
-        jForm.append("rDesempenhotime", $("input[name=\"rDesempenhotime\"]:checked").val());
-        jForm.append("rComprarnovojogador", $("input[name=\"rComprarnovojogador\"]:checked").val());
+        jForm.append("txtFoto", jQuery('#txtFoto').get(0).files[0]);
+        jForm.append("txtNome", document.getElementById("txtNome").value);
+        jForm.append("cmbDivisao", cmbDivisao);
+        jForm.append("cmbCategoria", cmbCategoria);
+        jForm.append("cmbTecnico", cmbTecnico);
+        jForm.append("rDesempenhotime", document.querySelector('input[name="rDesempenhotime"]:checked').value);
+        jForm.append("rComprarnovojogador", document.querySelector('input[name="rComprarnovojogador"]:checked').value);
 
         var token  = Login.getCookie('token');
         var consulta = "";
@@ -172,7 +211,7 @@ class Time
             consulta = "&tk="+token;
         }
         
-        $.ajax({
+        var jqxhr = jQuery.ajax({
             url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=4'+codigo+consulta,
             type: 'POST',
             data: jForm,
@@ -180,13 +219,15 @@ class Time
             mimeType: 'application/json',
             contentType: false,
             cache: false,
-            processData: false,
-            success: function (returndata) {
-                alert(returndata.mensagem);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert("Falha ao atualizar time!");
-            }
+            processData: false
+        });
+
+        jqxhr.always(function (returndata) {
+            alert(returndata.mensagem);
+        });
+
+        jqxhr.fail(function( jqXHR, textStatus ) {
+            alert("Falha ao atualizar time!");
         });
 
         return false;
@@ -214,7 +255,7 @@ class Time
             }
       
             if (mensagem === "") {
-                $.ajax({
+                jQuery.ajax({
                     type: 'POST',
                     contentType: 'application/json',
                     dataType: "json",
@@ -235,8 +276,8 @@ class Time
 
     static listaTodosTimes()
     {
-        $(document).ready(function() {
-            $.getJSON( "http://localhost/sistemaRest/api/v1/time/index.php", function( json ) 
+        jQuery(document).ready(function() {
+            jQuery.getJSON( "http://localhost/sistemaRest/api/v1/time/index.php", function( json ) 
             {
                 var len         = 0;
 
@@ -287,25 +328,25 @@ class Time
                     strHTML = "<p>"+json.mensagem+"</p>";
                 }
                 
-                $("#tabela").html(strHTML);
+                document.getElementById("tabela").innerHTML = strHTML;
             });
         });            
     }
 
     static listaNomePorCodigo(codigoParam)
     {
-        $(document).ready(function() 
+        jQuery(document).ready(function() 
         {
-            $.ajax({
+            jQuery.ajax({
                 type: 'GET',
                 contentType: 'application/json',
                 dataType: "json",
                 url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=1&id='+codigoParam,
-                success: function(data) {			
-                    $("#txtNome").val(data.nomeTime);			
+                success: function(data) {
+                    document.getElementById("txtNome").value = data.nomeTime;			
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    $("#txtNome").val("Falha ao carregar nome!");	
+                    document.getElementById("txtNome").innerHTML = "Falha ao carregar nome!";	
                 }
             });
         });
@@ -313,9 +354,9 @@ class Time
 
     static carregaDivisao(codigo)
     {
-        $(document).ready(function()
+        jQuery(document).ready(function()
         {
-            $.getJSON( "http://localhost/sistemaRest/api/v1/divisao/index.php?a=1&id="+codigo, function( json )
+            jQuery.getJSON( "http://localhost/sistemaRest/api/v1/divisao/index.php?a=1&id="+codigo, function( json )
             {
                 var len         = json.divisaos.length;
                 var temRegistro = false;
@@ -338,16 +379,16 @@ class Time
                     strHTML = "<option value=\"\">Nenhuma categoria cadastrada</option>";
                 }  
 
-                $("#cmbDivisao").html(strHTML);
+                document.getElementById("cmbDivisao").innerHTML = strHTML;
             });
         });
     }
 
     static carregaCategoria(codigo)
     {
-        $(document).ready(function() 
+        jQuery(document).ready(function() 
         {
-            $.getJSON( "http://localhost/sistemaRest/api/v1/categoria/index.php?a=1&id="+codigo, function( json ) 
+            jQuery.getJSON( "http://localhost/sistemaRest/api/v1/categoria/index.php?a=1&id="+codigo, function( json ) 
             {
                 var len         = json.categorias.length;
                 var temRegistro = false;
@@ -370,16 +411,16 @@ class Time
                     strHTML = "<option value=\"\">Nenhuma categoria cadastrada</option>";
                 }   
 
-                $("#cmbCategoria").html(strHTML);
+                document.getElementById("cmbCategoria").innerHTML = strHTML;
             });
         });
     }
 
     static carregaTecnico(codigo)
     {
-        $(document).ready(function() 
+        jQuery(document).ready(function() 
         {
-            $.getJSON( "http://localhost/sistemaRest/api/v1/tecnico/index.php?a=1&id="+codigo, function( json ) 
+            jQuery.getJSON( "http://localhost/sistemaRest/api/v1/tecnico/index.php?a=1&id="+codigo, function( json ) 
             {
                 var len         = json.tecnicos.length;
                 var temRegistro = false;
@@ -402,7 +443,7 @@ class Time
                     strHTML = "<option value=\"\">Nenhuma tecnico cadastrado</option>";
                 }   
 
-                $("#cmbTecnico").html(strHTML);
+                document.getElementById("cmbTecnico").innerHTML = strHTML;
             });
         });
     }
@@ -463,7 +504,7 @@ class Time
                 dhtml = dhtml + "\n<option value=\""+valor+"\">"+texto+"</option>";	
             }
         }
-
+        
         document.getElementById("destino").innerHTML = dhtml;
     }
 
