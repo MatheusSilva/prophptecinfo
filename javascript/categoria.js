@@ -107,7 +107,8 @@ class Categoria
     {
         var ok = window.confirm("Voce tem certeza que deseja excluir?");
 
-        if (ok) {	
+        if (ok) {
+            document.getElementById("ajax-loader").style.display='block';	
             var mensagem = "";
 
             if (codigo == "") {
@@ -128,11 +129,13 @@ class Categoria
                 linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 linkReq.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
-                    if (linkReq.readyState == '4') {
+
+                    if (linkReq.readyState == '4' && linkReq.status == '200') {
                         //Pegar dados da resposta json
+                        document.getElementById("ajax-loader").style.display = 'none';
+                        location.reload();
                         var json = JSON.parse(linkReq.responseText);
                         alert(json.mensagem);
-                        location.reload();  
                     }
                 }
 
