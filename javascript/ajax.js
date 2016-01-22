@@ -2,7 +2,7 @@
 
 class Ajax
 {
-  static criaRequest()
+  static createXHR()
   {
       var request = false;
 

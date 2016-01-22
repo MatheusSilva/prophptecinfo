@@ -41,84 +41,81 @@ class Time
             pesquisa = form.txtNome.value;
         }
 
-        linkReq = Ajax.criaRequest();
-        if(linkReq != undefined){
-          //Montar requisição
-          linkReq.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=2",true);
-          linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          linkReq.onreadystatechange = Time.listaTime;
+        linkReq = Ajax.createXHR();
+        if (linkReq != undefined) {
+            //Montar requisição
+            linkReq.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=2",true);
+            linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            linkReq.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+                if (linkReq.readyState == '4') {
+                    //Pegar dados da resposta json
+                    var json = JSON.parse(linkReq.responseText);
+                    
+                    // Pega a tabela.
+                    var table = document.getElementById("tabela");
+                    
+                    // Limpa toda a INNER da tabela.
+                    table.innerHTML = "";
+                    
+                    var len = 0;
 
-          //Enviar
-          linkReq.send("p="+pesquisa); 
-        }
-    }
+                    if (json.times != null) {
+                        len         = json.times.length;
+                    }
 
-    static listaTime()
-    {
-        //Verificar pelo estado "4" de pronto.
-        if (linkReq.readyState == '4') {
-            //Pegar dados da resposta json
-            var json = JSON.parse(linkReq.responseText);
-            
-            // Pega a tabela.
-            var table = document.getElementById("tabela");
-            
-            // Limpa toda a INNER da tabela.
-            table.innerHTML = "";
-            
-            var len = 0;
+                    var temRegistro = false;
+                    
+                    var strHTML     = '<table width="80%" class="lista">'
+                                    +'<tr class="primeira_linha">'
+                                    +'<td>C&oacute;digo</td>'
+                                    +'<td>Nome</td>'
+                                    +'<td>A&ccedil;&otilde;es</td>'
+                                    +'</tr>';
+                                    
+                    for (var i=0; i < len; i++) {
+                        var codigo    = json.times[i].codigo;
+                        var nome      = json.times[i].nome;
 
-            if (json.times != null) {
-                len         = json.times.length;
-            }
+                        if (i % 2 == 0) {
+                            strHTML = strHTML + '<tr class="linha_par">';
+                        } else {
+                            strHTML = strHTML + '<tr class="linha_impar">';
+                        }
 
-            var temRegistro = false;
-            
-            var strHTML     = '<table width="80%" class="lista">'
-                            +'<tr class="primeira_linha">'
-                            +'<td>C&oacute;digo</td>'
-                            +'<td>Nome</td>'
-                            +'<td>A&ccedil;&otilde;es</td>'
-                            +'</tr>';
-                            
-            for (var i=0; i < len; i++) {
-                var codigo    = json.times[i].codigo;
-                var nome      = json.times[i].nome;
+                        var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
+                        + codigo
+                        + "\">[D]</a>";
 
-                if (i % 2 == 0) {
-                    strHTML = strHTML + '<tr class="linha_par">';
-                } else {
-                    strHTML = strHTML + '<tr class="linha_impar">';
+                        var alterar = "<a href=\"../formularios/alterar.time.htm?codigo="
+                        + codigo
+                        + "\">[A]</a>";
+
+                        var excluir = "<a href=\"javascript:Time.confirmar("
+                        + codigo
+                        + ")\">[X]</a>";
+
+                        var acao = detalhes+alterar+excluir;
+
+                        strHTML = strHTML + "<td>"+codigo+"</td>"
+                        + "<td>"+nome+"</td>"   
+                        + "<td>"+acao+"</td>"   
+                        + "</tr>";
+                        temRegistro = true; 
+                    }
+
+                    if(temRegistro  == false) {
+                        strHTML = json.mensagem;
+                    }   
+
+                    strHTML = strHTML + "</table>";
+
+                    table.innerHTML = strHTML;
                 }
-
-                var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
-                + codigo
-                + "\">[D]</a>";
-
-                var alterar = "<a href=\"../formularios/alterar.time.htm?codigo="
-                + codigo
-                + "\">[A]</a>";
-
-                var excluir = "<a href=\"javascript:Time.confirmar("
-                + codigo
-                + ")\">[X]</a>";
-
-                var acao = detalhes+alterar+excluir;
-
-                strHTML = strHTML + "<td>"+codigo+"</td>"
-                + "<td>"+nome+"</td>"   
-                + "<td>"+acao+"</td>"   
-                + "</tr>";
-                temRegistro = true; 
             }
 
-            if(temRegistro  == false) {
-                strHTML = json.mensagem;
-            }   
-
-            strHTML = strHTML + "</table>";
-
-            table.innerHTML = strHTML;
+            //Enviar
+            linkReq.send("p="+pesquisa); 
         }
     }
     
