@@ -121,19 +121,19 @@ class Divisao
             }
 
             if(mensagem == "") {
-                jQuery.ajax({
-                    type: 'POST',
-                    contentType: 'application/json',
-                    dataType: "json",
-                    url: 'http://localhost/sistemaRest/api/v1/divisao/index.php?a=6'+codigo+consulta,
-                    success: function(data) {
-                        alert(data.mensagem);
-                        location.reload();				
-                    },
-                    error: function(jqXHR, textStatus, errorThrown){
-                        alert("Falha ao excluir divisao!");	
+                linkReq.open("POST","http://localhost/sistemaRest/api/v1/divisao/index.php?a=6"+codigo+consulta,true);
+                linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                linkReq.onreadystatechange = function() {
+                    //Verificar pelo estado "4" de pronto.
+                    if (linkReq.readyState == '4') {
+                        //Pegar dados da resposta json
+                        var json = JSON.parse(linkReq.responseText);
+                        alert(json.mensagem);
+                        location.reload();  
                     }
-                });
+                }
+
+                linkReq.send();
             } else {
                 alert(mensagem);
             } 

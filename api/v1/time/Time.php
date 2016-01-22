@@ -265,7 +265,9 @@ class Time extends ClasseBase
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(":codigo", $codigo, PDO::PARAM_INT);
 
-            if (!$stmt->execute()) {
+            $retorno = $stmt->execute();
+
+            if (!$retorno) {
                 $retorno = "Não foi possivel excluir este time.";
             } else {
                 $conexao->commit();

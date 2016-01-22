@@ -4,26 +4,26 @@ class Ajax
 {
   static createXHR()
   {
-      var request = false;
+      var xhr = false;
 
       try {
-          request = new XMLHttpRequest();
+          xhr = new XMLHttpRequest();
       } catch (trymicrosoft) {
           try {
-        	    request = new ActiveXObject("Msxml2.XMLHTTP");
+        	    xhr = new ActiveXObject("Msxml2.XMLHTTP");
           } catch (othermicrosoft) {
           		try {
-        	        request = new ActiveXObject("Microsoft.XMLHTTP");
+        	        xhr = new ActiveXObject("Microsoft.XMLHTTP");
         	    } catch (failed) {
-             			request = false;
+             			xhr = false;
           		}
         	}
       }
 
-      if (!request) {
+      if (!xhr) {
           alert("Error initializing XMLHttpRequest!");
       } else {
-          return request;
+          return xhr;
       }
   }
 }

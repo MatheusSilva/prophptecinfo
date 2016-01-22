@@ -151,8 +151,7 @@ if (empty($acao)) {
         $time["mensagem"] = "Problemas ao enviar imagem";
     }
 
-    $capa = json_encode($time);
-    echo $capa;
+    echo json_encode($time);
 } else if ($acao == 5) {
     $time    = "";
     $objtime = new time();
@@ -167,8 +166,7 @@ if (empty($acao)) {
         $time["mensagem"] = "Falha ao excluir time";	
     }
 
-    $json = json_encode($time);
-    echo $json;
+    echo json_encode($time);
 }
 
 $acao  = "";
