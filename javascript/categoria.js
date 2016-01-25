@@ -150,7 +150,7 @@ class Categoria
             
     static cadastrar(form) 
     {
-        document.getElementById("mensagem").innerHTML = "<br /><b>Carregando...</b>";
+        document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";
         xhr = Ajax.createXHR();
         var mensagem = "";
 
@@ -187,7 +187,7 @@ class Categoria
 
     static atualizar(form) 
     {
-        document.getElementById("mensagem").innerHTML = "<br /><b>Carregando...</b>";
+        document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";
         xhr = Ajax.createXHR();
         var codigo = form.codigo.value;
         var mensagem = "";
