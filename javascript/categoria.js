@@ -1,4 +1,4 @@
-let linkReq = '';
+let xhr = '';
 
 class Categoria
 {
@@ -10,16 +10,16 @@ class Categoria
             pesquisa = form.txtNome.value;
         }
 
-        linkReq = Ajax.createXHR();
-        if(linkReq != undefined){
+        xhr = Ajax.createXHR();
+        if(xhr != undefined){
             //Montar requisição
-            linkReq.open("POST","http://localhost/sistemaRest/api/v1/categoria/index.php?a=3",true);
-            linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            linkReq.onreadystatechange = function() {
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/categoria/index.php?a=3",true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
-                if (linkReq.readyState == '4') {
+                if (xhr.readyState == '4') {
                     //Pegar dados da resposta json
-                    var json = JSON.parse(linkReq.responseText);
+                    var json = JSON.parse(xhr.responseText);
                     
                     // Pega a tabela.
                     var table = document.getElementById("tabela");
@@ -84,7 +84,7 @@ class Categoria
             }
 
           //Enviar
-          linkReq.send("p="+pesquisa); 
+          xhr.send("p="+pesquisa); 
         }
     }
     
@@ -105,6 +105,7 @@ class Categoria
 
     static confirmar(codigo)
     {
+        xhr = Ajax.createXHR();
         var ok = window.confirm("Voce tem certeza que deseja excluir?");
 
         if (ok) {
@@ -124,30 +125,33 @@ class Categoria
                 consulta = "&tk="+token;
             }
                     
-            if (mensagem == "") {
-                linkReq.open("POST","http://localhost/sistemaRest/api/v1/categoria/index.php?a=6"+codigo+consulta,true);
-                linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                linkReq.onreadystatechange = function() {
+            if (mensagem == "" && xhr != undefined) {
+                xhr.open("POST","http://localhost/sistemaRest/api/v1/categoria/index.php?a=6"+codigo+consulta,true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                //xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
 
-                    if (linkReq.readyState == '4' && linkReq.status == '200') {
+                    if (xhr.readyState == '4' && xhr.status == '200') {
                         //Pegar dados da resposta json
                         document.getElementById("ajax-loader").style.display = 'none';
                         location.reload();
-                        var json = JSON.parse(linkReq.responseText);
+                        var json = JSON.parse(xhr.responseText);
                         alert(json.mensagem);
                     }
                 }
 
-                linkReq.send(); 
+                xhr.send(); 
             } else {
                 alert(mensagem);
             }
        }
     }
-
+            
     static cadastrar(form) 
     {
+        document.getElementById("mensagem").innerHTML = "<br /><b>Carregando...</b>";
+        xhr = Ajax.createXHR();
         var mensagem = "";
 
         if (form.txtNome.value == "") {
@@ -161,25 +165,21 @@ class Categoria
             consulta = "&tk="+token;
         }
 
-        if (mensagem == "") {
-            jQuery.ajax({
-                type: 'POST',
-                contentType: 'application/json',
-                dataType: "json",
-                url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=4'+consulta,
-                data: Categoria.formToJSON(form),
-                beforeSend: function() {
-                    document.getElementById("mensagem").innerHTML = "<br /><b>Carregando...</b>";
-                },
-                success: function(data) {
-                    document.getElementById("mensagem").innerHTML = data.mensagem;				
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    document.getElementById("mensagem").innerHTML = "<br /><b>Falha ao cadastrar categoria!</b>";	
+        if (mensagem == "" && xhr != undefined) {
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/categoria/index.php?a=4"+consulta,true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+
+                if (xhr.readyState == '4' && xhr.status == '200') {
+                    //Pegar dados da resposta json
+                    document.getElementById("txtNome").value = "";
+                    var json = JSON.parse(xhr.responseText);
+                    document.getElementById("mensagem").innerHTML = json.mensagem;
                 }
-            }).done(function( data ) {
-                document.getElementById("txtNome").value = "";	 	     	
-            });
+            }
+
+            xhr.send(Categoria.formToJSON(form));
         } else {
             document.getElementById("mensagem").innerHTML = mensagem;
         } 
@@ -187,6 +187,8 @@ class Categoria
 
     static atualizar(form) 
     {
+        document.getElementById("mensagem").innerHTML = "<br /><b>Carregando...</b>";
+        xhr = Ajax.createXHR();
         var codigo = form.codigo.value;
         var mensagem = "";
 
@@ -207,23 +209,20 @@ class Categoria
             consulta = "&tk="+token;
         }
 
-        if(mensagem == "") {
-            jQuery.ajax({
-                type: 'POST',
-                contentType: 'application/json',
-                dataType: "json",
-                url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=5'+codigo+consulta,
-                data: Categoria.formToJSON(form),
-                beforeSend: function(){
-                    document.getElementById("mensagem").innerHTML = "<br /><b>Carregando...</b>";
-                },
-                success: function(data) {
-                    document.getElementById("mensagem").innerHTML = "<br /><b>"+data.mensagem+"</br>";			
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    document.getElementById("mensagem").innerHTML = "<br /><b>Falha ao alterar categoria!</b>";
+        if(mensagem == "" && xhr != undefined) {
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/categoria/index.php?a=5"+codigo+consulta,true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+
+                if (xhr.readyState == '4' && xhr.status == '200') {
+                    //Pegar dados da resposta json
+                    var json = JSON.parse(xhr.responseText);
+                    document.getElementById("mensagem").innerHTML = json.mensagem;
                 }
-            });
+            }
+
+            xhr.send(Categoria.formToJSON(form));
         } else {
             document.getElementById("mensagem").innerHTML = mensagem;
         } 

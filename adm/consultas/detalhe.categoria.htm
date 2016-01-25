@@ -4,40 +4,37 @@
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
             <title>Cat&aacute;logo de Jogos</title>
             <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-
-            <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.2.0.js"></script>
             
             <script language="javascript" type="text/javascript" src="../../javascript/scripts.min.js"></script>
             
             <script type="text/javascript">
-            $(document).ready(function() {
-                location.queryString = {};
-                location.search.substr(1).split("&").forEach(function (pair) {
-                    if (pair === "") return;
-                    var parts = pair.split("=");
-                    location.queryString[parts[0]] = parts[1] &&
-                        decodeURIComponent(parts[1].replace(/\+/g, " "));
-                });
+                document.addEventListener('DOMContentLoaded', function() {
+                    location.queryString = {};
+                    location.search.substr(1).split("&").forEach(function (pair) {
+                        if (pair === "") return;
+                        var parts = pair.split("=");
+                        location.queryString[parts[0]] = parts[1] &&
+                            decodeURIComponent(parts[1].replace(/\+/g, " "));
+                    });
 
-                $.ajax({
-                    type: 'GET',
-                    contentType: 'application/json',
-                    dataType: "json",
-                    url: 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=2&id='+location.queryString.codigo,
-                    beforeSend: function(){
-                      $("#codigo").html("<br /><b>Carregando...</b>");
-                      $("#txtNome").html("<br /><b>Carregando...</b>");
-                    },
-                    success: function(data) {
-                      $("#codigo").val(data.codigo_categoria);
-                      $("#txtNome").val(data.nome);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown){
-                      $("#codigo").html("<br /><b>Falha ao carregar categoria!</b>");
-                      $("#txtNome").html("<br /><b>Falha ao carregar categoria!</b>");
+                    var xhr = Ajax.createXHR();
+
+                    xhr.open("GET","http://localhost/sistemaRest/api/v1/categoria/index.php?a=2&id="+location.queryString.codigo,true);
+                    
+                    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                    xhr.onreadystatechange = function() {
+                        //Verificar pelo estado "4" de pronto.
+
+                        if (xhr.readyState == '4' && xhr.status == '200') {
+                            //Pegar dados da resposta json
+                            var data = JSON.parse(xhr.responseText);
+                            document.getElementById("codigo").value = data.codigo_categoria;
+                            document.getElementById("txtNome").value = data.nome;
+                        }
                     }
+
+                    xhr.send();
                 });
-            });
             </script>
 	</head>
 	
