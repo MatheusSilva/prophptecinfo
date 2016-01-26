@@ -1,5 +1,3 @@
-let xhr = '';
-
 class Categoria
 {
     static consultar(form)
@@ -10,7 +8,7 @@ class Categoria
             pesquisa = form.txtNome.value;
         }
 
-        xhr = Ajax.createXHR();
+        var xhr = Ajax.createXHR();
         if(xhr != undefined){
             //Montar requisição
             xhr.open("POST","http://localhost/sistemaRest/api/v1/categoria/index.php?a=3",true);
@@ -105,7 +103,7 @@ class Categoria
 
     static confirmar(codigo)
     {
-        xhr = Ajax.createXHR();
+        var xhr = Ajax.createXHR();
         var ok = window.confirm("Voce tem certeza que deseja excluir?");
 
         if (ok) {
@@ -151,7 +149,7 @@ class Categoria
     static cadastrar(form) 
     {
         document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";
-        xhr = Ajax.createXHR();
+        var xhr = Ajax.createXHR();
         var mensagem = "";
 
         if (form.txtNome.value == "") {
@@ -188,7 +186,7 @@ class Categoria
     static atualizar(form) 
     {
         document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";
-        xhr = Ajax.createXHR();
+        var xhr = Ajax.createXHR();
         var codigo = form.codigo.value;
         var mensagem = "";
 

@@ -8,7 +8,7 @@ class Divisao
             pesquisa = form.txtNome.value;
         }
 
-        xhr = Ajax.createXHR();
+        var xhr = Ajax.createXHR();
 
         if(xhr != undefined) {
             //Montar requisição
@@ -103,7 +103,7 @@ class Divisao
 
     static confirmar(codigo)
     {
-        xhr = Ajax.createXHR();
+        var xhr = Ajax.createXHR();
         var ok = window.confirm("Voce tem certeza que deseja excluir?");
 
         if (ok && xhr != undefined) {
@@ -145,7 +145,7 @@ class Divisao
     static cadastrar(form) 
     {
         document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";
-        xhr = Ajax.createXHR();
+        var xhr = Ajax.createXHR();
         var mensagem = "";
 
         if (form.txtNome.value == "") {
@@ -182,7 +182,7 @@ class Divisao
     static atualizar(form) 
     {
         document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";  
-        xhr = Ajax.createXHR();
+        var xhr = Ajax.createXHR();
         var codigo = document.getElementById("codigo").value;
         var mensagem = "";
 

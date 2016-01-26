@@ -41,16 +41,16 @@ class Time
             pesquisa = form.txtNome.value;
         }
 
-        linkReq = Ajax.createXHR();
-        if (linkReq != undefined) {
+        var xhr = Ajax.createXHR();
+        if (xhr != undefined) {
             //Montar requisição
-            linkReq.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=2",true);
-            linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            linkReq.onreadystatechange = function() {
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php?a=2",true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
-                if (linkReq.readyState == '4') {
+                if (xhr.readyState == '4') {
                     //Pegar dados da resposta json
-                    var json = JSON.parse(linkReq.responseText);
+                    var json = JSON.parse(xhr.responseText);
                     
                     // Pega a tabela.
                     var table = document.getElementById("tabela");
@@ -115,7 +115,7 @@ class Time
             }
 
             //Enviar
-            linkReq.send("p="+pesquisa); 
+            xhr.send("p="+pesquisa); 
         }
     }
     
@@ -251,20 +251,20 @@ class Time
                 consulta = "&tk="+token;
             }
       
-            if (mensagem === "") {
-                linkReq.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=5"+codigo+consulta,true);
-                linkReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                linkReq.onreadystatechange = function() {
+            if (mensagem === "" && xhr != undefined) {
+                xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php?a=5"+codigo+consulta,true);
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
-                    if (linkReq.readyState == '4') {
+                    if (xhr.readyState == '4') {
                         //Pegar dados da resposta json
-                        var json = JSON.parse(linkReq.responseText);
+                        var json = JSON.parse(xhr.responseText);
                         alert(json.mensagem);
                         location.reload();  
                     }
                 }
 
-                linkReq.send();
+                xhr.send();
             } else {
                 alert(mensagem);
             } 
@@ -273,176 +273,239 @@ class Time
 
     static listaTodosTimes()
     {
-        jQuery(document).ready(function() {
-            jQuery.getJSON( "http://localhost/sistemaRest/api/v1/time/index.php", function( json ) 
-            {
-                var len         = 0;
+        var xhr = Ajax.createXHR();
 
-                if (json.times != undefined) {
-                    var len     = json.times.length;
-                }
+        if(xhr != undefined) {
+            //Montar requisição
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php",true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+                if (xhr.readyState == '4') {
 
-                var strHTML     = '<table width="80%" class="lista">'
-                                + '<tr class="primeira_linha">'
-                                + '<td>C&oacute;digo</td>'
-                                + '<td>Nome</td>'
-                                + '<td>A&ccedil;&otilde;es</td>'
-                                + '</tr>';
+                    //Pegar dados da resposta json
+                    var json = JSON.parse(xhr.responseText);
 
-                for (var i=0; i < len; i++) {
-                    var codigo   = json.times[i].codigo;
-                    var nome     = json.times[i].nome;
 
-                    if (i % 2 === 0) {
-                        strHTML = strHTML + '<tr class="linha_par">';
-                    } else {
-                        strHTML = strHTML + '<tr class="linha_impar">';
+                    var len         = 0;
+
+                    if (json.times != undefined) {
+                        var len     = json.times.length;
                     }
 
-                    var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
-                    + codigo
-                    + "\">[D]</a>";
+                    var strHTML     = '<table width="80%" class="lista">'
+                                    + '<tr class="primeira_linha">'
+                                    + '<td>C&oacute;digo</td>'
+                                    + '<td>Nome</td>'
+                                    + '<td>A&ccedil;&otilde;es</td>'
+                                    + '</tr>';
 
-                    var alterar = "<a href=\"../formularios/alterar.time.htm?codigo="
-                    + codigo
-                    + "\">[A]</a>";
+                    for (var i=0; i < len; i++) {
+                        var codigo   = json.times[i].codigo;
+                        var nome     = json.times[i].nome;
 
-                    var excluir = "<a href=\"javascript:Time.confirmar("
-                    + codigo
-                    + ")\">[X]</a>";
+                        if (i % 2 === 0) {
+                            strHTML = strHTML + '<tr class="linha_par">';
+                        } else {
+                            strHTML = strHTML + '<tr class="linha_impar">';
+                        }
 
-                    var acao = detalhes+alterar+excluir;
+                        var detalhes = "<a href=\"../consultas/detalhe.time.htm?codigo="
+                        + codigo
+                        + "\">[D]</a>";
 
-                    strHTML = strHTML + "<td>"+codigo+"</td>"
-                    + "<td>"+nome+"</td>"	
-                    + "<td>"+acao+"</td>"	
-                    + "</tr>";
+                        var alterar = "<a href=\"../formularios/alterar.time.htm?codigo="
+                        + codigo
+                        + "\">[A]</a>";
+
+                        var excluir = "<a href=\"javascript:Time.confirmar("
+                        + codigo
+                        + ")\">[X]</a>";
+
+                        var acao = detalhes+alterar+excluir;
+
+                        strHTML = strHTML + "<td>"+codigo+"</td>"
+                        + "<td>"+nome+"</td>"	
+                        + "<td>"+acao+"</td>"	
+                        + "</tr>";
+                    }
+                    
+                    strHTML = strHTML + "</table>";
+
+                    if (json.times == undefined && json.mensagem != undefined) {
+                        strHTML = "<p>"+json.mensagem+"</p>";
+                    }
+                    
+                    document.getElementById("tabela").innerHTML = strHTML;
                 }
-                
-                strHTML = strHTML + "</table>";
+            }
 
-                if (json.times == undefined && json.mensagem != undefined) {
-                    strHTML = "<p>"+json.mensagem+"</p>";
-                }
-                
-                document.getElementById("tabela").innerHTML = strHTML;
-            });
-        });            
+            xhr.send();
+        }
     }
 
     static listaNomePorCodigo(codigoParam)
     {
-        jQuery(document).ready(function() 
-        {
-            jQuery.ajax({
-                type: 'GET',
-                contentType: 'application/json',
-                dataType: "json",
-                url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=1&id='+codigoParam,
-                success: function(data) {
-                    document.getElementById("txtNome").value = data.nomeTime;			
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    document.getElementById("txtNome").innerHTML = "Falha ao carregar nome!";	
+        var xhr = Ajax.createXHR();
+
+        if(xhr != undefined) {
+            //Montar requisição
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php?a=1&id="+codigoParam,true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+                if (xhr.readyState == '4') {
+                    //Pegar dados da resposta json
+                    var data = JSON.parse(xhr.responseText);
+                    document.getElementById("txtNome").value = data.nomeTime;
                 }
-            });
-        });
+            }
+
+            xhr.send();
+        }
     }
 
     static carregaDivisao(codigo)
     {
-        jQuery(document).ready(function()
-        {
-            jQuery.getJSON( "http://localhost/sistemaRest/api/v1/divisao/index.php?a=1&id="+codigo, function( json )
-            {
-                var len         = json.divisaos.length;
-                var temRegistro = false;
-                var strHTML     = '';
+        var xhr = Ajax.createXHR();
 
-                for (var i=0; i < len; i++) {
-                    var codigo  = json.divisaos[i].codigo;
-                    var nome    = json.divisaos[i].nome;
-                    
-                    if(json.divisaos[i].selected) {
-                        strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";   
-                    } else {
-                        strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
+        if(xhr != undefined) {
+            //Montar requisição
+
+            if (codigo != undefined) {
+                codigo = "&id="+codigo;
+            } else {
+                codigo = "";
+            }
+
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/divisao/index.php?a=1"+codigo,true);
+            //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+                if (xhr.readyState == '4') {
+                    var json = JSON.parse(xhr.responseText);
+                    var len         = json.divisaos.length;
+                    var temRegistro = false;
+                    var strHTML     = '';
+
+                    for (var i=0; i < len; i++) {
+                        var codigo  = json.divisaos[i].codigo;
+                        var nome    = json.divisaos[i].nome;
+                        
+                        if(json.divisaos[i].selected) {
+                            strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";   
+                        } else {
+                            strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
+                        }
+
+                        temRegistro = true;	
                     }
 
-                    temRegistro = true;	
+                    if (temRegistro == false) {
+                        strHTML = "<option value=\"\">Nenhuma categoria cadastrada</option>";
+                    }  
+
+                    document.getElementById("cmbDivisao").innerHTML = strHTML;
                 }
+            }
 
-                if (temRegistro == false) {
-                    strHTML = "<option value=\"\">Nenhuma categoria cadastrada</option>";
-                }  
-
-                document.getElementById("cmbDivisao").innerHTML = strHTML;
-            });
-        });
+            xhr.send(); 
+        }     
     }
 
     static carregaCategoria(codigo)
     {
-        jQuery(document).ready(function() 
-        {
-            jQuery.getJSON( "http://localhost/sistemaRest/api/v1/categoria/index.php?a=1&id="+codigo, function( json ) 
-            {
-                var len         = json.categorias.length;
-                var temRegistro = false;
-                var strHTML     = '';
+        var xhr = Ajax.createXHR();
 
-                for (var i=0; i < len; i++) {
-                    var codigo   = json.categorias[i].codigo;
-                    var nome     = json.categorias[i].nome;
+        if(xhr != undefined) {
+            if (codigo != undefined) {
+                codigo = "&id="+codigo;
+            } else {
+                codigo = "";
+            }
 
-                    if(json.categorias[i].selected) {
-                        strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";
-                    } else {
-                        strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
+            //Montar requisição
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/categoria/index.php?a=1"+codigo,true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+                if (xhr.readyState == '4') {
+                    var json = JSON.parse(xhr.responseText);    
+                    var len         = json.categorias.length;
+                    var temRegistro = false;
+                    var strHTML     = '';
+
+                    for (var i=0; i < len; i++) {
+                        var codigo   = json.categorias[i].codigo;
+                        var nome     = json.categorias[i].nome;
+
+                        if(json.categorias[i].selected) {
+                            strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";
+                        } else {
+                            strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
+                        }
+
+                        temRegistro = true;	
                     }
 
-                    temRegistro = true;	
+                    if (temRegistro  === false) {
+                        strHTML = "<option value=\"\">Nenhuma categoria cadastrada</option>";
+                    }   
+
+                    document.getElementById("cmbCategoria").innerHTML = strHTML;
                 }
+            }
 
-                if (temRegistro  === false) {
-                    strHTML = "<option value=\"\">Nenhuma categoria cadastrada</option>";
-                }   
-
-                document.getElementById("cmbCategoria").innerHTML = strHTML;
-            });
-        });
+            xhr.send(); 
+        }
     }
 
     static carregaTecnico(codigo)
     {
-        jQuery(document).ready(function() 
-        {
-            jQuery.getJSON( "http://localhost/sistemaRest/api/v1/tecnico/index.php?a=1&id="+codigo, function( json ) 
-            {
-                var len         = json.tecnicos.length;
-                var temRegistro = false;
-                var strHTML     = '';
+        var xhr = Ajax.createXHR();
 
-                for (var i=0; i < len; i++) {
-                    var codigo   = json.tecnicos[i].codigo;
-                    var nome     = json.tecnicos[i].nome;
+        if(xhr != undefined) {
+            if (codigo != undefined) {
+                codigo = "&id="+codigo;
+            } else {
+                codigo = "";
+            }
 
-                    if(json.tecnicos[i].selected) {
-                        strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";
-                    } else {
-                        strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
+            //Montar requisição
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/tecnico/index.php?a=1"+codigo,true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+                if (xhr.readyState == '4') {
+                    var json = JSON.parse(xhr.responseText);
+                    var len         = json.tecnicos.length;
+                    var temRegistro = false;
+                    var strHTML     = '';
+
+                    for (var i=0; i < len; i++) {
+                        var codigo   = json.tecnicos[i].codigo;
+                        var nome     = json.tecnicos[i].nome;
+
+                        if(json.tecnicos[i].selected) {
+                            strHTML =  strHTML + "<option selected=\"true\" value=\""+codigo+"\">"+nome+"</option>";
+                        } else {
+                            strHTML =  strHTML + "<option value=\""+codigo+"\">"+nome+"</option>";
+                        }
+
+                        temRegistro = true;	
                     }
 
-                    temRegistro = true;	
+                    if(temRegistro  === false) {
+                        strHTML = "<option value=\"\">Nenhuma tecnico cadastrado</option>";
+                    }   
+
+                    document.getElementById("cmbTecnico").innerHTML = strHTML;
                 }
+            }
 
-                if(temRegistro  === false) {
-                    strHTML = "<option value=\"\">Nenhuma tecnico cadastrado</option>";
-                }   
-
-                document.getElementById("cmbTecnico").innerHTML = strHTML;
-            });
-        });
+            xhr.send();
+        }
     }
 
     static tudoParaDestino()

@@ -18,15 +18,14 @@
                 location.queryString[parts[0]] = parts[1] &&
                     decodeURIComponent(parts[1].replace(/\+/g, " "));
             });
-
-            var codigo = location.queryString.codigo;
-            Time.carregaDivisao(codigo);
-            Time.carregaCategoria(codigo);
-            Time.carregaTecnico(codigo);
-            Time.listaNomePorCodigo(codigo);
-
-            $(document).ready(function() {
-                $("#codigo").val(codigo);
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                var codigo = location.queryString.codigo;
+                Time.carregaDivisao(codigo);
+                Time.carregaCategoria(codigo);
+                Time.carregaTecnico(codigo);
+                Time.listaNomePorCodigo(codigo);
+                document.getElementById("codigo").value = codigo;
             });
         </script>
     </head>
