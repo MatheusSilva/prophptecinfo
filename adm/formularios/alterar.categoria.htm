@@ -17,7 +17,7 @@
                         decodeURIComponent(parts[1].replace(/\+/g, " "));
                 });
 
-                var var xhr = Ajax.createXHR();
+                var xhr = Ajax.createXHR();
 
                 xhr.open("GET","http://localhost/sistemaRest/api/v1/categoria/index.php?a=2&id="+location.queryString.codigo,true);
                 

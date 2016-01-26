@@ -4,13 +4,10 @@
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
             <title>Cat&aacute;logo de Jogos</title>
             <link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-            
-            <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.2.0.js"></script>
-            
             <script language="javascript" type="text/javascript" src="../../javascript/scripts.min.js"></script>
             
             <script type="text/javascript">
-            $(document).ready(function() {
+            document.addEventListener('DOMContentLoaded', function() {
                 location.queryString = {};
                 location.search.substr(1).split("&").forEach(function (pair) {
                     if (pair === "") return;
@@ -19,40 +16,30 @@
                         decodeURIComponent(parts[1].replace(/\+/g, " "));
                 });
 
-                $.ajax({
-                    type: 'GET',
-                    contentType: 'application/json',
-                    dataType: "json",
-                    url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=1&id='+location.queryString.codigo,
-                    beforeSend: function(){
-                      $("#codigo").html("<br /><b>Carregando...</b>");
-                      $("#txtNomeTime").html("<br /><b>Carregando...</b>");
-                      $("#txtNomeDivisao").html("<br /><b>Carregando...</b>");
-                      $("#txtNomeTecnico").html("<br /><b>Carregando...</b>");
-                      $("#txtNomeCategoria").html("<br /><b>Carregando...</b>");
-                      $("#txtDesempenhoTime").html("<br /><b>Carregando...</b>");
-                      $("#txtComprarNovoJogador").html("<br /><b>Carregando...</b>");
-                    },
-                    success: function(data) {
-                      $("#codigo").val(data.codigotime);
-                      $("#txtNomeTime").val(data.nomeTime);
-                      $("#txtNomeDivisao").val(data.nomeDivisao);
-                      $("#txtNomeTecnico").val(data.nomeTecnico);
-                      $("#txtNomeCategoria").val(data.nomeCategoria);
-                      $("#txtDesempenhoTime").val(data.nomeDesempenhoTime);
-                      $("#txtComprarNovoJogador").val(data.NomeComprarNovoJogador);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown){
-                      $("#codigo").html("<br /><b>Falha ao carregar time!</b>");
-                      $("#txtNomeTime").html("<br /><b>Falha ao carregar time!</b>");
-                      $("#txtNomeDivisao").html("<br /><b>Falha ao carregar time!</b>");
-                      $("#txtNomeTecnico").html("<br /><b>Falha ao carregar time!</b>");
-                      $("#txtNomeCategoria").html("<br /><b>Falha ao carregar time!</b>");
-                      $("#txtDesempenhoTime").html("<br /><b>Falha ao carregar time!</b>");
-                      $("#txtComprarNovoJogador").html("<br /><b>Falha ao carregar time!</b>");
+                var xhr = Ajax.createXHR();
+
+                if(xhr != undefined) {
+                    //Montar requisição
+                    xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php?a=1&id="+location.queryString.codigo,true);
+                    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                    xhr.onreadystatechange = function() {
+                        //Verificar pelo estado "4" de pronto.
+                        if (xhr.readyState == '4') {
+                            //Pegar dados da resposta json
+                            var json = JSON.parse(xhr.responseText);
+                            document.getElementById("codigo").value = json.codigotime;
+                            document.getElementById("txtNomeTime").value = json.nomeTime;
+                            document.getElementById("txtNomeDivisao").value = json.nomeDivisao;
+                            document.getElementById("txtNomeTecnico").value = json.nomeTecnico;
+                            document.getElementById("txtNomeCategoria").value = json.nomeCategoria;
+                            document.getElementById("txtDesempenhoTime").value = json.nomeDesempenhoTime;
+                            document.getElementById("txtComprarNovoJogador").value = json.NomeComprarNovoJogador;
+                        }
                     }
-                });
-            });
+
+                    xhr.send();
+                }
+            });  
             </script>
 	</head>
 	

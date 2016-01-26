@@ -170,6 +170,65 @@ class Time
         return false;
     }
 
+    static atualizarJsPuro(form)
+    {
+        var codigo = document.getElementById("codigo").value;  
+
+        if (codigo == "") {
+            mensagem += "Código invalido";
+        } else {
+            codigo = "&id="+codigo;
+        }
+        
+        var jForm = new FormData();
+
+        var e = document.getElementById("cmbDivisao");
+        var cmbDivisao = e.options[e.selectedIndex].value;
+
+        var e = document.getElementById("cmbCategoria");
+        var cmbCategoria = e.options[e.selectedIndex].value;
+
+        var e = document.getElementById("cmbTecnico");
+        var cmbTecnico = e.options[e.selectedIndex].value;
+
+        jForm.append("codigo", codigo);
+        jForm.append("txtFoto", jQuery('#txtFoto').get(0).files[0]);
+        jForm.append("txtNome", document.getElementById("txtNome").value);
+        jForm.append("cmbDivisao", cmbDivisao);
+        jForm.append("cmbCategoria", cmbCategoria);
+        jForm.append("cmbTecnico", cmbTecnico);
+        //jForm.append("rDesempenhotime", document.querySelector('input[name="rDesempenhotime"]:checked').value);
+        //jForm.append("rComprarnovojogador", document.querySelector('input[name="rComprarnovojogador"]:checked').value);
+
+        var token  = Login.getCookie('token');
+        var consulta = "";
+
+        if (token !== "") {
+            consulta = "&tk="+token;
+        }
+
+        var xhr = Ajax.createXHR();
+
+        if (xhr != undefined) {
+            //Montar requisição
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=4"+codigo+consulta,true);
+            xhr.setRequestHeader("Content-Type","multipart/form-data");
+            xhr.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+                if (xhr.readyState == '4') {
+                    //Pegar dados da resposta json
+                    alert(123123);
+
+                    var json = JSON.parse(xhr.responseText);
+                    console.log(888);
+                    alert(json.mensagem);
+                }
+            }
+
+            xhr.send(jForm); 
+        }
+    }
+
     static atualizar(form)
     {
         var codigo = document.getElementById("codigo").value;  
@@ -191,15 +250,14 @@ class Time
         var e = document.getElementById("cmbTecnico");
         var cmbTecnico = e.options[e.selectedIndex].value;
 
-
         jForm.append("codigo", codigo);
         jForm.append("txtFoto", jQuery('#txtFoto').get(0).files[0]);
         jForm.append("txtNome", document.getElementById("txtNome").value);
         jForm.append("cmbDivisao", cmbDivisao);
         jForm.append("cmbCategoria", cmbCategoria);
         jForm.append("cmbTecnico", cmbTecnico);
-        jForm.append("rDesempenhotime", document.querySelector('input[name="rDesempenhotime"]:checked').value);
-        jForm.append("rComprarnovojogador", document.querySelector('input[name="rComprarnovojogador"]:checked').value);
+        //jForm.append("rDesempenhotime", document.querySelector('input[name="rDesempenhotime"]:checked').value);
+        //jForm.append("rComprarnovojogador", document.querySelector('input[name="rComprarnovojogador"]:checked').value);
 
         var token  = Login.getCookie('token');
         var consulta = "";
@@ -220,14 +278,13 @@ class Time
         });
 
         jqxhr.always(function (returndata) {
+            //console.log(returndata.mensagem);
             alert(returndata.mensagem);
         });
 
         jqxhr.fail(function( jqXHR, textStatus ) {
             alert("Falha ao atualizar time!");
         });
-
-        return false;
     }
     
             
@@ -378,7 +435,7 @@ class Time
                 codigo = "";
             }
 
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/divisao/index.php?a=1"+codigo,true);
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/divisao/index.php?a=1"+codigo,true);
             //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {

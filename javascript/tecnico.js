@@ -57,8 +57,8 @@ class Tecnico
 
         if(xhr != undefined) {
             //Montar requisição
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/tecnico/index.php?a=3",true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/tecnico/index.php?a=3",true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
                 if (xhr.readyState == '4') {
@@ -191,8 +191,8 @@ class Tecnico
             }
             
             if(mensagem == "") {
-                xhr.open("POST","http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6"+codigo+consulta,true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.open("GET","http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6"+codigo+consulta,true);
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
                     if (xhr.readyState == '4') {
