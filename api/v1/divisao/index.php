@@ -158,7 +158,9 @@ if (empty($acao)) {
     $objdivisao = new divisao();
     $objdivisao->setCodigo_divisao($id);
 
-    if ($objdivisao->excluir($token)) {	 	
+    if ($objdivisao->validaFkDivisao($token)) {       
+          $divisao["mensagem"] = "Falha ao excluir divisão. Existem um ou mais times vinculados a esta divisão.";        
+    } else if ($objdivisao->excluir($token)) {	 	
           $divisao["mensagem"] = "divisao excluida com sucesso";	 	
     } else {
           $divisao["mensagem"] = "Falha ao excluir divisao";	

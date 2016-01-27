@@ -183,6 +183,48 @@ class Categoria
     }//public function alterar($codigo)
 	
     /**
+    * metodo que tem função de fazer validacao da restricao de integridade
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.1
+    */
+    public function validaFkCategoria($token)
+    {
+        try {
+            if ($this->objClasseBase->tokenEhValido($token) === false) {
+                return 999;
+            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
+            
+            $codigo  = $this->getCodigoCategoria();
+
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM categoria AS cat"; 
+            $sql  .= "\n ,time AS tim";
+            $sql  .= "\n WHERE tim.categoria_codigo_categoria = cat.codigo_categoria";
+            $sql  .= "\n AND cat.codigo_categoria = :id";
+
+            $conexao = Conexao::getConexao();
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":id", $codigo, PDO::PARAM_INT);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno["resultado"];
+        } catch (\PDOException $e) {
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function validaFkCategoria($codigo)
+
+
+    /**
     * metodo que tem função de fazer exclusão do registro
     *
     * @access    public
@@ -200,7 +242,6 @@ class Categoria
             }//if ($this->objClasseBase->tokenEhValido($token) === false) {
             
             $codigo  = $this->getCodigoCategoria();
-            $nome    = $this->getNome();
 
             $sql  = "\n DELETE FROM categoria";
             $sql .= "\n WHERE codigo_categoria = :id";

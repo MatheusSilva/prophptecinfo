@@ -154,7 +154,9 @@ if (empty($acao)) {
     $objtecnico = new tecnico();
     $objtecnico->setCodigoTecnico($id);
 
-    if ($objtecnico->excluir($token)) {	 	
+    if ($objtecnico->validaFkTecnico($token)) {       
+        $tecnico["mensagem"] = "Falha ao excluir tecnico. Existem um ou mais times vinculados a este tecnico.";        
+    } else if ($objtecnico->excluir($token)) {	 	
         $tecnico["mensagem"] = "tecnico excluido com sucesso";	 	
     } else {
         $tecnico["mensagem"] = "Falha ao excluir tecnico";	

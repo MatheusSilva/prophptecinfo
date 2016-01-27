@@ -102,6 +102,47 @@ class Divisao extends ClasseBase
         }
     }
 
+    /**
+    * metodo que tem função de fazer validacao da restricao de integridade
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.1
+    */
+    public function validaFkDivisao($token)
+    {
+        try {
+            if ($this->tokenEhValido($token) === false) {
+                return 999;
+            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
+            
+            $codigo  = $this->getcodigo_divisao();
+
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM divisao AS dv"; 
+            $sql  .= "\n ,time AS tim";
+            $sql  .= "\n WHERE tim.divisao_codigo_divisao = dv.codigo_divisao";
+            $sql  .= "\n AND dv.codigo_divisao = :id";
+
+            $conexao = Conexao::getConexao();
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":id", $codigo, PDO::PARAM_INT);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno["resultado"];
+        } catch (\PDOException $e) {
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function validaFkDivisao($codigo)
+
     public function excluir($token)
     {
         try {

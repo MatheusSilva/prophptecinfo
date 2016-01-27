@@ -168,7 +168,9 @@ if (empty($acao)) {
     $objCategoria = new Categoria();
     $objCategoria->setCodigoCategoria($id);
 
-    if ($objCategoria->excluir($token)) {	 	
+    if ($objCategoria->validaFkCategoria($token)) {       
+          $categoria["mensagem"] = "Falha ao excluir categoria. Existem um ou mais times vinculados a esta categoria.";        
+    } else if ($objCategoria->excluir($token)) {	 	
           $categoria["mensagem"] = "Categoria excluida com sucesso";	 	
     } else {
           $categoria["mensagem"] = "Falha ao excluir categoria";	
