@@ -31,21 +31,21 @@
 			<div id="conteudo">
 				<h2 class="titulo">Detalhe de Torcedor</h2>
 				<?php
-					require_once "../../api/v1/torcedor/Torcedor.php";
-					$codigo = $_GET['codigo'];
-					$dados  = Torcedor::listarPorCodigo($codigo);
-					
-					if ($dados != 0) {
-						$codigo_torcedor = $dados['codigo_torcedor'];
-						$nome 			 = $dados['nome'];
-						$login 		 	 = $dados['login'];
-						echo "C&oacute;digo: $codigo_torcedor <br/>";
-						echo "Nome: $nome <br/>";
-						echo "Login: $login <br/>";
-					} else {
-						echo 'Login n&atilde;o encontrado';
-					}	
-				?>
+                    require_once "../../api/v1/torcedor/Torcedor.php";
+                    $codigo = $_GET['codigo'];
+                    $dados  = Torcedor::listarPorCodigo($codigo);
+                    
+                    if ($dados != 0) {
+                        $codigo_torcedor = $dados['codigo_torcedor'];
+                        $nome             = $dados['nome'];
+                        $login             = $dados['login'];
+                        echo "C&oacute;digo: $codigo_torcedor <br/>";
+                        echo "Nome: $nome <br/>";
+                        echo "Login: $login <br/>";
+                    } else {
+                        echo 'Login n&atilde;o encontrado';
+                    }
+                ?>
 			</div>
 			
 			<footer id="rodape">

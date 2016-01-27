@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html> 
+<!DOCTYPE html> 
 <html lang="pt-br">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -42,10 +42,10 @@
 				</form>
 				
 				<?php
-					if (isset($_GET['msg'])) {
-						echo urldecode($_GET['msg']);
-					}	
-				?>
+                    if (isset($_GET['msg'])) {
+                        echo urldecode($_GET['msg']);
+                    }
+                ?>
 				
 				<table width="80%" class="lista">
 					<tr class="primeira_linha">
@@ -55,37 +55,37 @@
 					</tr>
 					
 					<?php
-					if (isset($_GET['btnConsultar'])) {						
-						require_once "../../api/v1/torcedor/Torcedor.php";
-						$vetor = Torcedor::listarPorNome($_GET['txtNome']);
-						
-						if ($vetor != 0) {
-							$linha = 0;
-							
-							foreach ($vetor as $info) {								
-								if (++$linha % 2 == 0) {
-									echo '<tr class="linha_par">';
-								} else {
-									echo '<tr class="linha_impar">';								
-								}
-								
-								$codigo = $info['codigoTorcedor'];
-								$nome 	= $info['nome'];
-								echo "<td>$codigo</td>";
-								echo "<td>$nome</td>";
-								
-								$detalhes = "<a href=\"../consultas/detalhe.torcedor.php?codigo=$codigo\">[D]</a>";
-								$alterar = "<a href=\"../formularios/alterar.torcedor.php?codigo=$codigo\">[A]</a>";
-								$excluir = "<a href=\"javascript:confirmar($codigo)\">[X]</a>";
-								
-								echo "<td>$detalhes $alterar $excluir</td>";
-								echo '</tr>';
-							}
-						} else {
-							echo 'Nenhum torcedor cadastrado';
-						}	
-					}
-					?>
+                    if (isset($_GET['btnConsultar'])) {
+                        require_once "../../api/v1/torcedor/Torcedor.php";
+                        $vetor = Torcedor::listarPorNome($_GET['txtNome']);
+                        
+                        if ($vetor != 0) {
+                            $linha = 0;
+                            
+                            foreach ($vetor as $info) {
+                                if (++$linha % 2 == 0) {
+                                    echo '<tr class="linha_par">';
+                                } else {
+                                    echo '<tr class="linha_impar">';
+                                }
+                                
+                                $codigo = $info['codigoTorcedor'];
+                                $nome    = $info['nome'];
+                                echo "<td>$codigo</td>";
+                                echo "<td>$nome</td>";
+                                
+                                $detalhes = "<a href=\"../consultas/detalhe.torcedor.php?codigo=$codigo\">[D]</a>";
+                                $alterar = "<a href=\"../formularios/alterar.torcedor.php?codigo=$codigo\">[A]</a>";
+                                $excluir = "<a href=\"javascript:confirmar($codigo)\">[X]</a>";
+                                
+                                echo "<td>$detalhes $alterar $excluir</td>";
+                                echo '</tr>';
+                            }
+                        } else {
+                            echo 'Nenhum torcedor cadastrado';
+                        }
+                    }
+                    ?>
 				</table>
 
 			</div>

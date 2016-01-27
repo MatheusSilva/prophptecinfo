@@ -1,6 +1,8 @@
 <?php
 require_once "Time.php";
 require_once "../lib/Upload.php";
+use model\Time;
+use lib\Upload;
 
 $acao  = "";
 $id    = "";
@@ -8,15 +10,15 @@ $token = "";
 $p     = "";
 
 if (isset($_REQUEST["a"]) && empty($_REQUEST["a"]) === false) {
-    $acao  = $_REQUEST["a"];        
+    $acao  = $_REQUEST["a"];
 }
 
 if (isset($_REQUEST["id"]) && empty($_REQUEST["id"]) === false) {
-    $id  = $_REQUEST["id"];        
+    $id  = $_REQUEST["id"];
 }
 
 if (isset($_REQUEST["tk"]) && empty($_REQUEST["tk"]) === false) {
-    $token  = $_REQUEST["tk"];        
+    $token  = $_REQUEST["tk"];
 }
 
 if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
@@ -32,7 +34,7 @@ if (empty($acao)) {
 
     if (!empty($items)) {
         // get all results
-        foreach($items as $row) {
+        foreach ($items as $row) {
             $itemArray = array(
                 'codigo' => $row['codigo_time'],
                 'codigoDivisao' => $row['divisao_codigo_divisao'],
@@ -50,7 +52,7 @@ if (empty($acao)) {
         $json["mensagem"] = "Nenhum time cadastrado";
         echo json_encode($json);
     }
-} else if ($acao == 1) {
+} elseif ($acao == 1) {
     $time     = new time();
     $items  = $time->listarPorCodigo($id);
     
@@ -60,8 +62,7 @@ if (empty($acao)) {
         $json["mensagem"] = "Codigo de time invalido";
         echo json_encode($json);
     }
-
-} else if ($acao == 2) {
+} elseif ($acao == 2) {
     $time    = new time();
     $items = $time->listarPorNome($p);
 
@@ -70,16 +71,16 @@ if (empty($acao)) {
         $json   .= json_encode($items);
         $json   .= "}";
         echo $json;
-    } else if(!empty($p)) {
+    } elseif (!empty($p)) {
         $json["mensagem"] = "Nenhum time encontrado com o termo buscado";
         echo json_encode($json);
     } else {
         $json["mensagem"] = "Nenhum time cadastrado";
         echo json_encode($json);
     }
-} else if ($acao == 3) {  
-    $foto 		        = $_FILES["txtFoto"];
-    $nome 		        = $_REQUEST['txtNome'];
+} elseif ($acao == 3) {
+    $foto                = $_FILES["txtFoto"];
+    $nome                = $_REQUEST['txtNome'];
     $codigodivisao      = $_REQUEST['cmbDivisao'];
     $codigocategoria    = $_REQUEST['cmbCategoria'];
     $codigotecnico      = $_REQUEST['cmbTecnico'];
@@ -94,9 +95,9 @@ if (empty($acao)) {
         $objtime = new Time();
         $objtime->setNome($nome);
         $objtime->setCapa($capa);
-        $objtime->setCodigo_divisao($codigodivisao);
-        $objtime->setCodigo_categoria($codigocategoria);
-        $objtime->setCodigo_tecnico($codigotecnico);
+        $objtime->setCodigoDivisao($codigodivisao);
+        $objtime->setCodigoCategoria($codigocategoria);
+        $objtime->setCodigoTecnico($codigotecnico);
         $objtime->setDesempenhotime($desempenhotime);
         $objtime->setComprarnovojogador($comprarnovojogador);
 
@@ -110,14 +111,14 @@ if (empty($acao)) {
     }
     
     echo json_encode($time);
-} else if ($acao == 4) {
+} elseif ($acao == 4) {
     $foto = "";
 
     if (isset($_FILES["txtFoto"]) && !empty($_FILES["txtFoto"])) {
         $foto           = $_FILES["txtFoto"];
     }
 
-    $nome 		        = $_REQUEST['txtNome'];
+    $nome                = $_REQUEST['txtNome'];
     $codigodivisao      = $_REQUEST['cmbDivisao'];
     $codigocategoria    = $_REQUEST['cmbCategoria'];
     $codigotecnico      = $_REQUEST['cmbTecnico'];
@@ -133,12 +134,12 @@ if (empty($acao)) {
 
     if ($capa != '0') {
         $objtime = new Time();
-        $objtime->setCodigo_time($id);
+        $objtime->setCodigoTime($id);
         $objtime->setNome($nome);
         $objtime->setCapa($capa);
-        $objtime->setCodigo_divisao($codigodivisao);
-        $objtime->setCodigo_categoria($codigocategoria);
-        $objtime->setCodigo_tecnico($codigotecnico);
+        $objtime->setCodigoDivisao($codigodivisao);
+        $objtime->setCodigoCategoria($codigocategoria);
+        $objtime->setCodigoTecnico($codigotecnico);
         //$objtime->setDesempenhotime($desempenhotime);
         //$objtime->setComprarnovojogador($comprarnovojogador);
 
@@ -152,18 +153,18 @@ if (empty($acao)) {
     }
 
     echo json_encode($time);
-} else if ($acao == 5) {
+} elseif ($acao == 5) {
     $time    = "";
     $objtime = new time();
-    $objtime->setCodigo_time($id);
+    $objtime->setCodigoTime($id);
     $retorno = $objtime->excluir($id, $token);
     
-    if ($retorno === true) {	 	
-        $time["mensagem"] = "Time excluido com sucesso";	 	
-    } else if($retorno !== false) {
-        $time["mensagem"] = $retorno;	
+    if ($retorno === true) {
+        $time["mensagem"] = "Time excluido com sucesso";
+    } elseif ($retorno !== false) {
+        $time["mensagem"] = $retorno;
     } else {
-        $time["mensagem"] = "Falha ao excluir time";	
+        $time["mensagem"] = "Falha ao excluir time";
     }
 
     echo json_encode($time);

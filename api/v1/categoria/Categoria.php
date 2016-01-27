@@ -1,4 +1,8 @@
 <?php
+namespace model;
+
+use lib\ClasseBase;
+use lib\Conexao;
 
 /**
 * classe Categoria
@@ -6,7 +10,7 @@
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
 */
-class Categoria 
+class Categoria
 {
     /**
     * @access private
@@ -26,9 +30,9 @@ class Categoria
     */
     private $nome;
 
-    function __construct()
+    public function __construct()
     {
-		require_once "../lib/Conexao.php";
+        require_once "../lib/Conexao.php";
         require_once "../lib/ClasseBase.php";
         $this->objClasseBase = new ClasseBase();
     }
@@ -37,16 +41,16 @@ class Categoria
     * metodo acessor Get que retorna a informação da propriedade codigoCategoria
     *
     * @access    public
-    * @return    integer Retorna o codigo da categoria 
+    * @return    integer Retorna o codigo da categoria
     * @author    Matheus Silva
     * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
-    */ 	
-    public function getCodigoCategoria() 
+    */
+    public function getCodigoCategoria()
     {
         return $this->codigoCategoria;
-    }//public function getCodigoCategoria() 
+    }//public function getCodigoCategoria()
 
     /**
     * metodo acessor Set que carrega informação na propriedade codigoCategoria
@@ -58,7 +62,7 @@ class Categoria
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setCodigoCategoria($codigoCategoria) 
+    public function setCodigoCategoria($codigoCategoria)
     {
         $this->codigoCategoria = $codigoCategoria;
     }//public function setCodigoCategoria($codigoCategoria)
@@ -67,17 +71,17 @@ class Categoria
     * metodo acessor Get que retorna a informação da propriedade nome
     *
     * @access    public
-    * @return    string Retorna o nome da categoria 
+    * @return    string Retorna o nome da categoria
     * @author    Matheus Silva
     * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getNome() 
+    public function getNome()
     {
         return $this->nome;
     }//public function getNome()
-	
+
     /**
     * metodo acessor Set que carrega informação na propriedade nome
     *
@@ -88,7 +92,7 @@ class Categoria
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setNome($nome) 
+    public function setNome($nome)
     {
         $this->nome = $nome;
     }//public function setNome($nome)
@@ -109,7 +113,7 @@ class Categoria
             if ($this->objClasseBase->tokenEhValido($token) === false) {
                 return 999;
             }//if ($this->objClasseBase->tokenEhValido($token) === false) {
-        
+
             $nome  = $this->getNome();
             $id    = $this->ultimoCodigo();
 
@@ -121,11 +125,11 @@ class Categoria
             $sql .= "\n , :nome";
             $sql .= "\n )";
 
-            $conexao = Conexao::getConexao();	
+            $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 30);
+            $stmt->bindParam(":id", $id, \PDO::PARAM_INT);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
@@ -138,7 +142,7 @@ class Categoria
             return false;
         }
     }//public function inserir()
-	
+
     /**
     * metodo que tem função de fazer alteração do registro
     *
@@ -152,7 +156,6 @@ class Categoria
     public function alterar($token)
     {
         try {
-
             if ($this->objClasseBase->tokenEhValido($token) === false) {
                 return 999;
             }//if ($this->objClasseBase->tokenEhValido($token) === false) {
@@ -160,15 +163,15 @@ class Categoria
             $codigo  = $this->getCodigoCategoria();
             $nome    = $this->getNome();
 
-            $sql  = "\n UPDATE categoria"; 
+            $sql  = "\n UPDATE categoria";
             $sql .= "\n SET nome = :nome";
             $sql .= "\n WHERE codigo_categoria = :id";
 
             $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id", $codigo, PDO::PARAM_INT);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 30);
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
@@ -181,7 +184,7 @@ class Categoria
             return false;
         }
     }//public function alterar($codigo)
-	
+
     /**
     * metodo que tem função de fazer validacao da restricao de integridade
     *
@@ -198,18 +201,18 @@ class Categoria
             if ($this->objClasseBase->tokenEhValido($token) === false) {
                 return 999;
             }//if ($this->objClasseBase->tokenEhValido($token) === false) {
-            
+
             $codigo  = $this->getCodigoCategoria();
 
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
-            $sql  .= "\n FROM categoria AS cat"; 
+            $sql  .= "\n FROM categoria AS cat";
             $sql  .= "\n ,time AS tim";
             $sql  .= "\n WHERE tim.categoria_codigo_categoria = cat.codigo_categoria";
             $sql  .= "\n AND cat.codigo_categoria = :id";
 
             $conexao = Conexao::getConexao();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
@@ -240,7 +243,7 @@ class Categoria
             if ($this->objClasseBase->tokenEhValido($token) === false) {
                 return 999;
             }//if ($this->objClasseBase->tokenEhValido($token) === false) {
-            
+
             $codigo  = $this->getCodigoCategoria();
 
             $sql  = "\n DELETE FROM categoria";
@@ -249,7 +252,7 @@ class Categoria
             $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
@@ -262,7 +265,7 @@ class Categoria
             return false;
         }
     }//public function excluir($codigo)
-	
+
     /**
     * metodo que tem função de buscar o ultimo codigo da categoria
     *
@@ -316,7 +319,7 @@ class Categoria
             $sql .= "\n WHERE codigo_categoria = :id";
              
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
             $conexao = null;
             return $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -326,9 +329,9 @@ class Categoria
             fwrite($fp, $e);
             fclose($fp);
             return false;
-        }		
+        }
     }//public static function listarPorCodigo($codigo)
-	
+
     /**
     * metodo que tem função de buscar todas as categorias que tenham determinado padrao de nome
     *
@@ -352,7 +355,7 @@ class Categoria
 
 
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 30);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
             $stmt->execute();
             $conexao = null;
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -362,7 +365,7 @@ class Categoria
             fwrite($fp, $e);
             fclose($fp);
             return false;
-        }	
+        }
     }//public static function listarPorNome($nome)
 
     /**
@@ -378,7 +381,7 @@ class Categoria
     public static function listarTudo($strRequire = '../lib/Conexao.php')
     {
         try {
-			require_once "../lib/Conexao.php";
+            require_once "../lib/Conexao.php";
             $conexao = Conexao::getConexao();
 
             $sql  = "\n SELECT codigo_categoria";
@@ -395,11 +398,11 @@ class Categoria
             fwrite($fp, $e);
             fclose($fp);
             return false;
-        }	
+        }
     }//public static function listarTudo()
-    
-    public static function listaCategoriaPorTime($strRequire = '../lib/Conexao.php', $intCodigo)
-    {     
+
+    public static function listaCategoriaPorTime($intCodigo, $strRequire = '../lib/Conexao.php')
+    {
         try {
             $sql   = "\n SELECT c.codigo_categoria";
             $sql  .= "\n ,c.nome";
@@ -408,9 +411,9 @@ class Categoria
             $sql  .= "\n WHERE  c.codigo_categoria = t.categoria_codigo_categoria";
             $sql  .= "\n AND t.codigo_time = :codigo";
 
-            $conexao = Conexao::getConexao(); 		  
+            $conexao = Conexao::getConexao();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":codigo", $intCodigo, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo", $intCodigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;

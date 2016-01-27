@@ -1,4 +1,5 @@
 <?php
+namespace lib;
 
 /**
 * classe Upload
@@ -23,8 +24,7 @@ abstract class Upload
         $extensao = strrchr($arquivo['name'], '.');
 
         // Faz a validação do arquivo enviado
-        if(in_array($extensao, $extensoes_permitidas) !== true)
-        {
+        if (in_array($extensao, $extensoes_permitidas) !== true) {
             return false;
         }//if(in_array($extensao, $extensoes_permitidas) !== true)
 
@@ -40,17 +40,17 @@ abstract class Upload
     * @since     13/07/2015
     * @version   0.1
     */
-    public static function validarTipo($arquivo, $arrMineTypes = array("image/jpeg","image/jpg", "image/png"))
+    public static function validarTipo($arquivo, $arrMineTypes = array("image/jpeg", "image/jpg", "image/png"))
     {
         $boolPassou = false;
 
-        foreach ($arrMineTypes as $valor ) {
+        foreach ($arrMineTypes as $valor) {
             if ($valor == $arquivo['type']) {
                 $boolPassou = true;
             }//if ($valor == $arquivo['type']) {
         }//foreach ($arrMineTypes as $valor ) {
 
-        return $boolPassou;	
+        return $boolPassou;
     }//public static function validarTipo($arquivo, $arrMineTypes = array("image/jpeg","image/jpg", "image/png"))
 
     /**
@@ -82,7 +82,7 @@ abstract class Upload
     * @version   0.1
     */
 
-    public static function enviar($nome, $arquivo, $caminho = "../../img/" )
+    public static function enviar($nome, $arquivo, $caminho = "../../img/")
     {
         //faz upload para o servidor
 
@@ -101,9 +101,7 @@ abstract class Upload
             copy($arquivo['tmp_name'], "../".$caminho);
             return $caminho;
         } else {
-            return '0';	
+            return '0';
         }//if ($arquivo['error'] == 0) {
-
     }//public static function enviar($nome, $arquivo, $caminho = "../../image/" )
-
 }//abstract class Upload

@@ -1,4 +1,8 @@
 <?php
+namespace model;
+
+use lib\ClasseBase;
+use lib\Conexao;
 
 require_once "../lib/ClasseBase.php";
 
@@ -10,96 +14,96 @@ require_once "../lib/ClasseBase.php";
 */
 class Time extends ClasseBase
 {
-    private $codigo_time;
+    private $codigoTime;
     private $nome;
-    private $codigo_categoria;
-    private $codigo_divisao;
-    private $codigo_tecnico;
+    private $codigoCategoria;
+    private $codigoDivisao;
+    private $codigoTecnico;
     private $capa;
     private $desempenhotime;
     private $comprarnovojogador;
 
-    function __construct() 
+    public function __construct()
     {
         require_once "../lib/Conexao.php";
     }
 
-    public function getDesempenhotime() 
+    public function getDesempenhotime()
     {
         return $this->desempenhotime;
     }
 
-    public function setDesempenhotime($desempenhotime) 
+    public function setDesempenhotime($desempenhotime)
     {
         $this->desempenhotime = $desempenhotime;
     }
 
-    public function getComprarnovojogador() 
+    public function getComprarnovojogador()
     {
         return $this->comprarnovojogador;
     }
 
-    public function setComprarnovojogador($comprarnovojogador) 
+    public function setComprarnovojogador($comprarnovojogador)
     {
         $this->comprarnovojogador = $comprarnovojogador;
     }
 
-    public function getCodigo_time() 
+    public function getCodigoTime()
     {
-        return $this->codigo_time;
+        return $this->codigoTime;
     }
 
-    public function setCodigo_time($codigo_time) 
+    public function setCodigoTime($codigoTime)
     {
-        $this->codigo_time = $codigo_time;
+        $this->codigoTime = $codigoTime;
     }
 
-    public function getNome() 
+    public function getNome()
     {
         return $this->nome;
     }
 
-    public function setNome($nome) 
+    public function setNome($nome)
     {
         $this->nome = $nome;
     }
 
-    public function getCodigo_categoria() 
+    public function getCodigoCategoria()
     {
-        return $this->codigo_categoria;
+        return $this->codigoCategoria;
     }
 
-    public function setCodigo_categoria($codigo_categoria) 
+    public function setCodigoCategoria($codigoCategoria)
     {
-        $this->codigo_categoria = $codigo_categoria;
+        $this->codigoCategoria = $codigoCategoria;
     }
 
-    public function getCodigo_divisao() 
+    public function getCodigoDivisao()
     {
-        return $this->codigo_divisao;
+        return $this->codigoDivisao;
     }
 
-    public function setCodigo_divisao($codigo_divisao) 
+    public function setCodigoDivisao($codigoDivisao)
     {
-        $this->codigo_divisao = $codigo_divisao;
+        $this->codigoDivisao = $codigoDivisao;
     }
 
-    public function getCodigo_tecnico() 
+    public function getCodigoTecnico()
     {
-        return $this->codigo_tecnico;
+        return $this->codigoTecnico;
     }
 
-    public function setCodigo_tecnico($codigo_tecnico) 
+    public function setCodigoTecnico($codigoTecnico)
     {
-        $this->codigo_tecnico = $codigo_tecnico;
+        $this->codigoTecnico = $codigoTecnico;
     }
 
-    public function getCapa() 
+    public function getCapa()
     {
         return $this->capa;
     }
 
-    public function setCapa($capa) 
+    public function setCapa($capa)
     {
         $this->capa = $capa;
     }
@@ -112,10 +116,10 @@ class Time extends ClasseBase
             }//if ($this->tokenEhValido($token) === false) {
 
             $nome               = $this->getNome();
-            $capa               = $this->getCapa(); 
-            $codigo_divisao     = $this->getCodigo_divisao();
-            $codigo_categoria   = $this->getCodigo_categoria();
-            $codigo_tecnico     = $this->getCodigo_tecnico();
+            $capa               = $this->getCapa();
+            $codigo_divisao     = $this->getCodigoDivisao();
+            $codigo_categoria   = $this->getCodigoCategoria();
+            $codigo_tecnico     = $this->getCodigoTecnico();
             $desempenhotime     = $this->getDesempenhotime();
             $comprarnovojogador = $this->getComprarnovojogador();
 
@@ -135,18 +139,18 @@ class Time extends ClasseBase
             $sql    .= "\n ,:codigo_tecnico";
             $sql    .= "\n ,:desempenhotime";
             $sql    .= "\n ,:comprarnovojogador";
-            $sql    .= "\n )"; 
+            $sql    .= "\n )";
 
-            $conexao = Conexao::getConexao(); 
+            $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 35);
-            $stmt->bindParam(":capa", $capa, PDO::PARAM_STR, 100);
-            $stmt->bindParam(":codigo_divisao", $codigo_divisao, PDO::PARAM_INT);
-            $stmt->bindParam(":codigo_categoria", $codigo_categoria, PDO::PARAM_INT);
-            $stmt->bindParam(":codigo_tecnico", $codigo_tecnico, PDO::PARAM_INT);
-            $stmt->bindParam(":desempenhotime", $desempenhotime, PDO::PARAM_STR, 5);
-            $stmt->bindParam(":comprarnovojogador", $comprarnovojogador, PDO::PARAM_STR, 3);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 35);
+            $stmt->bindParam(":capa", $capa, \PDO::PARAM_STR, 100);
+            $stmt->bindParam(":codigo_divisao", $codigo_divisao, \PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_categoria", $codigo_categoria, \PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_tecnico", $codigo_tecnico, \PDO::PARAM_INT);
+            $stmt->bindParam(":desempenhotime", $desempenhotime, \PDO::PARAM_STR, 5);
+            $stmt->bindParam(":comprarnovojogador", $comprarnovojogador, \PDO::PARAM_STR, 3);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
@@ -159,7 +163,7 @@ class Time extends ClasseBase
             return false;
         }
     }
-	
+    
     public function alterar($token)
     {
         try {
@@ -168,14 +172,14 @@ class Time extends ClasseBase
             }//if ($this->tokenEhValido($token) === false) {
 
             $banco              = Conexao::getConexao();
-            $codigo             = $this->getCodigo_time();
+            $codigo             = $this->getCodigoTime();
             $nome               = $this->getNome();
-            $codigo_divisao     = $this->getCodigo_divisao();
-            $codigo_categoria   = $this->getCodigo_categoria();
-            $codigo_tecnico     = $this->getCodigo_tecnico();
+            $codigo_divisao     = $this->getCodigoDivisao();
+            $codigo_categoria   = $this->getCodigoCategoria();
+            $codigo_tecnico     = $this->getCodigoTecnico();
             $capa               = $this->getCapa();
 
-            $sql     = "\n UPDATE time";  
+            $sql     = "\n UPDATE time";
             $sql    .= "\n SET nome                     = :nome";
             
             if (!empty($capa)) {
@@ -187,21 +191,21 @@ class Time extends ClasseBase
             $sql    .= "\n , tecnico_codigo_tecnico     = :codigo_tecnico";
             $sql    .= "\n WHERE codigo_time            = :codigo_time";
 
-            $conexao = Conexao::getConexao(); 
+            $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 35);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 35);
             
             if (!empty($capa)) {
                 $stmt->bindParam(":capa", $capa);
                 $arrRetorno = self::listarPorCodigo($codigo);
-                unlink("../".$arrRetorno["capa"], PDO::PARAM_STR, 100);
+                unlink("../".$arrRetorno["capa"], \PDO::PARAM_STR, 100);
             }
             
-            $stmt->bindParam(":codigo_divisao", $codigo_divisao, PDO::PARAM_INT);
-            $stmt->bindParam(":codigo_categoria", $codigo_categoria, PDO::PARAM_INT);
-            $stmt->bindParam(":codigo_tecnico", $codigo_tecnico, PDO::PARAM_INT);
-            $stmt->bindParam(":codigo_time", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_divisao", $codigo_divisao, \PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_categoria", $codigo_categoria, \PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_tecnico", $codigo_tecnico, \PDO::PARAM_INT);
+            $stmt->bindParam(":codigo_time", $codigo, \PDO::PARAM_INT);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
@@ -222,14 +226,14 @@ class Time extends ClasseBase
             $sql    .= "\n FROM time";
             $sql    .= "\n WHERE codigo_time    = :codigo";
 
-            $conexao = Conexao::getConexao(); 		  
+            $conexao = Conexao::getConexao();
             $stmt    = $conexao->prepare($sql);
-            $stmt->bindParam(":codigo", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
             
-            if ($retorno["retorno"] == 1 ) {
+            if ($retorno["retorno"] == 1) {
                 return true;
             }
             
@@ -257,13 +261,13 @@ class Time extends ClasseBase
             $arrRetorno = self::listarPorCodigo($codigo);
             unlink("../".$arrRetorno["capa"]);
 
-            $sql     = "\n DELETE FROM time"; 
+            $sql     = "\n DELETE FROM time";
             $sql    .= "\n WHERE codigo_time = :codigo";
 
-            $conexao = Conexao::getConexao(); 
+            $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":codigo", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
 
             $retorno = $stmt->execute();
 
@@ -293,7 +297,7 @@ class Time extends ClasseBase
             $sql    .= "\n ,capa";
             $sql    .= "\n FROM time";
 
-            $conexao = Conexao::getConexao(); 		  
+            $conexao = Conexao::getConexao();
             $stmt    = $conexao->prepare($sql);
             $stmt->execute();
             $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -307,7 +311,7 @@ class Time extends ClasseBase
             return false;
         }
     }
-        	
+            
     public static function listarPorCodigo($codigo)
     {
         try {
@@ -326,14 +330,14 @@ class Time extends ClasseBase
             $sql    .= "\n , divisao";
             $sql    .= "\n , tecnico";
             $sql    .= "\n , categoria";
-            $sql    .= "\n WHERE divisao_codigo_divisao   = codigo_divisao"; 
-            $sql    .= "\n AND tecnico_codigo_tecnico     = codigo_tecnico"; 
-            $sql    .= "\n AND categoria_codigo_categoria = codigo_categoria"; 
+            $sql    .= "\n WHERE divisao_codigo_divisao   = codigo_divisao";
+            $sql    .= "\n AND tecnico_codigo_tecnico     = codigo_tecnico";
+            $sql    .= "\n AND categoria_codigo_categoria = codigo_categoria";
             $sql    .= "\n AND codigo_time 			 	  = :codigo";
 
-            $conexao = Conexao::getConexao(); 		  
+            $conexao = Conexao::getConexao();
             $stmt    = $conexao->prepare($sql);
-            $stmt->bindParam(":codigo", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
@@ -346,7 +350,7 @@ class Time extends ClasseBase
             return false;
         }
     }
-	
+    
     public static function listarPorNome($nome)
     {
         try {
@@ -359,11 +363,11 @@ class Time extends ClasseBase
                 $nome   = $nome."%";
             }
 
-            $conexao = Conexao::getConexao(); 		  
+            $conexao = Conexao::getConexao();
             $stmt    = $conexao->prepare($sql);
 
             if ($nome !== "listaTodosTimes") {
-                $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 35);
+                $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 35);
             }
 
             $stmt->execute();

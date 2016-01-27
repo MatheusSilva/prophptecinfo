@@ -25,10 +25,10 @@
 				<h2 class="titulo">Alterar Dados de torcedor</h2>
 				
 				<?php
-					$codigo = $_GET['codigo'];
-					require_once "../../api/v1/torcedor/Torcedor.php";
-					$dados = Torcedor :: listarPorCodigo($codigo);
-				?>
+                    $codigo = $_GET['codigo'];
+                    require_once "../../api/v1/torcedor/Torcedor.php";
+                    $dados = Torcedor :: listarPorCodigo($codigo);
+                ?>
 				
 				<form method="post" 
 					  action="../adaptadores/adaptador.torcedor.php"
@@ -70,10 +70,10 @@
 				</form>
 				
 				<?php
-					if (isset($_GET['msg'])) {
-						echo urldecode($_GET['msg']);
-					}	
-				?>
+                    if (isset($_GET['msg'])) {
+                        echo urldecode($_GET['msg']);
+                    }
+                ?>
 			</div>
 			
 			<footer id="rodape">

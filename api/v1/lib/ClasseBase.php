@@ -1,12 +1,15 @@
 <?php
+namespace lib;
+
+use lib\Login;
 
 class ClasseBase
 {
-    function __construct() 
+    public function __construct()
     {
-	   require_once "Conexao.php";
-       require_once "Login.php";
-       Login::verificar(false);
+        require_once "Conexao.php";
+        require_once "Login.php";
+        Login::verificar(false);
     }
     
     public function tokenEhValido($strToken)
@@ -19,9 +22,9 @@ class ClasseBase
         $sql  .= "\n FROM torcedor";
         $sql  .= "\n WHERE token = :token";
 
-        $conexao = Conexao::getConexao(); 		  
+        $conexao = Conexao::getConexao();
         $stmt = $conexao->prepare($sql);
-        $stmt->bindParam(":token",$strToken);
+        $stmt->bindParam(":token", $strToken);
         $stmt->execute();
         $retorno =  $stmt->fetch();
         $conexao = null;
@@ -29,7 +32,7 @@ class ClasseBase
         if (empty($retorno)) {
             return false;
         }//if (empty($retorno)) {
-        
+
         return true;
     }
 }

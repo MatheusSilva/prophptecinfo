@@ -14,7 +14,7 @@ $arrJs[] = $basePathJs.'tecnico.js';
 $arrJs[] = $basePathJs.'time.js';
 
 foreach ($arrJs as $val) {
-	$minifier->add($val);
+    $minifier->add($val);
 }
 
 // save minified file to disk

@@ -1,4 +1,8 @@
 <?php
+namespace model;
+
+use lib\ClasseBase;
+use lib\Conexao;
 
 require_once "../lib/ClasseBase.php";
 
@@ -14,37 +18,37 @@ class Tecnico extends ClasseBase
     private $nome;
     private $data;
 
-    function __construct() 
-    { 
+    public function __construct()
+    {
         require_once "../lib/Conexao.php";
     }
 
-    public function getCodigoTecnico() 
+    public function getCodigoTecnico()
     {
         return $this->codigoTecnico;
     }
 
-    public function setCodigoTecnico($codigoTecnico) 
+    public function setCodigoTecnico($codigoTecnico)
     {
         $this->codigoTecnico = $codigoTecnico;
     }
 
-    public function getNome() 
+    public function getNome()
     {
         return $this->nome;
     }
 
-    public function setNome($nome) 
+    public function setNome($nome)
     {
         $this->nome = $nome;
     }
 
-    public function getData() 
+    public function getData()
     {
         return $this->data;
     }
 
-    public function setData($data) 
+    public function setData($data)
     {
         $this->data = $data;
     }
@@ -67,10 +71,10 @@ class Tecnico extends ClasseBase
             $sql  .= "\n ,:data";
             $sql  .= "\n )";
 
-            $conexao = Conexao::getConexao(); 
+            $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 30);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
             $stmt->bindParam(":data", $data);
             $retorno = $stmt->execute();
             $conexao->commit();
@@ -91,19 +95,19 @@ class Tecnico extends ClasseBase
             if ($this->tokenEhValido($token) !== true) {
                 return false;
             }//if ($this->tokenEhValido($token) === false) {
-            
+
             $codigo = $this->getCodigoTecnico();
-            $nome 		   = $this->getNome();
+            $nome           = $this->getNome();
 
             $sql   = "\n UPDATE tecnico";
             $sql  .= "\n SET nome = :nome";
             $sql  .= "\n WHERE codigo_tecnico = :codigo";
 
-            $conexao = Conexao::getConexao(); 
+            $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":nome", $nome, PDO::PARAM_STR, 30);
-            $stmt->bindParam(":codigo", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
+            $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
@@ -133,18 +137,18 @@ class Tecnico extends ClasseBase
             if ($this->tokenEhValido($token) === false) {
                 return 999;
             }//if ($this->objClasseBase->tokenEhValido($token) === false) {
-            
+
             $codigo  = $this->getCodigoTecnico();
 
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
-            $sql  .= "\n FROM tecnico AS tec"; 
+            $sql  .= "\n FROM tecnico AS tec";
             $sql  .= "\n ,time AS tim";
             $sql  .= "\n WHERE tim.tecnico_codigo_tecnico = tec.codigo_tecnico";
             $sql  .= "\n AND tec.codigo_tecnico = :id";
 
             $conexao = Conexao::getConexao();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
@@ -165,16 +169,16 @@ class Tecnico extends ClasseBase
             if ($this->tokenEhValido($token) !== true) {
                 return false;
             }//if ($this->tokenEhValido($token) === false) {
-            
+
             $codigo = $this->getCodigoTecnico();
             $sql   = "\n DELETE";
             $sql  .= "\n FROM tecnico";
             $sql  .= "\n WHERE codigo_tecnico = :codigo";
 
-            $conexao = Conexao::getConexao(); 
+            $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":codigo", $codigo, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
             $retorno = $stmt->execute();
             $conexao->commit();
             $conexao = null;
@@ -197,9 +201,9 @@ class Tecnico extends ClasseBase
             $sql  .= "\n FROM tecnico";
             $sql  .= "\n WHERE codigo_tecnico = :codigo";
 
-            $conexao = Conexao::getConexao(); 		  
+            $conexao = Conexao::getConexao();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":codigo", $codigo , PDO::PARAM_INT);
+            $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
@@ -222,9 +226,9 @@ class Tecnico extends ClasseBase
             $sql  .= "\n FROM tecnico";
             $sql  .= "\n WHERE nome LIKE :nome";
 
-            $conexao = Conexao::getConexao(); 		  
+            $conexao = Conexao::getConexao();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":nome", $nome , PDO::PARAM_STR, 30);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
             $stmt->execute();
             $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
             $conexao = null;
@@ -239,12 +243,12 @@ class Tecnico extends ClasseBase
     }
 
     public static function listarTudo($strRequire = '../lib/Conexao.php')
-    { 
+    {
         try {
             $sql   = "\n SELECT *";
             $sql  .= "\n FROM tecnico";
 
-            $conexao = Conexao::getConexao(); 		  
+            $conexao = Conexao::getConexao();
             $stmt = $conexao->prepare($sql);
             $stmt->execute();
             $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -259,8 +263,8 @@ class Tecnico extends ClasseBase
         }
     }
     
-    public static function listaTecnicoPorTime($strRequire = '../lib/Conexao.php', $intCodigo)
-    {     
+    public static function listaTecnicoPorTime($intCodigo, $strRequire = '../lib/Conexao.php')
+    {
         try {
             $sql   = "\n SELECT tec.codigo_tecnico";
             $sql  .= "\n ,tec.nome";
@@ -269,9 +273,9 @@ class Tecnico extends ClasseBase
             $sql  .= "\n WHERE  tec.codigo_tecnico = t.tecnico_codigo_tecnico";
             $sql  .= "\n AND t.codigo_time = :codigo";
 
-            $conexao = Conexao::getConexao(); 		  
+            $conexao = Conexao::getConexao();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":codigo", $intCodigo, PDO::PARAM_INT);
+            $stmt->bindParam(":codigo", $intCodigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
@@ -285,4 +289,3 @@ class Tecnico extends ClasseBase
         }
     }
 }
-	

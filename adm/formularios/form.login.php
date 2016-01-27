@@ -58,10 +58,10 @@
 				</form>
 				
 				<?php
-					if (isset($_GET['msg'])) {
-						echo urldecode($_GET['msg']);
-					}	
-				?>
+                    if (isset($_GET['msg'])) {
+                        echo urldecode($_GET['msg']);
+                    }
+                ?>
 				
 			</div>
 			

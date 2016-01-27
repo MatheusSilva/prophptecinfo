@@ -307,7 +307,9 @@ class Time
             if (token !== "") {
                 consulta = "&tk="+token;
             }
-      
+            
+            var xhr = Ajax.createXHR();
+            
             if (mensagem === "" && xhr != undefined) {
                 xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php?a=5"+codigo+consulta,true);
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
