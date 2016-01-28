@@ -4,20 +4,16 @@ namespace model;
 use lib\ClasseBase;
 use lib\Conexao;
 
+require_once "../lib/ClasseBase.php";
+
 /**
 * classe Categoria
 *
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
 */
-class Categoria
+class Categoria extends ClasseBase
 {
-    /**
-    * @access private
-    * @var integer Armazena o codigo da categoria
-    */
-    private $objClasseBase;
-
     /**
     * @access private
     * @var integer Armazena o codigo da categoria
@@ -33,8 +29,6 @@ class Categoria
     public function __construct()
     {
         require_once "../lib/Conexao.php";
-        require_once "../lib/ClasseBase.php";
-        $this->objClasseBase = new ClasseBase();
     }
     
     /**
@@ -110,12 +104,24 @@ class Categoria
     public function inserir($token)
     {
         try {
-            if ($this->objClasseBase->tokenEhValido($token) === false) {
+            $retorno = true;
+
+            if ($this->tokenEhValido($token) === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
-            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
+            }//if ($this->tokenEhValido($token) === false) {
 
             $nome  = $this->getNome();
             $id    = $this->ultimoCodigo();
+
+            if (empty($nome)) {
+                $this->setErro("Você deve preencher a categoria.");
+                $retorno = 998;
+            }
+
+            if ($retorno !== true) {
+                return $retorno;
+            }
 
             $sql  = "\n INSERT INTO categoria (";
             $sql .= "\n   `codigo_categoria`";
@@ -156,9 +162,9 @@ class Categoria
     public function alterar($token)
     {
         try {
-            if ($this->objClasseBase->tokenEhValido($token) === false) {
+            if ($this->tokenEhValido($token) === false) {
                 return 999;
-            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
+            }//if ($this->tokenEhValido($token) === false) {
 
             $codigo  = $this->getCodigoCategoria();
             $nome    = $this->getNome();
@@ -198,9 +204,9 @@ class Categoria
     public function validaFkCategoria($token)
     {
         try {
-            if ($this->objClasseBase->tokenEhValido($token) === false) {
+            if ($this->tokenEhValido($token) === false) {
                 return 999;
-            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
+            }//if ($this->tokenEhValido($token) === false) {
 
             $codigo  = $this->getCodigoCategoria();
 
@@ -240,9 +246,9 @@ class Categoria
     public function excluir($token)
     {
         try {
-            if ($this->objClasseBase->tokenEhValido($token) === false) {
+            if ($this->tokenEhValido($token) === false) {
                 return 999;
-            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
+            }//if ($this->tokenEhValido($token) === false) {
 
             $codigo  = $this->getCodigoCategoria();
 

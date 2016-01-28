@@ -128,10 +128,15 @@ if (empty($acao)) {
     $objdivisao = new divisao();
     $objdivisao->setNome($divisao["txtNome"]);
 
-    if ($objdivisao->inserir($token)) {
-        $divisao["mensagem"] = "divisao cadastrada com sucesso";
+    $boolRetorno = $objdivisao->inserir($token);
+    $strErros = $objdivisao->getErros();
+    
+    if ($boolRetorno === true) {
+        $divisao["mensagem"] = "Divisao cadastrada com sucesso.";
+    } else if (!empty($strErros)) {
+        $divisao["mensagem"] = $strErros;    
     } else {
-        $divisao["mensagem"] = "Falha ao cadastrar divisao";
+        $divisao["mensagem"] = "Falha ao cadastrar divisao.";
     }
 
     $json = json_encode($divisao);

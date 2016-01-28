@@ -20,27 +20,27 @@ class RoutesTest extends PHPUnit_Framework_TestCase
         return $result;
     }
     
-    public function testTokenInvalidoCategoria()
+    public function testTokenInvalidoSalvarDivisao()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=4&tk=asdasd';
+        $url = 'http://localhost/sistemaRest/api/v1/divisao/index.php?a=4&tk=asdasd';
         $data = array('txtNome' => 'NBI');
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Falha ao cadastrar categoria', $result["mensagem"]);
+        $this->assertEquals('Sua sessão expirou. Faça o login novamente.', $result["mensagem"]);
     }
     
-    public function testNomeEmBrancoCategoria()
+    public function testNomeEmBrancoSalvarDivisao()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=4&tk=698dc19d489c4e4db73e28a713eab07be10adc3949ba59abbe56e057f20f883e';
+        $url = 'http://localhost/sistemaRest/api/v1/divisao/index.php?a=4&tk=60a84a43a8cdcaa1e5fa865c9ead3f12a9f737a1c29e6b1dee407dcf1863346b';
         $data = array('txtNome' => '');
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Falha ao cadastrar categoria', $result["mensagem"]);
+        $this->assertEquals('Você deve preencher a divisão.', $result["mensagem"]);
     }
     
-    public function testNomeValidoCategoria()
+    public function testNomeValidoSalvarDivisao()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/categoria/index.php?a=4&tk=698dc19d489c4e4db73e28a713eab07be10adc3949ba59abbe56e057f20f883e';
+        $url = 'http://localhost/sistemaRest/api/v1/divisao/index.php?a=4&tk=60a84a43a8cdcaa1e5fa865c9ead3f12a9f737a1c29e6b1dee407dcf1863346b';
         $data = array('txtNome' => 'testephpunit');
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Categoria cadastrada com sucesso', $result["mensagem"]);
+        $this->assertEquals('Divisao cadastrada com sucesso.', $result["mensagem"]);
     }
 }

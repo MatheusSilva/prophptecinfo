@@ -134,10 +134,15 @@ if (empty($acao)) {
     $objCategoria = new Categoria();
     $objCategoria->setNome($categoria["txtNome"]);
 
-    if ($objCategoria->inserir($token)) {
-        $categoria["mensagem"] = "Categoria cadastrada com sucesso";
+    $boolRetorno = $objCategoria->inserir($token);
+    $strErros = $objCategoria->getErros();
+    
+    if ($boolRetorno === true) {
+        $categoria["mensagem"] = "Categoria cadastrada com sucesso.";
+    } else if (!empty($strErros)) {
+        $categoria["mensagem"] = $strErros;    
     } else {
-        $categoria["mensagem"] = "Falha ao cadastrar categoria";
+        $categoria["mensagem"] = "Falha ao cadastrar categoria.";
     }
 
     $json = json_encode($categoria);

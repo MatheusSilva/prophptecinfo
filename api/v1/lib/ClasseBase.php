@@ -5,6 +5,8 @@ use lib\Login;
 
 class ClasseBase
 {
+    private $arrErro;
+
     public function __construct()
     {
         require_once "Conexao.php";
@@ -12,6 +14,35 @@ class ClasseBase
         Login::verificar(false);
     }
     
+    public function getErros()
+    {
+        $strErros = "";
+
+        if (is_array($this->arrErro) && !empty($this->arrErro)) {
+            $boolPassou = false;
+            foreach ($this->arrErro as $val) {
+                if ($boolPassou) {
+                    $strErros .= "<br />".$val;
+                } else {
+                    $strErros .= $val;
+                    $boolPassou = true;
+                }
+            }
+        }
+
+        return $strErros;
+    }
+
+    public function setErro($strErro)
+    {
+        $this->arrErro[] = $strErro;
+    }
+
+    public function limpaErros()
+    {
+        $this->arrErro = array();
+    }
+
     public function tokenEhValido($strToken)
     {
         if (empty($strToken)) {

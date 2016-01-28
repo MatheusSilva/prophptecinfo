@@ -123,8 +123,13 @@ if (empty($acao)) {
     $data = $dia."/".$mes."/".$ano;
     $objtecnico->setData($data);
 
-    if ($objtecnico->inserir($token)) {
-        $tecnico["mensagem"] = "tecnico cadastrado com sucesso";
+    $boolRetorno = $objtecnico->inserir($token);
+    $strErros = $objtecnico->getErros();
+
+    if ($boolRetorno === true) {
+        $tecnico["mensagem"] = "Tecnico cadastrado com sucesso.";
+    } else if (!empty($strErros)) {
+        $tecnico["mensagem"] = $strErros;    
     } else {
         $tecnico["mensagem"] = "Falha ao cadastrar tecnico";
     }

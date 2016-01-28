@@ -56,12 +56,29 @@ class Tecnico extends ClasseBase
     public function inserir($token)
     {
         try {
+            $retorno = true;
+
             if ($this->tokenEhValido($token) !== true) {
-                return false;
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return 999;
             }//if ($this->tokenEhValido($token) === false) {
 
             $nome  = $this->getNome();
             $data  = $this->getData();
+
+            if (empty($nome)) {
+                $this->setErro("Você deve preencher o tecnico.");
+                $retorno = 998;
+            }
+
+            if (empty($data) || mb_strlen($data, mb_detect_encoding($data)) !== 10 ) {
+                $this->setErro("Você deve preencher a data.");
+                $retorno = 997;
+            }
+
+            if ($retorno !== true) {
+                return $retorno;
+            }
 
             $sql   = "\n INSERT INTO tecnico(";
             $sql  .= "\n  nome";
@@ -93,7 +110,7 @@ class Tecnico extends ClasseBase
     {
         try {
             if ($this->tokenEhValido($token) !== true) {
-                return false;
+                return 999;
             }//if ($this->tokenEhValido($token) === false) {
 
             $codigo = $this->getCodigoTecnico();
@@ -167,7 +184,7 @@ class Tecnico extends ClasseBase
     {
         try {
             if ($this->tokenEhValido($token) !== true) {
-                return false;
+                return 999;
             }//if ($this->tokenEhValido($token) === false) {
 
             $codigo = $this->getCodigoTecnico();

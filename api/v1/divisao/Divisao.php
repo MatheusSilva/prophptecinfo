@@ -45,11 +45,24 @@ class Divisao extends ClasseBase
     public function inserir($token)
     {
         try {
+            $retorno = true;
+
             if ($this->tokenEhValido($token) === false) {
-                return false;
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return 999;
             }//if ($this->tokenEhValido($token) === false) {
 
             $nome  = $this->getNome();
+
+            if (empty($nome)) {
+                $this->setErro("Você deve preencher a divisão.");
+                $retorno = 998;
+            }
+
+
+            if ($retorno !== true) {
+                return $retorno;
+            }
 
             $sql   = "\n INSERT INTO divisao (";
             $sql  .= "\n nome";
@@ -78,7 +91,7 @@ class Divisao extends ClasseBase
     {
         try {
             if ($this->tokenEhValido($token) === false) {
-                return false;
+                return 999;
             }//if ($this->tokenEhValido($token) === false) {
 
             $codigo = $this->getCodigoDivisao();
@@ -151,7 +164,7 @@ class Divisao extends ClasseBase
     {
         try {
             if ($this->tokenEhValido($token) !== true) {
-                return false;
+                return 999;
             }//if ($this->tokenEhValido($token) === false) {
 
             $codigo = $this->getCodigoDivisao();
