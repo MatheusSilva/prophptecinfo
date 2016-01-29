@@ -202,6 +202,7 @@ class Divisao extends ClasseBase
     {
         try {
             if ($this->tokenEhValido($token) !== true) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
             }//if ($this->tokenEhValido($token) === false) {
 

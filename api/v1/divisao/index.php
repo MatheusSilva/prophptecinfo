@@ -48,7 +48,7 @@ if (empty($acao)) {
 
         echo $json;
     } else {
-        $json["mensagem"] = "Nenhum divisão cadastrada";
+        $json["mensagem"] = "Nenhum divisão cadastrada.";
         echo json_encode($json);
     }
 } elseif ($acao == 1) {
@@ -84,7 +84,7 @@ if (empty($acao)) {
     } else {
         $itemArray = array(
                 'codigo' => "",
-                'nome'   => "Nenhuma divisão cadastrada",
+                'nome'   => "Nenhuma divisão cadastrada.",
                 'selected'   => true
         );
             
@@ -103,7 +103,7 @@ if (empty($acao)) {
     if (!empty($items)) {
         echo json_encode($items);
     } else {
-        $json["mensagem"] = "codigo divisão invalido";
+        $json["mensagem"] = "codigo divisão invalido.";
         echo json_encode($json);
     }
 } elseif ($acao == 3) {
@@ -116,10 +116,10 @@ if (empty($acao)) {
         $json .= "}";
         echo $json;
     } elseif (!empty($p)) {
-        $json["mensagem"] = "Nenhuma divisão encontrada com o termo buscado";
+        $json["mensagem"] = "Nenhuma divisão encontrada com o termo buscado.";
         echo json_encode($json);
     } else {
-        $json["mensagem"] = "Nenhuma divisão cadastrada";
+        $json["mensagem"] = "Nenhuma divisão cadastrada.";
         echo json_encode($json);
     }
 } elseif ($acao == 4) {

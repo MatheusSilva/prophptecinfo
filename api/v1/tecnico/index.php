@@ -79,7 +79,7 @@ if (empty($acao)) {
     } else {
         $itemArray = array(
                 'codigo' => "",
-                'nome'   => "Nenhum tecnico cadastrado",
+                'nome'   => "Nenhum técnico cadastrado.",
                 'selected'   => true
         );
             
@@ -108,7 +108,7 @@ if (empty($acao)) {
         $json .= "}";
         echo $json;
     } else {
-        $json["mensagem"] = "Nenhum tecnico cadastrado.";
+        $json["mensagem"] = "Nenhum técnico cadastrado.";
         echo json_encode($json);
     }
 } elseif ($acao == 4) {
@@ -127,11 +127,11 @@ if (empty($acao)) {
     $strErros = $objtecnico->getErros();
 
     if ($boolRetorno === true) {
-        $tecnico["mensagem"] = "Tecnico cadastrado com sucesso.";
+        $tecnico["mensagem"] = "Técnico cadastrado com sucesso.";
     } else if (!empty($strErros)) {
         $tecnico["mensagem"] = $strErros;    
     } else {
-        $tecnico["mensagem"] = "Falha ao cadastrar tecnico";
+        $tecnico["mensagem"] = "Falha ao cadastrar técnico.";
     }
 
     $json = json_encode($tecnico);
@@ -143,11 +143,15 @@ if (empty($acao)) {
     $objtecnico->setCodigoTecnico($id);
     $objtecnico->setNome($tecnico["txtNome"]);
 
+    $boolRetorno = $objtecnico->alterar($token);
+    $strErros = $objtecnico->getErros();
 
-    if ($objtecnico->alterar($token)) {
-        $tecnico["mensagem"] = "tecnico atualizado com sucesso";
+    if ($boolRetorno === true) {
+        $tecnico["mensagem"] = "Técnico alterado com sucesso.";
+    } else if (!empty($strErros)) {
+        $tecnico["mensagem"] = $strErros;    
     } else {
-        $tecnico["mensagem"] = "Falha ao atualizar tecnico";
+        $tecnico["mensagem"] = "Falha ao atualizar técnico.";
     }
 
     $json = json_encode($tecnico);
@@ -157,12 +161,15 @@ if (empty($acao)) {
     $objtecnico = new tecnico();
     $objtecnico->setCodigoTecnico($id);
 
-    if ($objtecnico->validaFkTecnico($token)) {
-        $tecnico["mensagem"] = "Falha ao excluir tecnico. Existem um ou mais times vinculados a este tecnico.";
-    } elseif ($objtecnico->excluir($token)) {
-        $tecnico["mensagem"] = "tecnico excluido com sucesso";
+    $boolRetorno = $objtecnico->excluir($token);
+    $strErros = $objtecnico->getErros();
+
+    if ($boolRetorno === true) {
+        $tecnico["mensagem"] = "Técnico excluido com sucesso.";
+    } else if (!empty($strErros)) {
+        $tecnico["mensagem"] = $strErros;    
     } else {
-        $tecnico["mensagem"] = "Falha ao excluir tecnico";
+        $tecnico["mensagem"] = "Falha ao excluir técnico.";
     }
 
     $json = json_encode($tecnico);

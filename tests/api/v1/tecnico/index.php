@@ -23,34 +23,38 @@ class RoutesTest extends PHPUnit_Framework_TestCase
     public function testTokenInvalidoSalvarTecnico()
     {
         $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=4&tk=asdasd';
-        $data = array(
-            'txtNome' => "NBI"
-            ,'cmbDia' => ""
-            ,'cmbMes' => ""
-            ,'cmbAno' => ""
-        );
+        $data = array('txtNome' => 'NBI');
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Sua sessão expirou. Faça o login novamente.', $result["mensagem"]);
+    }
 
+    public function testTokenInvalidoAlterarTecnico()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5&tk=asdasd';
+        $data = array('txtNome' => 'NBI');
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Sua sessão expirou. Faça o login novamente.', $result["mensagem"]);
     }
     
     public function testNomeEmBrancoSalvarTecnico()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=4&tk=60a84a43a8cdcaa1e5fa865c9ead3f12a9f737a1c29e6b1dee407dcf1863346b';
-        $data = array(
-            'txtNome' => ""
-            ,'cmbDia' => ""
-            ,'cmbMes' => ""
-            ,'cmbAno' => ""
-        );
-
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=4&tk=65189e519a39d4672511a210b49ad8f3bd99fe0eead3300459aa4b6fed327da7';
+        $data = array();
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Você deve preencher o tecnico.<br />Você deve preencher a data.', $result["mensagem"]);
+        $this->assertEquals('Você deve preencher o técnico.<br />Você deve preencher a data.', $result["mensagem"]);
+    }
+
+    public function testNomeEmBrancoAlterarTecnico()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5&id=3&tk=65189e519a39d4672511a210b49ad8f3bd99fe0eead3300459aa4b6fed327da7';
+        $data = array();
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Você deve preencher a técnico.', $result["mensagem"]);
     }
     
     public function testNomeValidoSalvarTecnico()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=4&tk=60a84a43a8cdcaa1e5fa865c9ead3f12a9f737a1c29e6b1dee407dcf1863346b';
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=4&tk=65189e519a39d4672511a210b49ad8f3bd99fe0eead3300459aa4b6fed327da7';
         $data = array(
             'txtNome' => 'testephpunit'
             ,'cmbDia' => 12
@@ -59,6 +63,69 @@ class RoutesTest extends PHPUnit_Framework_TestCase
         );
 
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Tecnico cadastrado com sucesso.', $result["mensagem"]);
+        $this->assertEquals('Técnico cadastrado com sucesso.', $result["mensagem"]);
+    }
+
+    public function testNomeValidoAlterarTecnico()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5&id=3&tk=65189e519a39d4672511a210b49ad8f3bd99fe0eead3300459aa4b6fed327da7  ';
+        $data = array(
+            'txtNome' => 'sub 26'
+            ,'cmbDia' => 11
+            ,'cmbMes' => 11
+            ,'cmbAno' => 2011
+        );
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Técnico alterado com sucesso.', $result["mensagem"]);
+    }
+
+
+    public function testAlterarTecnicoInexistente()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5&id=999&tk=65189e519a39d4672511a210b49ad8f3bd99fe0eead3300459aa4b6fed327da7    ';
+        $data = array('txtNome' => 'sub 25');
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Falha ao alterar técnico. Código inexistente.', $result["mensagem"]);
+    }
+
+
+    public function testAlterarTecnicoInvalida()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5&id=asds&tk=65189e519a39d4672511a210b49ad8f3bd99fe0eead3300459aa4b6fed327da7   ';
+        $data = array('txtNome' => 'sub 25');
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Falha ao alterar técnico. Código inválido.', $result["mensagem"]);
+    }
+
+    public function testExcluirTecnicoInexistente()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6&id=999&tk=65189e519a39d4672511a210b49ad8f3bd99fe0eead3300459aa4b6fed327da7    ';
+        $data = array();
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Falha ao excluir técnico. Código inexistente.', $result["mensagem"]);
+    }
+
+    public function testExcluirTecnicoInvalida()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6&id=asds&tk=65189e519a39d4672511a210b49ad8f3bd99fe0eead3300459aa4b6fed327da7   ';
+        $data = array();
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Falha ao excluir técnico. Código inválido.', $result["mensagem"]);
+    }
+
+    public function testExcluirTecnicoVinculadaTime()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6&id=3&tk=65189e519a39d4672511a210b49ad8f3bd99fe0eead3300459aa4b6fed327da7  ';
+        $data = array();
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Falha ao excluir técnico. Existem um ou mais times vinculados a este técnico.', $result["mensagem"]);
+    }
+
+    public function testExcluirTecnico()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6&id=36&tk=65189e519a39d4672511a210b49ad8f3bd99fe0eead3300459aa4b6fed327da7 ';
+        $data = array();
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Técnico excluido com sucesso.', $result["mensagem"]);
     }
 }

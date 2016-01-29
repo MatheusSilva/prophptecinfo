@@ -67,7 +67,7 @@ class Tecnico extends ClasseBase
             $data  = $this->getData();
 
             if (empty($nome)) {
-                $this->setErro("Você deve preencher o tecnico.");
+                $this->setErro("Você deve preencher o técnico.");
                 $retorno = 998;
             }
 
@@ -106,15 +106,65 @@ class Tecnico extends ClasseBase
         }
     }
 
+     /**
+    * metodo que tem função de fazer validacao da restricao de integridade
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.1
+    */
+    public function existeTecnico()
+    {
+        try {
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM tecnico AS tec";
+            $sql  .= "\n WHERE tec.codigo_tecnico = :id";
+
+            $conexao = Conexao::getConexao();
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":id", $this->getCodigoTecnico(), \PDO::PARAM_INT);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno["resultado"];
+        } catch (\PDOException $e) {
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function existeTecnico()
+
     public function alterar($token)
     {
         try {
-            if ($this->tokenEhValido($token) !== true) {
+
+            if ($this->tokenEhValido($token) === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
             }//if ($this->tokenEhValido($token) === false) {
 
             $codigo = $this->getCodigoTecnico();
-            $nome           = $this->getNome();
+            $nome   = $this->getNome();
+
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Falha ao alterar técnico. Código inválido.");
+                return 998;
+            }
+
+            if ($this->existeTecnico() != 1) {
+                $this->setErro("Falha ao alterar técnico. Código inexistente.");
+                return 997;
+            }
+
+            if (empty($nome)) {
+                $this->setErro("Você deve preencher a técnico.");
+                return 996;
+            }
 
             $sql   = "\n UPDATE tecnico";
             $sql  .= "\n SET nome = :nome";
@@ -151,10 +201,6 @@ class Tecnico extends ClasseBase
     public function validaFkTecnico($token)
     {
         try {
-            if ($this->tokenEhValido($token) === false) {
-                return 999;
-            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
-
             $codigo  = $this->getCodigoTecnico();
 
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
@@ -184,10 +230,27 @@ class Tecnico extends ClasseBase
     {
         try {
             if ($this->tokenEhValido($token) !== true) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
             }//if ($this->tokenEhValido($token) === false) {
 
             $codigo = $this->getCodigoTecnico();
+
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Falha ao excluir técnico. Código inválido.");
+                return 998;
+            }
+
+            if ($this->existeTecnico() != 1) {
+                $this->setErro("Falha ao excluir técnico. Código inexistente.");
+                return 997;
+            }
+
+            if ($this->validaFkTecnico()) {
+                $this->setErro("Falha ao excluir técnico. Existem um ou mais times vinculados a este técnico.");
+                return 996;
+            }
+
             $sql   = "\n DELETE";
             $sql  .= "\n FROM tecnico";
             $sql  .= "\n WHERE codigo_tecnico = :codigo";
