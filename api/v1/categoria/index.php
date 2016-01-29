@@ -156,11 +156,12 @@ if (empty($acao)) {
     $objCategoria->setNome($categoria["txtNome"]);
 
     $boolRetorno = $objCategoria->alterar($token);
+    $strErros = $objCategoria->getErros();
 
     if ($boolRetorno === true) {
-        $categoria["mensagem"] = "Categoria atualizada com sucesso";
-    } elseif ($boolRetorno == 999) {
-        $categoria["mensagem"] = "Sua sessão expirou. Faça o login novamente.";
+        $categoria["mensagem"] = "Categoria alterada com sucesso.";
+    } else if (!empty($strErros)) {
+        $categoria["mensagem"] = $strErros;    
     } else {
         $categoria["mensagem"] = "Falha ao atualizar categoria";
     }
@@ -171,11 +172,13 @@ if (empty($acao)) {
     $categoria    = "";
     $objCategoria = new Categoria();
     $objCategoria->setCodigoCategoria($id);
+    $boolRetorno = $objCategoria->excluir($token);
+    $strErros = $objCategoria->getErros();
 
-    if ($objCategoria->validaFkCategoria($token)) {
-        $categoria["mensagem"] = "Falha ao excluir categoria. Existem um ou mais times vinculados a esta categoria.";
-    } elseif ($objCategoria->excluir($token)) {
-        $categoria["mensagem"] = "Categoria excluida com sucesso";
+    if ($boolRetorno === true) {
+        $categoria["mensagem"] = "Categoria excluida com sucesso.";
+    } else if (!empty($strErros)) {
+        $categoria["mensagem"] = $strErros;    
     } else {
         $categoria["mensagem"] = "Falha ao excluir categoria";
     }

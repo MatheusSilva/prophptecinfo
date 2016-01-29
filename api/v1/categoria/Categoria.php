@@ -10,7 +10,7 @@ require_once "../lib/ClasseBase.php";
 * classe Categoria
 *
 * @author    Matheus Silva
-* @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+* @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
 */
 class Categoria extends ClasseBase
 {
@@ -37,7 +37,7 @@ class Categoria extends ClasseBase
     * @access    public
     * @return    integer Retorna o codigo da categoria
     * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
@@ -52,7 +52,7 @@ class Categoria extends ClasseBase
     * @access    public
     * @param     integer $codigoCategoria Armazena a senha atual
     * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
@@ -67,7 +67,7 @@ class Categoria extends ClasseBase
     * @access    public
     * @return    string Retorna o nome da categoria
     * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
@@ -82,7 +82,7 @@ class Categoria extends ClasseBase
     * @access    public
     * @param     string $nome Armazena a senha atual
     * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
@@ -97,7 +97,7 @@ class Categoria extends ClasseBase
     * @access    public
     * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
     * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
@@ -112,15 +112,11 @@ class Categoria extends ClasseBase
             }//if ($this->tokenEhValido($token) === false) {
 
             $nome  = $this->getNome();
-            $id    = $this->ultimoCodigo();
+            $id    = null;
 
             if (empty($nome)) {
                 $this->setErro("Você deve preencher a categoria.");
-                $retorno = 998;
-            }
-
-            if ($retorno !== true) {
-                return $retorno;
+                return 998;
             }
 
             $sql  = "\n INSERT INTO categoria (";
@@ -150,24 +146,75 @@ class Categoria extends ClasseBase
     }//public function inserir()
 
     /**
+    * metodo que tem função de fazer validacao da restricao de integridade
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.1
+    */
+    public function existeCategoria()
+    {
+        try {
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM categoria AS cat";
+            $sql  .= "\n WHERE cat.codigo_categoria = :id";
+
+            $conexao = Conexao::getConexao();
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":id", $this->getCodigoCategoria(), \PDO::PARAM_INT);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno["resultado"];
+        } catch (\PDOException $e) {
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function existeCategoria()
+
+    /**
     * metodo que tem função de fazer alteração do registro
     *
     * @access    public
     * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
     * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
     public function alterar($token)
     {
         try {
+            $retorno = true;
+
             if ($this->tokenEhValido($token) === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
             }//if ($this->tokenEhValido($token) === false) {
 
             $codigo  = $this->getCodigoCategoria();
             $nome    = $this->getNome();
+
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Falha ao alterar categoria. Código inválido.");
+                return 998;
+            }
+
+            if ($this->existeCategoria() != 1) {
+                $this->setErro("Falha ao alterar categoria. Código inexistente.");
+                return 997;
+            }
+
+            if (empty($nome)) {
+                $this->setErro("Você deve preencher a categoria.");
+                return 996;
+            }
 
             $sql  = "\n UPDATE categoria";
             $sql .= "\n SET nome = :nome";
@@ -201,15 +248,9 @@ class Categoria extends ClasseBase
     * @since     14/12/2010
     * @version   0.1
     */
-    public function validaFkCategoria($token)
+    public function validaFkCategoria()
     {
         try {
-            if ($this->tokenEhValido($token) === false) {
-                return 999;
-            }//if ($this->tokenEhValido($token) === false) {
-
-            $codigo  = $this->getCodigoCategoria();
-
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
             $sql  .= "\n FROM categoria AS cat";
             $sql  .= "\n ,time AS tim";
@@ -218,7 +259,7 @@ class Categoria extends ClasseBase
 
             $conexao = Conexao::getConexao();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
+            $stmt->bindParam(":id", $this->getCodigoCategoria(), \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
@@ -233,13 +274,14 @@ class Categoria extends ClasseBase
     }//public function validaFkCategoria($codigo)
 
 
+    //https://www.youtube.com/watch?v=_SPTZdvKzZs
     /**
     * metodo que tem função de fazer exclusão do registro
     *
     * @access    public
     * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
     * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
@@ -251,6 +293,21 @@ class Categoria extends ClasseBase
             }//if ($this->tokenEhValido($token) === false) {
 
             $codigo  = $this->getCodigoCategoria();
+
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Falha ao excluir categoria. Código inválido.");
+                return 998;
+            }
+
+            if ($this->existeCategoria() != 1) {
+                $this->setErro("Falha ao excluir categoria. Código inexistente.");
+                return 997;
+            }
+
+            if ($this->validaFkCategoria()) {
+                $this->setErro("Falha ao excluir categoria. Existem um ou mais times vinculados a esta categoria.");
+                return 996;
+            }
 
             $sql  = "\n DELETE FROM categoria";
             $sql .= "\n WHERE codigo_categoria = :id";
@@ -273,43 +330,12 @@ class Categoria extends ClasseBase
     }//public function excluir($codigo)
 
     /**
-    * metodo que tem função de buscar o ultimo codigo da categoria
-    *
-    * @access    public
-    * @return    integer retorna o ultimo codigo
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public static function ultimoCodigo()
-    {
-        try {
-            $conexao = Conexao::getConexao();
-            $sql  = "\n SELECT MAX(codigo_categoria) + 1 AS codigo";
-            $sql .= "\n FROM categoria";
-
-            $stmt = $conexao->prepare($sql);
-            $stmt->execute();
-            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            $conexao = null;
-            return $retorno["codigo"];
-        } catch (\PDOException $e) {
-            $conexao = null;
-            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
-            fwrite($fp, $e);
-            fclose($fp);
-            return false;
-        }
-    }//public static function ultimoCodigo()
-
-    /**
     * metodo que tem função de buscar as informacoes da categoria por codigo
     *
     * @access    public
     * @return    array retorna as informacoes
     * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
@@ -344,7 +370,7 @@ class Categoria extends ClasseBase
     * @access    public
     * @return    array retorna as informacoes
     * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
@@ -380,7 +406,7 @@ class Categoria extends ClasseBase
     * @access    public
     * @return    array retorna as informacoes
     * @author    Matheus Silva
-    * @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
