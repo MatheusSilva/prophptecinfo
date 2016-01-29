@@ -48,7 +48,7 @@ if (empty($acao)) {
 
         echo $json;
     } else {
-        $json["mensagem"] = "Nenhum divisao cadastrada";
+        $json["mensagem"] = "Nenhum divisão cadastrada";
         echo json_encode($json);
     }
 } elseif ($acao == 1) {
@@ -84,7 +84,7 @@ if (empty($acao)) {
     } else {
         $itemArray = array(
                 'codigo' => "",
-                'nome'   => "Nenhuma divisao cadastrada",
+                'nome'   => "Nenhuma divisão cadastrada",
                 'selected'   => true
         );
             
@@ -103,7 +103,7 @@ if (empty($acao)) {
     if (!empty($items)) {
         echo json_encode($items);
     } else {
-        $json["mensagem"] = "codigo divisao invalido";
+        $json["mensagem"] = "codigo divisão invalido";
         echo json_encode($json);
     }
 } elseif ($acao == 3) {
@@ -116,10 +116,10 @@ if (empty($acao)) {
         $json .= "}";
         echo $json;
     } elseif (!empty($p)) {
-        $json["mensagem"] = "Nenhuma divisao encontrada com o termo buscado";
+        $json["mensagem"] = "Nenhuma divisão encontrada com o termo buscado";
         echo json_encode($json);
     } else {
-        $json["mensagem"] = "Nenhuma divisao cadastrada";
+        $json["mensagem"] = "Nenhuma divisão cadastrada";
         echo json_encode($json);
     }
 } elseif ($acao == 4) {
@@ -129,14 +129,14 @@ if (empty($acao)) {
     $objdivisao->setNome($divisao["txtNome"]);
 
     $boolRetorno = $objdivisao->inserir($token);
-    $strErros = $objdivisao->getErros();
+    $strErros    = $objdivisao->getErros();
     
     if ($boolRetorno === true) {
-        $divisao["mensagem"] = "Divisao cadastrada com sucesso.";
+        $divisao["mensagem"] = "Divisão cadastrada com sucesso.";
     } else if (!empty($strErros)) {
         $divisao["mensagem"] = $strErros;    
     } else {
-        $divisao["mensagem"] = "Falha ao cadastrar divisao.";
+        $divisao["mensagem"] = "Falha ao cadastrar divisão.";
     }
 
     $json = json_encode($divisao);
@@ -148,11 +148,15 @@ if (empty($acao)) {
     $objdivisao->setCodigoDivisao($id);
     $objdivisao->setNome($divisao["txtNome"]);
 
+    $boolRetorno = $objdivisao->alterar($token);
+    $strErros    = $objdivisao->getErros();
 
-    if ($objdivisao->alterar($token)) {
-        $divisao["mensagem"] = "divisao atualizada com sucesso";
+    if ($boolRetorno === true) {
+        $divisao["mensagem"] = "Divisão alterada com sucesso.";
+    } else if (!empty($strErros)) {
+        $divisao["mensagem"] = $strErros;    
     } else {
-        $divisao["mensagem"] = "Falha ao atualizar divisao";
+        $divisao["mensagem"] = "Falha ao atualizar divisão.";
     }
 
     $json = json_encode($divisao);
@@ -162,12 +166,15 @@ if (empty($acao)) {
     $objdivisao = new divisao();
     $objdivisao->setCodigoDivisao($id);
 
-    if ($objdivisao->validaFkDivisao($token)) {
-        $divisao["mensagem"] = "Falha ao excluir divisão. Existem um ou mais times vinculados a esta divisão.";
-    } elseif ($objdivisao->excluir($token)) {
-        $divisao["mensagem"] = "divisao excluida com sucesso";
+    $boolRetorno = $objdivisao->excluir($token);
+    $strErros    = $objdivisao->getErros();
+
+    if ($boolRetorno === true) {
+        $divisao["mensagem"] = "Divisão excluida com sucesso.";
+    } else if (!empty($strErros)) {
+        $divisao["mensagem"] = $strErros;    
     } else {
-        $divisao["mensagem"] = "Falha ao excluir divisao";
+        $divisao["mensagem"] = "Falha ao excluir divisão.";
     }
 
     $json = json_encode($divisao);

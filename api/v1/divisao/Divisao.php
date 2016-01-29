@@ -56,12 +56,7 @@ class Divisao extends ClasseBase
 
             if (empty($nome)) {
                 $this->setErro("Você deve preencher a divisão.");
-                $retorno = 998;
-            }
-
-
-            if ($retorno !== true) {
-                return $retorno;
+                return 998;
             }
 
             $sql   = "\n INSERT INTO divisao (";
@@ -87,15 +82,64 @@ class Divisao extends ClasseBase
         }
     }
 
+    /**
+    * metodo que tem função de fazer validacao da restricao de integridade
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.1
+    */
+    public function existeDivisao()
+    {
+        try {
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM divisao AS dv";
+            $sql  .= "\n WHERE dv.codigo_divisao = :id";
+
+            $conexao = Conexao::getConexao();
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":id", $this->getCodigoDivisao(), \PDO::PARAM_INT);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+            $conexao = null;
+            return $retorno["resultado"];
+        } catch (\PDOException $e) {
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function existeDivisao()
+
     public function alterar($token)
     {
         try {
             if ($this->tokenEhValido($token) === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
             }//if ($this->tokenEhValido($token) === false) {
 
             $codigo = $this->getCodigoDivisao();
             $nome   = $this->getNome();
+
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Falha ao alterar divisão. Código inválido.");
+                return 998;
+            }
+
+            if ($this->existeDivisao() != 1) {
+                $this->setErro("Falha ao alterar divisão. Código inexistente.");
+                return 997;
+            }
+
+            if (empty($nome)) {
+                $this->setErro("Você deve preencher a divisão.");
+                return 996;
+            }
 
             $sql   = "\n UPDATE divisao";
             $sql  .= "\n SET nome = :nome";
@@ -129,15 +173,9 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.1
     */
-    public function validaFkDivisao($token)
+    public function validaFkDivisao()
     {
         try {
-            if ($this->tokenEhValido($token) === false) {
-                return 999;
-            }//if ($this->objClasseBase->tokenEhValido($token) === false) {
-
-            $codigo  = $this->getCodigoDivisao();
-
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
             $sql  .= "\n FROM divisao AS dv";
             $sql  .= "\n ,time AS tim";
@@ -146,7 +184,7 @@ class Divisao extends ClasseBase
 
             $conexao = Conexao::getConexao();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
+            $stmt->bindParam(":id", $this->getCodigoDivisao(), \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
@@ -158,7 +196,7 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function validaFkDivisao($codigo)
+    }//public function validaFkDivisao()
 
     public function excluir($token)
     {
@@ -168,6 +206,21 @@ class Divisao extends ClasseBase
             }//if ($this->tokenEhValido($token) === false) {
 
             $codigo = $this->getCodigoDivisao();
+
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Falha ao excluir divisão. Código inválido.");
+                return 998;
+            }
+
+            if ($this->existeDivisao() != 1) {
+                $this->setErro("Falha ao excluir divisão. Código inexistente.");
+                return 997;
+            }
+
+            if ($this->validaFkDivisao()) {
+                $this->setErro("Falha ao excluir divisão. Existem um ou mais times vinculados a esta divisão.");
+                return 996;
+            }
 
             $sql   = "\n DELETE";
             $sql  .= "\n FROM divisao";
