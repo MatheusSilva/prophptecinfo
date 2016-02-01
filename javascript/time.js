@@ -266,7 +266,7 @@ class Time
             consulta = "&tk="+token;
         }
         
-        var jqxhr = jQuery.ajax({
+        jQuery.ajax({
             url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=4'+codigo+consulta,
             type: 'POST',
             data: jForm,
@@ -275,16 +275,16 @@ class Time
             contentType: false,
             cache: false,
             processData: false
+        }).always(function (data, textStatus, jqXHRP) {
+            alert(123);
+            console.log(data);
+            console.log(textStatus);
+            console.log(jqXHRP);
         });
 
-        jqxhr.always(function (returndata) {
-            //console.log(returndata.mensagem);
-            alert(returndata.mensagem);
-        });
-
-        jqxhr.fail(function( jqXHR, textStatus ) {
-            alert("Falha ao atualizar time!");
-        });
+       // jqxhr.fail(function( jqXHR, textStatus ) {
+        //    alert("Falha ao atualizar time!");
+        //});
     }
     
             

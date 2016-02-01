@@ -79,13 +79,13 @@ if (empty($acao)) {
         echo json_encode($json);
     }
 } elseif ($acao == 3) {
-    $foto                = $_FILES["txtFoto"];
-    $nome                = $_REQUEST['txtNome'];
-    $codigodivisao      = $_REQUEST['cmbDivisao'];
-    $codigocategoria    = $_REQUEST['cmbCategoria'];
-    $codigotecnico      = $_REQUEST['cmbTecnico'];
-    $desempenhotime     = $_REQUEST['rDesempenhotime'];
-    $comprarnovojogador = $_REQUEST['rComprarnovojogador'];
+    $foto               = $_FILES["txtFoto"];
+    $nome               = $_POST['txtNome'];
+    $codigodivisao      = $_POST['cmbDivisao'];
+    $codigocategoria    = $_POST['cmbCategoria'];
+    $codigotecnico      = $_POST['cmbTecnico'];
+    $desempenhotime     = $_POST['rDesempenhotime'];
+    $comprarnovojogador = $_POST['rComprarnovojogador'];
     
     $time = "";
 
@@ -101,27 +101,33 @@ if (empty($acao)) {
         $objtime->setDesempenhotime($desempenhotime);
         $objtime->setComprarnovojogador($comprarnovojogador);
 
-        if ($objtime->inserir($token)) {
-            $time["mensagem"] = "time cadastrado com sucesso";
+        $retorno  = $objtime->inserir($token);
+        $strErros = $objtime->getErros();
+
+        if ($retorno === true) {
+            $time["mensagem"] = "Time cadastrado com sucesso.";
+        } elseif (empty($strErros) === false) {
+            $time["mensagem"] = $strErros;
         } else {
-            $time["mensagem"] = "Falha ao cadastrar time";
+            $time["mensagem"] = "Falha ao cadastrar time.";
         }
     } else {
-        $time["mensagem"] = "Problemas ao enviar imagem";
+        $time["mensagem"] = "Problemas ao enviar imagem.";
     }
     
     echo json_encode($time);
 } elseif ($acao == 4) {
     $foto = "";
-
+    
     if (isset($_FILES["txtFoto"]) && !empty($_FILES["txtFoto"])) {
         $foto           = $_FILES["txtFoto"];
     }
+    
+    $nome               = $_POST['txtNome'];
+    $codigodivisao      = $_POST['cmbDivisao'];
+    $codigocategoria    = $_POST['cmbCategoria'];
+    $codigotecnico      = $_POST['cmbTecnico'];
 
-    $nome                = $_REQUEST['txtNome'];
-    $codigodivisao      = $_REQUEST['cmbDivisao'];
-    $codigocategoria    = $_REQUEST['cmbCategoria'];
-    $codigotecnico      = $_REQUEST['cmbTecnico'];
     //$desempenhotime     = $_REQUEST['rDesempenhotime'];
     //$comprarnovojogador = $_REQUEST['rComprarnovojogador'];
     $capa = '';
@@ -143,14 +149,21 @@ if (empty($acao)) {
         //$objtime->setDesempenhotime($desempenhotime);
         //$objtime->setComprarnovojogador($comprarnovojogador);
 
-        if ($objtime->alterar($token)) {
-            $time["mensagem"] = "Time alterado com sucesso";
+        $retorno  = $objtime->alterar($token);
+        $strErros = $objtime->getErros();
+
+        if ($retorno === true) {
+            $time["mensagem"] = "Time alterado com sucesso.";
+        } elseif (empty($strErros) === false) {
+            $time["mensagem"] = $strErros;
         } else {
-            $time["mensagem"] = "Falha ao alterar time";
+            $time["mensagem"] = "Falha ao alterar time.";
         }
     } else {
-        $time["mensagem"] = "Problemas ao enviar imagem";
+        $time["mensagem"] = "Problemas ao enviar imagem.";
     }
+
+    $time["mensagem"] = "hahahaha ahahahaha hahahaha hahaha";
 
     echo json_encode($time);
 } elseif ($acao == 5) {
@@ -158,15 +171,16 @@ if (empty($acao)) {
     $objtime = new time();
     $objtime->setCodigoTime($id);
     $retorno = $objtime->excluir($id, $token);
+    $strErros = $objtime->getErros();
     
     if ($retorno === true) {
-        $time["mensagem"] = "Time excluido com sucesso";
-    } elseif ($retorno !== false) {
-        $time["mensagem"] = $retorno;
+        $time["mensagem"] = "Time excluido com sucesso.";
+    } elseif (empty($strErros) === false) {
+        $time["mensagem"] = $strErros;
     } else {
         $time["mensagem"] = "Falha ao excluir time";
     }
-
+    
     echo json_encode($time);
 }
 

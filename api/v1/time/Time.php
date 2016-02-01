@@ -112,8 +112,9 @@ class Time extends ClasseBase
     {
         try {
             if ($this->tokenEhValido($token) !== true) {
-                return false;
-            }//if ($this->tokenEhValido($token) === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return 999;
+            }
 
             $nome               = $this->getNome();
             $capa               = $this->getCapa();
@@ -168,11 +169,22 @@ class Time extends ClasseBase
     {
         try {
             if ($this->tokenEhValido($token) !== true) {
-                return false;
-            }//if ($this->tokenEhValido($token) === false) {
-
-            $banco              = Conexao::getConexao();
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return 999;
+            }
+            
             $codigo             = $this->getCodigoTime();
+
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Falha ao atualizar time. Código inválido.");
+                return 998;
+            }
+
+            if ($this->existeTime($codigo) != 1) {
+                $this->setErro("Falha ao atualizar time. Código inexistente.");
+                return 998;
+            }
+
             $nome               = $this->getNome();
             $codigo_divisao     = $this->getCodigoDivisao();
             $codigo_categoria   = $this->getCodigoCategoria();
@@ -222,9 +234,9 @@ class Time extends ClasseBase
     public function existeTime($codigo)
     {
         try {
-            $sql     = "\n SELECT 1 as retorno";
+            $sql     = "\n SELECT DISTINCT 1 AS retorno";
             $sql    .= "\n FROM time";
-            $sql    .= "\n WHERE codigo_time    = :codigo";
+            $sql    .= "\n WHERE codigo_time = :codigo";
 
             $conexao = Conexao::getConexao();
             $stmt    = $conexao->prepare($sql);
@@ -232,12 +244,7 @@ class Time extends ClasseBase
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             $conexao = null;
-            
-            if ($retorno["retorno"] == 1) {
-                return true;
-            }
-            
-            return false;
+            return $retorno["retorno"];
         } catch (\PDOException $e) {
             $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
@@ -251,11 +258,18 @@ class Time extends ClasseBase
     {
         try {
             if ($this->tokenEhValido($token) !== true) {
-                return "Você não esta logado.";
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return 999;
             }
             
-            if ($this->existeTime($codigo) !== true) {
-                return "O time que você esta tentando excluir não existe.";
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Falha ao excluir time. Código inválido.");
+                return 998;
+            }
+
+            if ($this->existeTime($codigo) != 1) {
+                $this->setErro("Falha ao excluir time. Código inexistente.");
+                return 998;
             }
 
             $arrRetorno = self::listarPorCodigo($codigo);
@@ -272,7 +286,8 @@ class Time extends ClasseBase
             $retorno = $stmt->execute();
 
             if (!$retorno) {
-                $retorno = "Não foi possivel excluir este time.";
+                $this->setErro("Não foi possivel excluir este time.");
+                $retorno = false;
             } else {
                 $conexao->commit();
             }
