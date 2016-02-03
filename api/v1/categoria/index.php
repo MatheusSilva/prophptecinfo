@@ -139,8 +139,8 @@ if (empty($acao)) {
     
     if ($boolRetorno === true) {
         $categoria["mensagem"] = "Categoria cadastrada com sucesso.";
-    } else if (!empty($strErros)) {
-        $categoria["mensagem"] = $strErros;    
+    } elseif (!empty($strErros)) {
+        $categoria["mensagem"] = $strErros;
     } else {
         $categoria["mensagem"] = "Falha ao cadastrar categoria.";
     }
@@ -160,8 +160,8 @@ if (empty($acao)) {
 
     if ($boolRetorno === true) {
         $categoria["mensagem"] = "Categoria alterada com sucesso.";
-    } else if (!empty($strErros)) {
-        $categoria["mensagem"] = $strErros;    
+    } elseif (!empty($strErros)) {
+        $categoria["mensagem"] = $strErros;
     } else {
         $categoria["mensagem"] = "Falha ao atualizar categoria";
     }
@@ -177,8 +177,8 @@ if (empty($acao)) {
 
     if ($boolRetorno === true) {
         $categoria["mensagem"] = "Categoria excluida com sucesso.";
-    } else if (!empty($strErros)) {
-        $categoria["mensagem"] = $strErros;    
+    } elseif (!empty($strErros)) {
+        $categoria["mensagem"] = $strErros;
     } else {
         $categoria["mensagem"] = "Falha ao excluir categoria";
     }

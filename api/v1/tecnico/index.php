@@ -128,8 +128,8 @@ if (empty($acao)) {
 
     if ($boolRetorno === true) {
         $tecnico["mensagem"] = "Técnico cadastrado com sucesso.";
-    } else if (!empty($strErros)) {
-        $tecnico["mensagem"] = $strErros;    
+    } elseif (!empty($strErros)) {
+        $tecnico["mensagem"] = $strErros;
     } else {
         $tecnico["mensagem"] = "Falha ao cadastrar técnico.";
     }
@@ -148,8 +148,8 @@ if (empty($acao)) {
 
     if ($boolRetorno === true) {
         $tecnico["mensagem"] = "Técnico alterado com sucesso.";
-    } else if (!empty($strErros)) {
-        $tecnico["mensagem"] = $strErros;    
+    } elseif (!empty($strErros)) {
+        $tecnico["mensagem"] = $strErros;
     } else {
         $tecnico["mensagem"] = "Falha ao atualizar técnico.";
     }
@@ -166,8 +166,8 @@ if (empty($acao)) {
 
     if ($boolRetorno === true) {
         $tecnico["mensagem"] = "Técnico excluido com sucesso.";
-    } else if (!empty($strErros)) {
-        $tecnico["mensagem"] = $strErros;    
+    } elseif (!empty($strErros)) {
+        $tecnico["mensagem"] = $strErros;
     } else {
         $tecnico["mensagem"] = "Falha ao excluir técnico.";
     }

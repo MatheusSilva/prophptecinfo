@@ -71,7 +71,7 @@ class Tecnico extends ClasseBase
                 $retorno = 998;
             }
 
-            if (empty($data) || mb_strlen($data, mb_detect_encoding($data)) !== 10 ) {
+            if (empty($data) || mb_strlen($data, mb_detect_encoding($data)) !== 10) {
                 $this->setErro("Você deve preencher a data.");
                 $retorno = 997;
             }
@@ -142,7 +142,6 @@ class Tecnico extends ClasseBase
     public function alterar($token)
     {
         try {
-
             if ($this->tokenEhValido($token) === false) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;

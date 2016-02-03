@@ -133,8 +133,8 @@ if (empty($acao)) {
     
     if ($boolRetorno === true) {
         $divisao["mensagem"] = "Divisão cadastrada com sucesso.";
-    } else if (!empty($strErros)) {
-        $divisao["mensagem"] = $strErros;    
+    } elseif (!empty($strErros)) {
+        $divisao["mensagem"] = $strErros;
     } else {
         $divisao["mensagem"] = "Falha ao cadastrar divisão.";
     }
@@ -153,8 +153,8 @@ if (empty($acao)) {
 
     if ($boolRetorno === true) {
         $divisao["mensagem"] = "Divisão alterada com sucesso.";
-    } else if (!empty($strErros)) {
-        $divisao["mensagem"] = $strErros;    
+    } elseif (!empty($strErros)) {
+        $divisao["mensagem"] = $strErros;
     } else {
         $divisao["mensagem"] = "Falha ao atualizar divisão.";
     }
@@ -171,8 +171,8 @@ if (empty($acao)) {
 
     if ($boolRetorno === true) {
         $divisao["mensagem"] = "Divisão excluida com sucesso.";
-    } else if (!empty($strErros)) {
-        $divisao["mensagem"] = $strErros;    
+    } elseif (!empty($strErros)) {
+        $divisao["mensagem"] = $strErros;
     } else {
         $divisao["mensagem"] = "Falha ao excluir divisão.";
     }
