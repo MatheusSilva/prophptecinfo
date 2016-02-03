@@ -1,50 +1,56 @@
-<!DOCTYPE html> <html lang="pt-br">
+<!DOCTYPE html> 
+<html lang="pt-br">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Cat&aacute;logo de Jogos</title>
-        <link rel="stylesheet" type="text/css" href="../../css/layoutgeral.css" />
-        <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-2.2.0.js"></script>
-        
-        <script language="javascript" type="text/javascript" src="../../javascript/time.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../css/layoutgeral.css" /> 
+        <script language="javascript" type="text/javascript" src="../../javascript/scripts.min.js"></script>
         <script type="text/javascript">
-            $(document).ready(function() {
+            document.addEventListener('DOMContentLoaded', function() {
                 var dhtml = "";
+                var xhr = Ajax.createXHR();
+                xhr.open("GET", "http://localhost/sistemaRest/api/v1/time/index.php", true);
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
-                $.getJSON( "http://localhost/sistemaRest/api/v1/time/index.php", function( json ) 
-                {
-                    var len         = json.times.length;
-                    var temRegistro = false;
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == '4' && xhr.status == '200') { 
+                        var json        = JSON.parse(xhr.responseText);   
+                        var len         = json.times.length;
+                        var temRegistro = false;
 
-                    dhtml     = '<table>';
+                        dhtml     = '<table>';
 
-                    for (var i=0; i < len; i++) {
-                        var codigo    = json.times[i].codigo;
-                        var nome      = json.times[i].nome;
-                        var capa      = json.times[i].capa;
-                        
-                        dhtml = dhtml
-                            +"<tr>"
-                                +"<td>"
-                                    +"<img src=\""+capa+"\"  class=\"miniatura\" alt="+nome+" />"
-                                +"</td>"
-                            +"</tr>"
+                        for (var i=0; i < len; i++) {
+                            var codigo    = json.times[i].codigo;
+                            var nome      = json.times[i].nome;
+                            var capa      = json.times[i].capa;
+                            
+                            dhtml = dhtml
+                                +"<tr>"
+                                    +"<td>"
+                                        +"<img src=\""+capa+"\"  class=\"miniatura\" alt="+nome+" />"
+                                    +"</td>"
+                                +"</tr>"
 
-                            +"<tr>"
-                                +"<td>"
-                                    +"<a href=\"../../adm/consultas/detalhe.time.htm?codigo="+codigo+"\">"+nome+"</a>"
-                                +"</td>"
-                            +"</tr>";
+                                +"<tr>"
+                                    +"<td>"
+                                        +"<a href=\"../../adm/consultas/detalhe.time.htm?codigo="+codigo+"\">"+nome+"</a>"
+                                    +"</td>"
+                                +"</tr>";
 
-                        temRegistro = true;
+                            temRegistro = true;
+                        }
+
+                        if(temRegistro  === false) {
+                            dhtml = "Nenhuma time cadastrado";
+                        }
+
+                        dhtml = dhtml + "</table>";
+                        document.getElementById("times").innerHTML = dhtml;
                     }
+                }
 
-                    if(temRegistro  === false) {
-                        dhtml = "Nenhuma time cadastrado";
-                    }
-
-                    dhtml = dhtml + "</table>";
-                    $("#times").html(dhtml);
-                });
+                xhr.send();
             });
         </script>
     </head>

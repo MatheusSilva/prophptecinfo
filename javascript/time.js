@@ -121,37 +121,11 @@ class Time
     
     static cadastrar(form) 
     {
-        if (Time.valida() == false) {
-            return false;
-        }
+        //if (Time.valida() == false) {
+           // return false;
+        //}
 
-        var jForm = new FormData();
-
-        var e = document.getElementById("cmbDivisao");
-        var cmbDivisao = e.options[e.selectedIndex].value;
-
-        var e = document.getElementById("cmbCategoria");
-        var cmbCategoria = e.options[e.selectedIndex].value;
-
-        var e = document.getElementById("cmbTecnico");
-        var cmbTecnico = e.options[e.selectedIndex].value;
-
-        jForm.append("txtFoto", jQuery('#txtFoto').get(0).files[0]);
-        jForm.append("txtNome", document.getElementById("txtNome").value);
-        jForm.append("cmbDivisao", cmbDivisao);
-        jForm.append("cmbCategoria", cmbCategoria);
-        jForm.append("cmbTecnico", cmbTecnico);
-        jForm.append("rDesempenhotime", document.querySelector('input[name="rDesempenhotime"]:checked').value);
-        jForm.append("rComprarnovojogador", document.querySelector('input[name="rComprarnovojogador"]:checked').value);
-
-
-        var token  = Login.getCookie('token');
-        var consulta = "";
-
-        if (token !== "") {
-            consulta = "&tk="+token;
-        }
-        
+        /* mesmo codigo utilizando jquery
         jQuery.ajax({
             url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=3'+consulta,
             type: 'POST',
@@ -166,71 +140,74 @@ class Time
             alert(returndata.mensagem);
             location.reload();
         });
-
-        return false;
-    }
-
-    static atualizarJsPuro(form)
-    {
-        var codigo = document.getElementById("codigo").value;  
-
-        if (codigo == "") {
-            mensagem += "Código invalido";
-        } else {
-            codigo = "&id="+codigo;
-        }
+        */
         
-        var jForm = new FormData();
-
-        var e = document.getElementById("cmbDivisao");
-        var cmbDivisao = e.options[e.selectedIndex].value;
-
-        var e = document.getElementById("cmbCategoria");
-        var cmbCategoria = e.options[e.selectedIndex].value;
-
-        var e = document.getElementById("cmbTecnico");
-        var cmbTecnico = e.options[e.selectedIndex].value;
-
-        jForm.append("codigo", codigo);
-        jForm.append("txtFoto", jQuery('#txtFoto').get(0).files[0]);
-        jForm.append("txtNome", document.getElementById("txtNome").value);
-        jForm.append("cmbDivisao", cmbDivisao);
-        jForm.append("cmbCategoria", cmbCategoria);
-        jForm.append("cmbTecnico", cmbTecnico);
-        //jForm.append("rDesempenhotime", document.querySelector('input[name="rDesempenhotime"]:checked').value);
-        //jForm.append("rComprarnovojogador", document.querySelector('input[name="rComprarnovojogador"]:checked').value);
-
-        var token  = Login.getCookie('token');
-        var consulta = "";
-
-        if (token !== "") {
-            consulta = "&tk="+token;
-        }
-
         var xhr = Ajax.createXHR();
 
         if (xhr != undefined) {
+            var e = document.getElementById("cmbDivisao");
+            var cmbDivisao = e.options[e.selectedIndex].value;
+
+            var e = document.getElementById("cmbCategoria");
+            var cmbCategoria = e.options[e.selectedIndex].value;
+
+            var e = document.getElementById("cmbTecnico");
+            var cmbTecnico = e.options[e.selectedIndex].value;
+
+            var txtNome = document.getElementById("txtNome").value;
+
+            var file = document.getElementById("txtFoto").files[0];
+
+            var jForm = new FormData();
+            jForm.append("txtFoto", file);
+            jForm.append("txtNome", txtNome);
+            jForm.append("cmbDivisao", cmbDivisao);
+            jForm.append("cmbCategoria", cmbCategoria);
+            jForm.append("cmbTecnico", cmbTecnico);
+            jForm.append("rDesempenhotime", document.querySelector('input[name="rDesempenhotime"]:checked').value);
+            jForm.append("rComprarnovojogador", document.querySelector('input[name="rComprarnovojogador"]:checked').value);
+
+            var token  = Login.getCookie('token');
+            var consulta = "&tk="+token;
+
+            var assincrono = false; // true para assincrono e false para sincrono
+        
             //Montar requisição
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=4"+codigo+consulta,true);
-            xhr.setRequestHeader("Content-Type","multipart/form-data");
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=3"+consulta, assincrono);
+
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
-                if (xhr.readyState == '4') {
+                if (xhr.readyState == 4 && xhr.status == 200) {
                     //Pegar dados da resposta json
-                    alert(123123);
-
                     var json = JSON.parse(xhr.responseText);
-                    console.log(888);
                     alert(json.mensagem);
                 }
             }
 
-            xhr.send(jForm); 
+            xhr.send(jForm);
         }
+
+        return false;
     }
 
     static atualizar(form)
     {
+        /* mesmo codigo utilizando jquery
+        jQuery.ajax({
+            url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=4'+codigo+consulta,
+            type: 'POST',
+            data: jForm,
+            async: false,
+            contentType: false,
+            cache: false,
+            processData: false
+        }).fail(function( jqXHR, textStatus, errorThrown ) {
+            alert("Falha ao alterar time.");
+        }).always(function (data, textStatus, jqXHRP) {
+            alert(data.mensagem);
+        });
+        */
+
         var codigo = document.getElementById("codigo").value;  
 
         if (codigo == "") {
@@ -239,55 +216,50 @@ class Time
             codigo = "&id="+codigo;
         }
         
-        var jForm = new FormData();
+        var xhr = Ajax.createXHR();
 
-        var e = document.getElementById("cmbDivisao");
-        var cmbDivisao = e.options[e.selectedIndex].value;
+        if (xhr != undefined) {
+            var e = document.getElementById("cmbDivisao");
+            var cmbDivisao = e.options[e.selectedIndex].value;
 
-        var e = document.getElementById("cmbCategoria");
-        var cmbCategoria = e.options[e.selectedIndex].value;
+            var e = document.getElementById("cmbCategoria");
+            var cmbCategoria = e.options[e.selectedIndex].value;
 
-        var e = document.getElementById("cmbTecnico");
-        var cmbTecnico = e.options[e.selectedIndex].value;
+            var e = document.getElementById("cmbTecnico");
+            var cmbTecnico = e.options[e.selectedIndex].value;
 
-        jForm.append("codigo", codigo);
-        jForm.append("txtFoto", jQuery('#txtFoto').get(0).files[0]);
-        jForm.append("txtNome", document.getElementById("txtNome").value);
-        jForm.append("cmbDivisao", cmbDivisao);
-        jForm.append("cmbCategoria", cmbCategoria);
-        jForm.append("cmbTecnico", cmbTecnico);
-        //jForm.append("rDesempenhotime", document.querySelector('input[name="rDesempenhotime"]:checked').value);
-        //jForm.append("rComprarnovojogador", document.querySelector('input[name="rComprarnovojogador"]:checked').value);
+            var txtNome = document.getElementById("txtNome").value;
 
-        var token  = Login.getCookie('token');
-        var consulta = "";
+            var file = document.getElementById("txtFoto").files[0];
 
-        if (token !== "") {
-            consulta = "&tk="+token;
-        }
+            var jForm = new FormData();
+            jForm.append("txtFoto", file);
+            jForm.append("txtNome", txtNome);
+            jForm.append("cmbDivisao", cmbDivisao);
+            jForm.append("cmbCategoria", cmbCategoria);
+            jForm.append("cmbTecnico", cmbTecnico);
+
+            var token  = Login.getCookie('token');
+            var consulta = "&tk="+token;
+
+            var assincrono = false; // true para assincrono e false para sincrono
         
-        jQuery.ajax({
-            url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=4'+codigo+consulta,
-            type: 'POST',
-            data: jForm,
-            dataType: 'json',
-            mimeType: 'application/json',
-            contentType: false,
-            cache: false,
-            processData: false
-        }).always(function (data, textStatus, jqXHRP) {
-            alert(123);
-            console.log(data);
-            console.log(textStatus);
-            console.log(jqXHRP);
-        });
+            //Montar requisição
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=4"+codigo+consulta, assincrono);
 
-       // jqxhr.fail(function( jqXHR, textStatus ) {
-        //    alert("Falha ao atualizar time!");
-        //});
+            xhr.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    //Pegar dados da resposta json
+                    var json = JSON.parse(xhr.responseText);
+                    alert(json.mensagem);
+                }
+            }
+
+            xhr.send(jForm);
+        }
     }
-    
-            
+        
     static confirmar(codigo)
     {
         var ok = window.confirm("Voce tem certeza que deseja excluir?");

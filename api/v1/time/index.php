@@ -163,8 +163,6 @@ if (empty($acao)) {
         $time["mensagem"] = "Problemas ao enviar imagem.";
     }
 
-    $time["mensagem"] = "hahahaha ahahahaha hahahaha hahaha";
-
     echo json_encode($time);
 } elseif ($acao == 5) {
     $time    = "";
