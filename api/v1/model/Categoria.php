@@ -341,7 +341,7 @@ class Categoria extends ClasseBase
     public static function listarPorCodigo($codigo)
     {
         try {
-            require_once "../lib/Conexao.php";
+            require_once "../vendor/autoload.php";
             $conexao = Conexao::getConexao();
 
             $sql  = "\n SELECT codigo_categoria";
@@ -412,7 +412,7 @@ class Categoria extends ClasseBase
     public static function listarTudo($strRequire = '../lib/Conexao.php')
     {
         try {
-            require_once "../lib/Conexao.php";
+            require_once "../vendor/autoload.php";
             $conexao = Conexao::getConexao();
 
             $sql  = "\n SELECT codigo_categoria";

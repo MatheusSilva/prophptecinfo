@@ -9,8 +9,7 @@ class ClasseBase
 
     public function __construct()
     {
-        require_once "Conexao.php";
-        require_once "Login.php";
+        require_once "../vendor/autoload.php";
         Login::verificar(false);
     }
     

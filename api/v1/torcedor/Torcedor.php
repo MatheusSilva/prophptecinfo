@@ -18,7 +18,7 @@ class Torcedor
     
     public function __construct()
     {
-        require_once "../../api/v1/lib/Conexao.php";
+        require_once "../../api/v1/vendor/autoload.php";
     }
     
     public function getCodigoTorcedor()

@@ -23,7 +23,7 @@ class Time extends ClasseBase
 
     public function __construct()
     {
-        require_once "../lib/Conexao.php";
+        require_once "../vendor/autoload.php";
     }
 
     public function getDesempenhotime()
