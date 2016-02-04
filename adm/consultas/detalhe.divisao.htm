@@ -19,7 +19,7 @@
 
                 var xhr = Ajax.createXHR();
 
-                xhr.open("GET","http://localhost/sistemaRest/api/v1/divisao/index.php?a=2&id="+location.queryString.codigo,true);
+                xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=2&id="+location.queryString.codigo,true);
                     
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function() {

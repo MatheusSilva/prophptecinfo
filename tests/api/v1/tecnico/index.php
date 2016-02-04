@@ -1,7 +1,7 @@
 <?php
-class RoutesTest extends PHPUnit_Framework_TestCase
+class TecnicoTest extends PHPUnit_Framework_TestCase
 {
-    private $token = "dba73f675dcf70d80762b1bbdb61d08920ee4def1bd9acb267672a6c63a3e9fb";
+    private $token = "dc358110b62ae36c3ab26de9c1c6e9c5448b0e77ada20aa817727d8ada948bc9";
 
     private function api($url, $data = array(), $method = "POST")
     {
@@ -28,7 +28,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
     
     public function testTokenInvalidoSalvarTecnico()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=4&tk=asdasd';
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=4&tk=asdasd';
         $data = array('txtNome' => 'NBI');
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Sua sessão expirou. Faça o login novamente.', $result["mensagem"]);
@@ -36,7 +36,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testTokenInvalidoAlterarTecnico()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5&tk=asdasd';
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=5&tk=asdasd';
         $data = array('txtNome' => 'NBI');
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Sua sessão expirou. Faça o login novamente.', $result["mensagem"]);
@@ -44,7 +44,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
     
     public function testNomeEmBrancoSalvarTecnico()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=4&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=4&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Você deve preencher o técnico.<br />Você deve preencher a data.', $result["mensagem"]);
@@ -52,7 +52,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testNomeEmBrancoAlterarTecnico()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5&id=37&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=5&id=37&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Você deve preencher a técnico.', $result["mensagem"]);
@@ -60,7 +60,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
     
     public function testNomeValidoSalvarTecnico()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=4&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=4&tk='.$this->token;
         $data = array(
             'txtNome' => 'testephpunit'
             ,'cmbDia' => 12
@@ -74,7 +74,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testNomeValidoAlterarTecnico()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5&id=38&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=5&id=38&tk='.$this->token;
         $data = array(
             'txtNome' => 'sub 26'
             ,'cmbDia' => 11
@@ -88,7 +88,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testAlterarTecnicoInexistente()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5&id=999&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=5&id=999&tk='.$this->token;
         $data = array('txtNome' => 'sub 25');
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Falha ao alterar técnico. Código inexistente.', $result["mensagem"]);
@@ -97,7 +97,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testAlterarTecnicoInvalida()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=5&id=asds&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=5&id=asds&tk='.$this->token;
         $data = array('txtNome' => 'sub 25');
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Falha ao alterar técnico. Código inválido.', $result["mensagem"]);
@@ -105,7 +105,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testExcluirTecnicoInexistente()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6&id=999&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=6&id=999&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Falha ao excluir técnico. Código inexistente.', $result["mensagem"]);
@@ -113,7 +113,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testExcluirTecnicoInvalida()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6&id=asds&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=6&id=asds&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Falha ao excluir técnico. Código inválido.', $result["mensagem"]);
@@ -121,7 +121,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testExcluirTecnicoVinculadaTime()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6&id=3&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=6&id=3&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals(
@@ -132,7 +132,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testExcluirTecnico()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/tecnico/index.php?a=6&id=36&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=6&id=36&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Técnico excluido com sucesso.', $result["mensagem"]);

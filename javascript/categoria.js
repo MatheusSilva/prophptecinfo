@@ -11,7 +11,7 @@ class Categoria
         var xhr = Ajax.createXHR();
         if(xhr != undefined){
             //Montar requisição
-            xhr.open("GET","http://localhost/sistemaRest/api/v1/categoria/index.php?a=3",true);
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=3",true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
@@ -124,7 +124,7 @@ class Categoria
             }
                     
             if (mensagem == "" && xhr != undefined) {
-                xhr.open("GET","http://localhost/sistemaRest/api/v1/categoria/index.php?a=6"+codigo+consulta,true);
+                xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=6"+codigo+consulta,true);
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
@@ -163,7 +163,7 @@ class Categoria
         }
 
         if (mensagem == "" && xhr != undefined) {
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/categoria/index.php?a=4"+consulta,true);
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=4"+consulta,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -207,7 +207,7 @@ class Categoria
         }
 
         if(mensagem == "" && xhr != undefined) {
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/categoria/index.php?a=5"+codigo+consulta,true);
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=5"+codigo+consulta,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.

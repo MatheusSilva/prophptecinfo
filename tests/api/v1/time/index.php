@@ -1,7 +1,7 @@
 <?php
-class RoutesTest extends PHPUnit_Framework_TestCase
+class TimeTest extends PHPUnit_Framework_TestCase
 {
-    private $token = "dba73f675dcf70d80762b1bbdb61d08920ee4def1bd9acb267672a6c63a3e9fb";
+    private $token = "dc358110b62ae36c3ab26de9c1c6e9c5448b0e77ada20aa817727d8ada948bc9";
     
     private function api($url, $data = array(), $method = "POST")
     {
@@ -28,7 +28,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
     
     public function testAlterarTimeValido()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/time/index.php?a=4&id=2&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/time.php?a=4&id=2&tk='.$this->token;
 
         $data = array(
              'txtNome'      => 'Timeco alterado'
@@ -43,7 +43,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testExcluirTimeInexistente()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/time/index.php?a=5&id=999&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/time.php?a=5&id=999&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Falha ao excluir time. Código inexistente.', $result["mensagem"]);
@@ -51,7 +51,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
 
     public function testExcluirTimeInvalida()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/time/index.php?a=5&id=asds&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/time.php?a=5&id=asds&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Falha ao excluir time. Código inválido.', $result["mensagem"]);
@@ -60,7 +60,7 @@ class RoutesTest extends PHPUnit_Framework_TestCase
     /*
     public function testExcluirTime()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/time/index.php?a=5&id=1&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/time.php?a=5&id=1&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Time excluido com sucesso.', $result["mensagem"]);

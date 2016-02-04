@@ -20,7 +20,7 @@
 
                 if(xhr != undefined) {
                     //Montar requisição
-                    xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php?a=1&id="+location.queryString.codigo,true);
+                    xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/time.php?a=1&id="+location.queryString.codigo,true);
                     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                     xhr.onreadystatechange = function() {
                         //Verificar pelo estado "4" de pronto.

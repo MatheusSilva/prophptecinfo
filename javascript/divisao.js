@@ -12,7 +12,7 @@ class Divisao
 
         if(xhr != undefined) {
             //Montar requisição
-            xhr.open("GET","http://localhost/sistemaRest/api/v1/divisao/index.php?a=3",true);
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=3",true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -123,7 +123,7 @@ class Divisao
             }
 
             if(mensagem == "") {
-                xhr.open("GET","http://localhost/sistemaRest/api/v1/divisao/index.php?a=6"+codigo+consulta,true);
+                xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=6"+codigo+consulta,true);
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
@@ -160,7 +160,7 @@ class Divisao
         }
                 
         if (mensagem == "" && xhr != undefined) {
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/divisao/index.php?a=4"+consulta,true);
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=4"+consulta,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -204,7 +204,7 @@ class Divisao
         }
 
         if(mensagem == "" && xhr != undefined) {
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/divisao/index.php?a=5"+codigo+consulta,true);
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=5"+codigo+consulta,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.

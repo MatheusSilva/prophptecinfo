@@ -44,7 +44,7 @@ class Time
         var xhr = Ajax.createXHR();
         if (xhr != undefined) {
             //Montar requisição
-            xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php?a=2",true);
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/time.php?a=2",true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -127,7 +127,7 @@ class Time
 
         /* mesmo codigo utilizando jquery
         jQuery.ajax({
-            url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=3'+consulta,
+            url: 'http://localhost/sistemaRest/api/v1/controller/time.php?a=3'+consulta,
             type: 'POST',
             data: jForm,
             dataType: 'json',
@@ -173,7 +173,7 @@ class Time
             var assincrono = false; // true para assincrono e false para sincrono
         
             //Montar requisição
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=3"+consulta, assincrono);
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/time.php?a=3"+consulta, assincrono);
 
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -194,7 +194,7 @@ class Time
     {
         /* mesmo codigo utilizando jquery
         jQuery.ajax({
-            url: 'http://localhost/sistemaRest/api/v1/time/index.php?a=4'+codigo+consulta,
+            url: 'http://localhost/sistemaRest/api/v1/controller/time.php?a=4'+codigo+consulta,
             type: 'POST',
             data: jForm,
             async: false,
@@ -245,7 +245,7 @@ class Time
             var assincrono = false; // true para assincrono e false para sincrono
         
             //Montar requisição
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/time/index.php?a=4"+codigo+consulta, assincrono);
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/time.php?a=4"+codigo+consulta, assincrono);
 
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -283,7 +283,7 @@ class Time
             var xhr = Ajax.createXHR();
             
             if (mensagem === "" && xhr != undefined) {
-                xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php?a=5"+codigo+consulta,true);
+                xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/time.php?a=5"+codigo+consulta,true);
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
@@ -308,7 +308,7 @@ class Time
 
         if(xhr != undefined) {
             //Montar requisição
-            xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php",true);
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/time.php",true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -381,7 +381,7 @@ class Time
 
         if(xhr != undefined) {
             //Montar requisição
-            xhr.open("GET","http://localhost/sistemaRest/api/v1/time/index.php?a=1&id="+codigoParam,true);
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/time.php?a=1&id="+codigoParam,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -409,7 +409,7 @@ class Time
                 codigo = "";
             }
 
-            xhr.open("GET","http://localhost/sistemaRest/api/v1/divisao/index.php?a=1"+codigo,true);
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=1"+codigo,true);
             //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
@@ -457,7 +457,7 @@ class Time
             }
 
             //Montar requisição
-            xhr.open("GET","http://localhost/sistemaRest/api/v1/categoria/index.php?a=1"+codigo,true);
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=1"+codigo,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -504,7 +504,7 @@ class Time
             }
 
             //Montar requisição
-            xhr.open("GET","http://localhost/sistemaRest/api/v1/tecnico/index.php?a=1"+codigo,true);
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=1"+codigo,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
