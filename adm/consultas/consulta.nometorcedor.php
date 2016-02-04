@@ -42,9 +42,9 @@
 				</form>
 				
 				<?php
-                    if (isset($_GET['msg'])) {
-                        echo urldecode($_GET['msg']);
-                    }
+                if (isset($_GET['msg'])) {
+                    echo urldecode($_GET['msg']);
+                }
                 ?>
 				
 				<table width="80%" class="lista">

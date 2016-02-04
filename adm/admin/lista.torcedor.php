@@ -33,46 +33,50 @@
 			
 			<div id="conteudo">
 				<h2>Lista de Torcedores</h2>
+
 				<?php
-                    if (isset($_GET['msg'])) {
-                        echo urldecode($_GET['msg']);
-                    }
-                ?>                
+                if (isset($_GET['msg'])) {
+                    echo urldecode($_GET['msg']);
+                }
+                ?>
+
 				<table width="80%" class="lista">
 					<tr class="primeira_linha">
 						<td>C&oacute;digo</td>
 						<td>Nome</td>
 						<td>A&ccedil;&otilde;es</td>
 					</tr>
-					<?php
-                        require_once "../../api/v1/torcedor/Torcedor.php";
-                        $vetor = Torcedor::listarTudo();
-                        
-                        if ($vetor != 0) {
-                            $linha = 0;
-                            foreach ($vetor as $info) {
-                                if (++$linha % 2 == 0) {
-                                    echo '<tr class="linha_par">';
-                                } else {
-                                    echo '<tr class="linha_impar">';
-                                }
-                                
-                                $codigo = $info['codigo_torcedor'];
-                                $nome   = $info['nome'];
-                                echo "<td>$codigo</td>";
-                                echo "<td>$nome</td>";
-                                
-                                $detalhes = "<a href=\"../consultas/detalhe.torcedor.php?codigo=$codigo\">[D]</a>";
-                                $alterar = "<a href=\"../formularios/alterar.torcedor.php?codigo=$codigo\">[A]</a>";
-                                $excluir = "<a href=\"javascript:confirmar($codigo)\">[X]</a>";
-                                
-                                echo "<td>$detalhes $alterar $excluir</td>";
-                                echo '</tr>';
+
+				    <?php
+                    require_once "../../api/v1/torcedor/Torcedor.php";
+                    $vetor = Torcedor::listarTudo();
+                    
+                    if ($vetor != 0) {
+                        $linha = 0;
+                        foreach ($vetor as $info) {
+                            if (++$linha % 2 == 0) {
+                                echo '<tr class="linha_par">';
+                            } else {
+                                echo '<tr class="linha_impar">';
                             }
-                        } else {
-                            echo 'Nenhuma torcedor cadastrado';
+                            
+                            $codigo = $info['codigo_torcedor'];
+                            $nome   = $info['nome'];
+                            echo "<td>$codigo</td>";
+                            echo "<td>$nome</td>";
+                            
+                            $detalhes = "<a href=\"../consultas/detalhe.torcedor.php?codigo=$codigo\">[D]</a>";
+                            $alterar = "<a href=\"../formularios/alterar.torcedor.php?codigo=$codigo\">[A]</a>";
+                            $excluir = "<a href=\"javascript:confirmar($codigo)\">[X]</a>";
+                            
+                            echo "<td>$detalhes $alterar $excluir</td>";
+                            echo '</tr>';
                         }
+                    } else {
+                        echo 'Nenhuma torcedor cadastrado';
+                    }
                     ?>
+                    
 				</table>
 					
 			</div>

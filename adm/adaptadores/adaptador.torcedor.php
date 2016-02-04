@@ -6,7 +6,6 @@ require_once "../../api/v1/torcedor/Torcedor.php";
 use model\Torcedor;
 
 if ($acao == 1) {
-
     // inserir
     $nome      = $_POST['txtNome'];
     $login      = $_POST['txtLogin'];

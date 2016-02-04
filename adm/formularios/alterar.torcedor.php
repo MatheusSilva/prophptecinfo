@@ -46,7 +46,12 @@
 						<tr>
 							<td>Login:</td>
 							<td>
-								<input type="text" name="txtLogin" id="txtLogin" value="<?php echo $dados['login']; ?>" />
+								<input
+									type="text"
+									name="txtLogin"
+									id="txtLogin"
+									value="<?php echo $dados['login']; ?>"
+								/>
 							</td>
 						</tr>
 						
@@ -60,7 +65,11 @@
 						<tr>
 							<td colspan="2">
 								<input type="hidden" name="acao" value="2" />
-								<input type="hidden" name="codigo" value="<?php echo $dados['codigo_torcedor']; ?>" />                         
+								<input
+									type="hidden"
+									name="codigo"
+									value="<?php echo $dados['codigo_torcedor']; ?>"
+								/>
 								<input type="submit" name="btnAlterar" value="Alterar" id="btnAlterar" /> 
 								<input type="reset" name="btnLimpar" value="Limpar" id="btnLimpar" />
 							</td>
@@ -70,9 +79,9 @@
 				</form>
 				
 				<?php
-                    if (isset($_GET['msg'])) {
-                        echo urldecode($_GET['msg']);
-                    }
+                if (isset($_GET['msg'])) {
+                    echo urldecode($_GET['msg']);
+                }
                 ?>
 			</div>
 			

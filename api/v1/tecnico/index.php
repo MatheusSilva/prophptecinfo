@@ -1,5 +1,5 @@
 <?php
-require_once "Tecnico.php";
+require_once "../vendor/autoload.php";
 use model\Tecnico;
 
 $acao  = "";

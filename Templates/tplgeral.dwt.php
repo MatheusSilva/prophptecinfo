@@ -13,7 +13,7 @@
 
             <header>
                 <nav id="menu_superior">
-                    <a href="../site/paginas/home.php">Home</a> ::
+                    <a href="../site/paginas/home.html">Home</a> ::
                     <a href="../adm/formularios/cadastro.torcedor.php">Cadastrar-se</a> ::
                     <a href="../site/consultas/lista.times.php">Consultas</a> ::            
                     <a href="../adm/paginas/home.php">Entrar</a>

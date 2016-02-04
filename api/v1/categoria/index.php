@@ -1,6 +1,7 @@
 <?php
-require_once "Categoria.php";
+require_once "../vendor/autoload.php";
 use model\Categoria;
+
 
 $acao  = "";
 $id    = "";

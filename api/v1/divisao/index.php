@@ -1,5 +1,5 @@
 <?php
-require_once "Divisao.php";
+require_once "../vendor/autoload.php";
 use model\Divisao;
 
 $acao  = "";

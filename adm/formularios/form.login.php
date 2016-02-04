@@ -14,9 +14,9 @@
 			
 			<header>
                 <nav id="menu_superior">
-                    <a href="../../site/paginas/home.php">Home</a> ::
+                    <a href="../../site/paginas/home.html">Home</a> ::
 	            	<a href="../formularios/cadastro.torcedor.php">Cadastrar-se</a> ::
-	           	 	<a href="../../site/consultas/lista.time.php">Consultas</a> ::   
+	           	 	<a href="../../site/consultas/lista.time.html">Consultas</a> ::   
 					<a href="../../adm/paginas/home.php">Entrar</a>
                 </nav>
             </header>
@@ -56,9 +56,9 @@
 				</form>
 				
 				<?php
-                    if (isset($_GET['msg'])) {
-                        echo urldecode($_GET['msg']);
-                    }
+                if (isset($_GET['msg'])) {
+                    echo urldecode($_GET['msg']);
+                }
                 ?>
 				
 			</div>

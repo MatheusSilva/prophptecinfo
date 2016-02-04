@@ -1,6 +1,5 @@
 <?php
-require_once "Time.php";
-require_once "../lib/Upload.php";
+require_once "../vendor/autoload.php";
 use model\Time;
 use lib\Upload;
 

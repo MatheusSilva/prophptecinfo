@@ -122,7 +122,7 @@ class Login
         session_destroy();
 
         if ($redirecionar) {
-            header('location:../../site/paginas/home.php');
+            header('location:../../site/paginas/home.html');
         }
     }
 }
