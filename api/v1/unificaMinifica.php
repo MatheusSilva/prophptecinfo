@@ -2,8 +2,7 @@
 require_once "vendor/autoload.php";
 use MatthiasMullie\Minify;
 
-
-$basePathJs 	= "/var/www/html/sistemaRest/javascript/";
+$basePathJs     = "/var/www/html/sistemaRest/javascript/";
 $minifiedPathJs = $basePathJs.'scripts.min.js';
 
 $minifier = new Minify\JS($basePathJs.'ajax.js');

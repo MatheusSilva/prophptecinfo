@@ -23,13 +23,7 @@ class Categoria extends ClasseBase
     * @var string Armazena o nome da categoria
     */
     private $nome;
-
-    function __autoload($class_name)
-    {
-        $file_name = str_replace("\\", DIRECTORY_SEPARATOR, $class_name) . '.php';
-        include $file_name;
-    }
-
+    
     public function __construct()
     {
 

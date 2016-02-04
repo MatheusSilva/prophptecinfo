@@ -4,8 +4,6 @@ namespace model;
 use lib\ClasseBase;
 use lib\Conexao;
 
-require_once "../lib/ClasseBase.php";
-
 /**
 * classe Time
 *

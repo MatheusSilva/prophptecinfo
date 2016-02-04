@@ -2,7 +2,6 @@
 require_once "../vendor/autoload.php";
 use model\Categoria;
 
-
 $acao  = "";
 $id    = "";
 $token = "";
