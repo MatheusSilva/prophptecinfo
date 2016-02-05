@@ -1,5 +1,5 @@
 <?php
-require_once "../../api/v1/vendor/autoload.php";
-use lib\Login;
+require_once "../../vendor/autoload.php";
+use matheus\sistemaRest\api\v1\lib\Login;
 
 Login::sair();

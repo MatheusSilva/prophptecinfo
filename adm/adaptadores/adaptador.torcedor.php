@@ -3,7 +3,7 @@
 $acao = $_REQUEST['acao'];
 require_once "../../api/v1/torcedor/Torcedor.php";
 
-use model\Torcedor;
+use matheus\sistemaRest\api\v1\model\Torcedor;
 
 if ($acao == 1) {
     // inserir

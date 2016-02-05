@@ -1,5 +1,5 @@
 <?php
-namespace lib;
+namespace matheus\sistemaRest\api\v1\lib;
 
 /**
 * classe UploadTexto

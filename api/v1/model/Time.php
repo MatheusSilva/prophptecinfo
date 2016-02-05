@@ -1,8 +1,8 @@
 <?php
-namespace model;
+namespace matheus\sistemaRest\api\v1\model;
 
-use lib\ClasseBase;
-use lib\Conexao;
+use matheus\sistemaRest\api\v1\lib\ClasseBase;
+use matheus\sistemaRest\api\v1\lib\Conexao;
 
 /**
 * classe Time
@@ -23,7 +23,6 @@ class Time extends ClasseBase
 
     public function __construct()
     {
-        require_once "../vendor/autoload.php";
     }
 
     public function getDesempenhotime()
@@ -310,14 +309,10 @@ class Time extends ClasseBase
             $sql    .= "\n ,capa";
             $sql    .= "\n FROM time";
 
-            $conexao = Conexao::getConexao();
-            $stmt    = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->execute();
-            $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $conexao = null;
-            return $retorno;
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -348,15 +343,11 @@ class Time extends ClasseBase
             $sql    .= "\n AND categoria_codigo_categoria = codigo_categoria";
             $sql    .= "\n AND codigo_time 			 	  = :codigo";
 
-            $conexao = Conexao::getConexao();
-            $stmt    = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
-            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            $conexao = null;
-            return $retorno;
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -376,19 +367,15 @@ class Time extends ClasseBase
                 $nome   = $nome."%";
             }
 
-            $conexao = Conexao::getConexao();
-            $stmt    = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
 
             if ($nome !== "listaTodosTimes") {
                 $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 35);
             }
 
             $stmt->execute();
-            $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $conexao = null;
-            return $retorno;
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);

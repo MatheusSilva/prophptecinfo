@@ -1,7 +1,7 @@
 <?php
-namespace lib;
+namespace matheus\sistemaRest\api\v1\lib;
 
-use lib\Login;
+use matheus\sistemaRest\api\v1\lib\Login;
 
 class ClasseBase
 {

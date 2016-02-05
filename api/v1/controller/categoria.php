@@ -1,6 +1,6 @@
 <?php
-require_once "../vendor/autoload.php";
-use model\Categoria;
+require_once "../../../vendor/autoload.php";
+use matheus\sistemaRest\api\v1\model\Categoria;
 
 $acao  = "";
 $id    = "";

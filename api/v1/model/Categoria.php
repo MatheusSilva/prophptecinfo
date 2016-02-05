@@ -1,8 +1,8 @@
 <?php
-namespace model;
+namespace matheus\sistemaRest\api\v1\model;
 
-use lib\ClasseBase;
-use lib\Conexao;
+use matheus\sistemaRest\api\v1\lib\ClasseBase;
+use matheus\sistemaRest\api\v1\lib\Conexao;
 
 /**
 * classe Categoria
@@ -160,15 +160,12 @@ class Categoria extends ClasseBase
             $sql  .= "\n FROM categoria AS cat";
             $sql  .= "\n WHERE cat.codigo_categoria = :id";
 
-            $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":id", $this->getCodigoCategoria(), \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            $conexao = null;
             return $retorno["resultado"];
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -255,15 +252,12 @@ class Categoria extends ClasseBase
             $sql  .= "\n WHERE tim.categoria_codigo_categoria = cat.codigo_categoria";
             $sql  .= "\n AND cat.codigo_categoria = :id";
 
-            $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":id", $this->getCodigoCategoria(), \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            $conexao = null;
             return $retorno["resultado"];
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -341,21 +335,16 @@ class Categoria extends ClasseBase
     public static function listarPorCodigo($codigo)
     {
         try {
-            require_once "../vendor/autoload.php";
-            $conexao = Conexao::getConexao();
-
             $sql  = "\n SELECT codigo_categoria";
             $sql .= "\n ,nome";
             $sql .= "\n FROM categoria";
             $sql .= "\n WHERE codigo_categoria = :id";
              
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
-            $conexao = null;
             return $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -376,22 +365,17 @@ class Categoria extends ClasseBase
     public static function listarPorNome($nome)
     {
         try {
-            $nome .= "%";
-            $conexao = Conexao::getConexao();
-
             $sql  = "\n SELECT codigo_categoria";
             $sql .= "\n ,nome";
             $sql .= "\n FROM categoria";
             $sql .= "\n WHERE nome LIKE :nome";
 
-
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
+            $nome .= "%";
             $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
             $stmt->execute();
-            $conexao = null;
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -409,19 +393,15 @@ class Categoria extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarTudo($strRequire = '../lib/Conexao.php')
+    public static function listarTudo()
     {
         try {
-            require_once "../vendor/autoload.php";
-            $conexao = Conexao::getConexao();
-
             $sql  = "\n SELECT codigo_categoria";
             $sql .= "\n ,nome";
             $sql .= "\n FROM categoria";
-
-            $stmt = $conexao->prepare($sql);
+            
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->execute();
-            $conexao = null;
             return $stmt->fetchAll();
         } catch (\PDOException $e) {
             $conexao = null;
@@ -432,7 +412,7 @@ class Categoria extends ClasseBase
         }
     }//public static function listarTudo()
 
-    public static function listaCategoriaPorTime($intCodigo, $strRequire = '../lib/Conexao.php')
+    public static function listaCategoriaPorTime($intCodigo)
     {
         try {
             $sql   = "\n SELECT c.codigo_categoria";
@@ -442,15 +422,11 @@ class Categoria extends ClasseBase
             $sql  .= "\n WHERE  c.codigo_categoria = t.categoria_codigo_categoria";
             $sql  .= "\n AND t.codigo_time = :codigo";
 
-            $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":codigo", $intCodigo, \PDO::PARAM_INT);
             $stmt->execute();
-            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            $conexao = null;
-            return $retorno;
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);

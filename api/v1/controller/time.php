@@ -1,7 +1,7 @@
 <?php
-require_once "../vendor/autoload.php";
-use model\Time;
-use lib\Upload;
+require_once "../../../vendor/autoload.php";
+use matheus\sistemaRest\api\v1\model\Time;
+use matheus\sistemaRest\api\v1\lib\Upload;
 
 $acao  = "";
 $id    = "";

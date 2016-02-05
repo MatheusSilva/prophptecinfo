@@ -1,7 +1,7 @@
 <?php
-namespace model;
+namespace matheus\sistemaRest\api\v1\model;
 
-use lib\Conexao;
+use matheus\sistemaRest\api\v1\lib\Conexao;
 
 /**
 * classe Torcedor
@@ -18,7 +18,7 @@ class Torcedor
     
     public function __construct()
     {
-        require_once "../../api/v1/vendor/autoload.php";
+        require_once "../../vendor/autoload.php";
     }
     
     public function getCodigoTorcedor()

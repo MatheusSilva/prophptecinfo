@@ -1,7 +1,7 @@
 <?php
-namespace lib;
+namespace matheus\sistemaRest\api\v1\lib;
 
-use model\Torcedor;
+use matheus\sistemaRest\api\v1\model\Torcedor;
 
 /**
 * classe Login
@@ -40,11 +40,12 @@ class Login
             $sql  .= "\n WHERE login = :torcedor";
             $sql  .= "\n AND senha   = :senha";
 
-            $salt1 = "jcxzknhxjajduhlJHDGHAQZkhyhmnk789553";
-            $salt2 = "893343hjgsjhbjlAHLKJHIDJiertokrjtkr";
-            $rand = uniqid(rand(), true);
+            $salt1     = "jcxzknhxjajduhlJHDGHAQZkhyhmnk789553";
+            $salt2     = "893343hjgsjhbjlAHLKJHIDJiertokrjtkr";
+            $rand      = uniqid(rand(), true);
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
 
-            $token = hash('sha256', $salt1.$rand.$senha.$salt2);
+            $token = hash('sha256', $userAgent.$salt2.$rand.$senha.$salt1);
 
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(":token", $token);
@@ -57,8 +58,9 @@ class Login
                 if (!isset($_SESSION)) {
                     session_start();
                 }
-
-                $_SESSION['logado']          = 'ok';
+                
+                $_SESSION['agentUser']        = 'ok';
+                $_SESSION['logado']           = 'ok';
                 $_SESSION['u']                = $retornoSelect['login'];
                 $_SESSION['nomeTorcedor']     = $retornoSelect['nome'];
                 $conexao = null;

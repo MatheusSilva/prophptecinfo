@@ -1,8 +1,8 @@
 <?php
-namespace model;
+namespace matheus\sistemaRest\api\v1\model;
 
-use lib\ClasseBase;
-use lib\Conexao;
+use matheus\sistemaRest\api\v1\lib\ClasseBase;
+use matheus\sistemaRest\api\v1\lib\Conexao;
 
 /**
 * classe Divisao
@@ -17,7 +17,6 @@ class Divisao extends ClasseBase
 
     public function __construct()
     {
-        require_once "../vendor/autoload.php";
     }
 
     public function getCodigoDivisao()
@@ -97,15 +96,12 @@ class Divisao extends ClasseBase
             $sql  .= "\n FROM divisao AS dv";
             $sql  .= "\n WHERE dv.codigo_divisao = :id";
 
-            $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":id", $this->getCodigoDivisao(), \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            $conexao = null;
             return $retorno["resultado"];
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -180,15 +176,12 @@ class Divisao extends ClasseBase
             $sql  .= "\n WHERE tim.divisao_codigo_divisao = dv.codigo_divisao";
             $sql  .= "\n AND dv.codigo_divisao = :id";
 
-            $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":id", $this->getCodigoDivisao(), \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            $conexao = null;
             return $retorno["resultado"];
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -250,15 +243,11 @@ class Divisao extends ClasseBase
             $sql  .= "\n FROM divisao";
             $sql  .= "\n WHERE codigo_divisao = :codigo";
 
-            $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
-            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            $conexao = null;
-            return $retorno;
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -275,15 +264,11 @@ class Divisao extends ClasseBase
             $sql  .= "\n FROM divisao";
             $sql  .= "\n WHERE nome LIKE :nome";
 
-            $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 25);
             $stmt->execute();
-            $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $conexao = null;
-            return $retorno;
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -291,20 +276,16 @@ class Divisao extends ClasseBase
         }
     }
 
-    public static function listarTudo($strRequire = '../lib/Conexao.php')
+    public static function listarTudo()
     {
         try {
             $sql   = "\n SELECT *";
             $sql  .= "\n FROM divisao";
 
-            $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->execute();
-            $retorno =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $conexao = null;
-            return $retorno;
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
@@ -312,7 +293,7 @@ class Divisao extends ClasseBase
         }
     }
     
-    public static function listaDivisaoPorTime($intCodigo, $strRequire = '../lib/Conexao.php')
+    public static function listaDivisaoPorTime($intCodigo)
     {
         try {
             $sql   = "\n SELECT d.codigo_divisao";
@@ -322,15 +303,11 @@ class Divisao extends ClasseBase
             $sql  .= "\n WHERE  d.codigo_divisao = t.divisao_codigo_divisao";
             $sql  .= "\n AND t.codigo_time = :codigo";
 
-            $conexao = Conexao::getConexao();
-            $stmt = $conexao->prepare($sql);
+            $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":codigo", $intCodigo, \PDO::PARAM_INT);
             $stmt->execute();
-            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            $conexao = null;
-            return $retorno;
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $conexao = null;
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
