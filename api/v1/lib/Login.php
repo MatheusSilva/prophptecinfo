@@ -59,10 +59,9 @@ class Login
                     session_start();
                 }
                 
-                $_SESSION['agentUser']        = 'ok';
+                $_SESSION['agentUser']        = $userAgent;
                 $_SESSION['logado']           = 'ok';
                 $_SESSION['u']                = $retornoSelect['login'];
-                $_SESSION['nomeTorcedor']     = $retornoSelect['nome'];
                 $conexao = null;
                 setcookie("token", $token, time()+900, "/");
                 header('location:../paginas/home.php');
@@ -86,6 +85,7 @@ class Login
         
         if (!isset($_SESSION['logado'])
         || $_SESSION['logado'] != 'ok'
+        || $_SESSION['agentUser'] != $_SERVER['HTTP_USER_AGENT']
         || !isset($_COOKIE['token'])) {
             self::sair($redirecionar);
 
@@ -112,7 +112,7 @@ class Login
         $sql  .= "\n SET    token = :token";
         $sql  .= "\n WHERE  login = :torcedor";
         
-        $token = "h";
+        $token = "";
         
         require_once 'Conexao.php';
         $conexao = Conexao::getConexao();
