@@ -298,8 +298,8 @@ class Divisao extends ClasseBase
         try {
             $sql   = "\n SELECT d.codigo_divisao";
             $sql  .= "\n ,d.nome";
-            $sql  .= "\n FROM time.time AS t";
-            $sql  .= "\n ,time.divisao AS d";
+            $sql  .= "\n FROM time AS t";
+            $sql  .= "\n ,divisao AS d";
             $sql  .= "\n WHERE  d.codigo_divisao = t.divisao_codigo_divisao";
             $sql  .= "\n AND t.codigo_time = :codigo";
 

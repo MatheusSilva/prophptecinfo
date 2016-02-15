@@ -47,6 +47,8 @@ class Tecnico extends ClasseBase
 
     public function setData($data)
     {
+        $data = explode('/', $data);
+        $data = $data[2]."-".$data[1]."-".$data[0];
         $this->data = $data;
     }
 
@@ -267,7 +269,7 @@ class Tecnico extends ClasseBase
         try {
             $sql   = "\n SELECT codigo_tecnico";
             $sql  .= "\n ,nome";
-            $sql  .= "\n ,data_nascimento";
+            $sql  .= "\n ,DATE_FORMAT(data_nascimento,'%d/%m/%Y') AS data_nascimento";
             $sql  .= "\n FROM tecnico";
             $sql  .= "\n WHERE codigo_tecnico = :codigo";
 
@@ -308,7 +310,9 @@ class Tecnico extends ClasseBase
     public static function listarTudo()
     {
         try {
-            $sql   = "\n SELECT *";
+            $sql   = "\n SELECT codigo_tecnico";
+            $sql  .= "\n ,nome";
+            $sql  .= "\n ,DATE_FORMAT(data_nascimento,'%d/%m/%Y') AS data_nascimento";
             $sql  .= "\n FROM tecnico";
 
             $stmt = Conexao::getConexao()->prepare($sql);
@@ -327,8 +331,8 @@ class Tecnico extends ClasseBase
         try {
             $sql   = "\n SELECT tec.codigo_tecnico";
             $sql  .= "\n ,tec.nome";
-            $sql  .= "\n FROM time.time AS t";
-            $sql  .= "\n ,time.tecnico AS tec";
+            $sql  .= "\n FROM time AS t";
+            $sql  .= "\n ,tecnico AS tec";
             $sql  .= "\n WHERE  tec.codigo_tecnico = t.tecnico_codigo_tecnico";
             $sql  .= "\n AND t.codigo_time = :codigo";
 

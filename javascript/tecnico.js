@@ -5,19 +5,19 @@ class Tecnico
         var strErro = '';
 
         if (document.getElementById("txtNome").value == "") {
-            strErro = strErro + "\nVoce Nao Preencheu o Nome";
+            strErro = strErro + "\nVocê não preencheu o nome.";
         }
         
         if (document.getElementById("cmbDia").value == "Dia") {
-            strErro = strErro + "\nVoce Nao Preencheu o Dia";
+            strErro = strErro + "\nVocê não preencheu o dia.";
         }
         
         if (document.getElementById("cmbMes").value == "Mes") {
-            strErro = strErro + "\nVoce Nao Preencheu o Mes";
+            strErro = strErro + "\nVocê não preencheu o mes.";
         }
         
         if (document.getElementById("cmbAno").value == "Ano") {
-            strErro = strErro + "\nVoce Nao Preencheu o Ano";
+            strErro = strErro + "\nVocê não preencheu o ano.";
         }
         
         if (document.getElementById("cmbDia").value == "31") {
@@ -25,18 +25,18 @@ class Tecnico
             || document.getElementById("cmbMes").value  == "06" 
             || document.getElementById("cmbMes").value  == "09" 
             || document.getElementById("cmbMes").value  == "11") {
-                strErro = strErro + "\no Mes que voce escolheu nao possui mais de 30 dias";
+                strErro = strErro + "\no mês que você escolheu não possui mais de 30 dias.";
             }
         }
          
         if ((document.getElementById("cmbDia").value == "29") && (document.getElementById("cmbMes").value == "02")) {
             if ((document.getElementById("cmbAno").value%4 != "0") || (document.getElementById("cmbAno").value%100 != "0") || (document.getElementById("cmbAno").value%400 != "0")) {
-                strErro = strErro + "\nEste ano nao e bissexto";
+                strErro = strErro + "\nEste ano não é bissexto.";
             }
         }
         
-        if ((document.getElementById("cmbDia").value == "30") || (document.getElementById("cmbDia").value == "31") && (document.getElementById("cmbMes").value == "02")) {
-            strErro = strErro + "\nfevereiro nao tem mais que 29 dias";
+        if (document.getElementById("cmbDia").value > 29 && document.getElementById("cmbMes").value == "02") {
+            strErro = strErro + "\nfevereiro não tem mais que 29 dias.";
         }
 
         if(strErro != "") {
@@ -172,7 +172,7 @@ class Tecnico
     static confirmar(codigo)
     {
         var xhr = Ajax.createXHR();
-        var ok = window.confirm("Voce tem certeza que deseja excluir?");
+        var ok = window.confirm("Você tem certeza que deseja excluir?");
 
         if (ok && xhr != undefined) {		
             var mensagem = "";
@@ -212,17 +212,17 @@ class Tecnico
 
     static cadastrar(form) 
     {
-        document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";
         var xhr = Ajax.createXHR();
 
         if (Tecnico.valida() == false) {
             return false;
         }
         
+        document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";
         var mensagem = "";
 
         if (form.txtNome.value == "") {
-            mensagem += "<br /><b>Você não preencheu a tecnico</b>";
+            mensagem += "<br /><b>Você não preencheu a técnico.</b>";
         }
 
         var token  = Login.getCookie('token');
@@ -266,7 +266,7 @@ class Tecnico
 
 
         if (form.txtNome.value == "") {
-            mensagem += "<br /><b>Você não preencheu a tecnico</b>";
+            mensagem += "<br /><b>Você não preencheu a técnico</b>";
         }
         
         var token  = Login.getCookie('token');

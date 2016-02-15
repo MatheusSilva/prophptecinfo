@@ -13,7 +13,7 @@ abstract class Conexao
 
     public static function getConexao()
     {
-        $strHost = "mysql:host=127.0.0.1;dbname=time";
+        $strHost = "mysql:host=127.0.0.1;dbname=dbatime";
         $strUsuario = "root";
         $strSenha = "";
 

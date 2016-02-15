@@ -323,25 +323,25 @@ class Time extends ClasseBase
     public static function listarPorCodigo($codigo)
     {
         try {
-            $sql     = "\n SELECT time.codigo_time AS codigotime";
-            $sql    .= "\n ,time.nome AS nomeTime";
-            $sql    .= "\n ,time.tecnico_codigo_tecnico AS codigoTecnico";
-            $sql    .= "\n ,capa";
-            $sql    .= "\n ,divisao.codigo_divisao AS codigoDivisao";
-            $sql    .= "\n ,divisao.nome AS nomeDivisao";
-            $sql    .= "\n ,tecnico.nome AS nomeTecnico";
-            $sql    .= "\n ,categoria.codigo_categoria AS codigoCategoria";
-            $sql    .= "\n ,categoria.nome AS nomeCategoria";
-            $sql    .= "\n ,time.desempenho_time AS nomeDesempenhoTime";
-            $sql    .= "\n ,time.comprar_novo_jogador AS NomeComprarNovoJogador";
-            $sql    .= "\n FROM time";
-            $sql    .= "\n , divisao";
-            $sql    .= "\n , tecnico";
-            $sql    .= "\n , categoria";
-            $sql    .= "\n WHERE divisao_codigo_divisao   = codigo_divisao";
-            $sql    .= "\n AND tecnico_codigo_tecnico     = codigo_tecnico";
-            $sql    .= "\n AND categoria_codigo_categoria = codigo_categoria";
-            $sql    .= "\n AND codigo_time 			 	  = :codigo";
+            $sql     = "\n SELECT tim.codigo_time AS codigotime";
+            $sql    .= "\n ,tim.nome AS nomeTime";
+            $sql    .= "\n ,tim.tecnico_codigo_tecnico AS codigoTecnico";
+            $sql    .= "\n ,tim.capa";
+            $sql    .= "\n ,dvi.codigo_divisao AS codigoDivisao";
+            $sql    .= "\n ,dvi.nome AS nomeDivisao";
+            $sql    .= "\n ,tec.nome AS nomeTecnico";
+            $sql    .= "\n ,cat.codigo_categoria AS codigoCategoria";
+            $sql    .= "\n ,cat.nome AS nomeCategoria";
+            $sql    .= "\n ,tim.desempenho_time AS nomeDesempenhoTime";
+            $sql    .= "\n ,tim.comprar_novo_jogador AS NomeComprarNovoJogador";
+            $sql    .= "\n FROM time AS tim";
+            $sql    .= "\n , divisao AS dvi";
+            $sql    .= "\n , tecnico AS tec";
+            $sql    .= "\n , categoria AS cat";
+            $sql    .= "\n WHERE tim.divisao_codigo_divisao   = dvi.codigo_divisao";
+            $sql    .= "\n AND tim.tecnico_codigo_tecnico     = tec.codigo_tecnico";
+            $sql    .= "\n AND tim.categoria_codigo_categoria = cat.codigo_categoria";
+            $sql    .= "\n AND tim.codigo_time 			 	  = :codigo";
 
             $stmt = Conexao::getConexao()->prepare($sql);
             $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
@@ -358,8 +358,8 @@ class Time extends ClasseBase
     public static function listarPorNome($nome)
     {
         try {
-            $sql     = "\n SELECT time.codigo_time AS codigo";
-            $sql    .= "\n ,time.nome AS nome";
+            $sql     = "\n SELECT codigo_time AS codigo";
+            $sql    .= "\n ,nome AS nome";
             $sql    .= "\n FROM time";
 
             if ($nome !== "listaTodosTimes") {

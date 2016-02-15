@@ -417,8 +417,8 @@ class Categoria extends ClasseBase
         try {
             $sql   = "\n SELECT c.codigo_categoria";
             $sql  .= "\n ,c.nome";
-            $sql  .= "\n FROM time.time AS t";
-            $sql  .= "\n ,time.categoria AS c";
+            $sql  .= "\n FROM time AS t";
+            $sql  .= "\n ,categoria AS c";
             $sql  .= "\n WHERE  c.codigo_categoria = t.categoria_codigo_categoria";
             $sql  .= "\n AND t.codigo_time = :codigo";
 

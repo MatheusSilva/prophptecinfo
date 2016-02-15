@@ -1,58 +1,71 @@
-CREATE DATABASE IF NOT EXISTS time;
+DROP DATABASE IF EXISTS dbatime;
 
-USE time;
+CREATE DATABASE IF NOT EXISTS dbatime CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS tecnico (
-  codigo_tecnico INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  nome VARCHAR(30) NULL,
-  data_nascimento CHAR(10) NULL,
-  PRIMARY KEY(codigo_tecnico)
-);
+USE dbatime;
 
 CREATE TABLE IF NOT EXISTS torcedor (
-  codigo_torcedor INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  nome VARCHAR(35) NULL,
-  login VARCHAR(20) NULL,
-  senha CHAR(128) NULL,
-  token VARCHAR(64) NOT NULL,
-  PRIMARY KEY(codigo_torcedor)
-);
+  codigo_torcedor INTEGER UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  nome VARCHAR(35) NOT NULL COMMENT 'nome do torcedor',
+  login VARCHAR(20) NOT NULL UNIQUE COMMENT 'login do torcedor',
+  senha CHAR(128) NOT NULL COMMENT 'senha do torcedor',
+  token CHAR(64) NULL COMMENT 'token de autenticacao do torcedor',
+  PRIMARY KEY(codigo_torcedor) 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'tabela que armazena os torcedores';
+
+CREATE TABLE IF NOT EXISTS tecnico (
+  codigo_tecnico INTEGER UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  nome VARCHAR(30) NOT NULL COMMENT 'nome do tecnico',
+  data_nascimento DATE NOT NULL COMMENT 'data de nascimento',
+  PRIMARY KEY(codigo_tecnico)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'tabela que armazena os tecnicos';
 
 CREATE TABLE IF NOT EXISTS categoria (
-  codigo_categoria INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  nome VARCHAR(30) NULL,
-  PRIMARY KEY(codigo_categoria)
-);
+  codigo_categoria INTEGER UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  nome VARCHAR(30) NOT NULL UNIQUE COMMENT 'nome da categoria',
+  PRIMARY KEY(codigo_categoria) 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'tabela que armazena os categorias';
 
 CREATE TABLE IF NOT EXISTS divisao (
-  codigo_divisao INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  nome VARCHAR(25) NULL,
-  PRIMARY KEY(codigo_divisao)
-);
+  codigo_divisao INTEGER UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  nome VARCHAR(25) NOT NULL UNIQUE COMMENT 'nome da divisao',
+  PRIMARY KEY(codigo_divisao) 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'tabela que armazena as divisoes';
 
 CREATE TABLE IF NOT EXISTS time (
-  codigo_time INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  categoria_codigo_categoria INTEGER UNSIGNED NOT NULL,
-  divisao_codigo_divisao INTEGER UNSIGNED NOT NULL,
-  tecnico_codigo_tecnico INTEGER UNSIGNED NOT NULL,
-  desempenho_time  CHAR(5),
-  comprar_novo_jogador  CHAR(3),
-  nome VARCHAR(35) NULL,
-  capa VARCHAR(100) NULL,
-  PRIMARY KEY(codigo_time),
-  INDEX jogo_FKIndex1(tecnico_codigo_tecnico),
-  INDEX jogo_FKIndex2(divisao_codigo_divisao),
-  INDEX time_FKIndex3(categoria_codigo_categoria),
-  FOREIGN KEY(tecnico_codigo_tecnico)
-    REFERENCES tecnico(codigo_tecnico)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION,
-  FOREIGN KEY(divisao_codigo_divisao)
-    REFERENCES divisao(codigo_divisao)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION,
-  FOREIGN KEY(categoria_codigo_categoria)
-    REFERENCES categoria(codigo_categoria)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION
-);
+  codigo_time INTEGER UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  nome VARCHAR(35) NOT NULL COMMENT 'nome da time',
+  tecnico_codigo_tecnico INTEGER UNSIGNED NOT NULL COMMENT 'FK de tecnico',  
+  categoria_codigo_categoria INTEGER UNSIGNED NOT NULL COMMENT 'FK de categoria',
+  divisao_codigo_divisao INTEGER UNSIGNED NOT NULL COMMENT 'FK de divisao',
+  desempenho_time  CHAR(5) NULL COMMENT 'desempenho do time',
+  comprar_novo_jogador  CHAR(3) NULL COMMENT 'comprar novo jogador para o time',
+  capa VARCHAR(100) NULL COMMENT 'capa do time',
+  PRIMARY KEY(codigo_time)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'tabela que armazena os times';
+
+CREATE INDEX idx_Login ON torcedor(login);
+CREATE INDEX idx_fk_TimeTecnico ON time(tecnico_codigo_tecnico);
+CREATE INDEX idx_fk_TimeCategoria ON time(categoria_codigo_categoria);
+CREATE INDEX idx_fk_TimeDivisao ON time(divisao_codigo_divisao);
+
+ALTER TABLE time
+ADD CONSTRAINT fk_TimeTecnico
+FOREIGN KEY(tecnico_codigo_tecnico)
+REFERENCES tecnico(codigo_tecnico)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE time
+ADD CONSTRAINT fk_TimeDivisao
+FOREIGN KEY(divisao_codigo_divisao)
+REFERENCES divisao(codigo_divisao)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE time ADD
+CONSTRAINT fk_TimeCategoria
+FOREIGN KEY(categoria_codigo_categoria)
+REFERENCES categoria(codigo_categoria)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;

@@ -69,7 +69,7 @@ class Torcedor
         $login = $this->getLogin();
         $senha = $this->getSenha();
         
-        $sql    = "\n INSERT INTO `time`.`torcedor`(";
+        $sql    = "\n INSERT INTO `torcedor`(";
         $sql   .= "\n nome";
         $sql   .= "\n ,login";
         $sql   .= "\n ,senha";
