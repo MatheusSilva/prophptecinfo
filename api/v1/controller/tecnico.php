@@ -2,10 +2,10 @@
 require_once "../../../vendor/autoload.php";
 use matheus\sistemaRest\api\v1\model\Tecnico;
 
-$acao  = "";
-$id    = "";
-$token = "";
-$p     = "";
+$acao       = "";
+$id         = "";
+$p          = "";
+$objTecnico = new tecnico();
 
 if (isset($_REQUEST["a"]) && empty($_REQUEST["a"]) === false) {
     $acao  = $_REQUEST["a"];
@@ -16,7 +16,7 @@ if (isset($_REQUEST["id"]) && empty($_REQUEST["id"]) === false) {
 }
 
 if (isset($_REQUEST["tk"]) && empty($_REQUEST["tk"]) === false) {
-    $token  = $_REQUEST["tk"];
+    $objTecnico->setToken($_REQUEST["tk"]);
 }
 
 if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
@@ -26,8 +26,7 @@ if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
 header('Content-Type: application/json');
 
 if (empty($acao)) {
-    $tecnico = new tecnico();
-    $items   = $tecnico->listarTudo();
+    $items   = $objTecnico->listarTudo();
     $results = array();
 
     if (!empty($items)) {
@@ -47,7 +46,6 @@ if (empty($acao)) {
         echo $json;
     }
 } elseif ($acao == 1) {
-    $objTecnico = new tecnico();
     $arrTodosTecnico   = $objTecnico->listarTudo();
     $arrTecnicoTime   = $objTecnico->listaTecnicoPorTime($id, null);
     $results = array();
@@ -92,15 +90,13 @@ if (empty($acao)) {
         echo $json;
     }
 } elseif ($acao == 2) {
-    $tecnico = new tecnico();
-    $items = $tecnico->listarPorCodigo($id);
+    $items = $objTecnico->listarPorCodigo($id);
     
     if (!empty($items)) {
         echo json_encode($items);
     }
 } elseif ($acao == 3) {
-    $tecnico = new tecnico();
-    $items   = $tecnico->listarPorNome($p);
+    $items   = $objTecnico->listarPorNome($p);
     
     if (!empty($items)) {
         $json = "{\"tecnicos\":";
@@ -114,17 +110,16 @@ if (empty($acao)) {
 } elseif ($acao == 4) {
     $request_body = file_get_contents('php://input');
     $tecnico    = json_decode($request_body, true);
-    $objtecnico = new tecnico();
-    $objtecnico->setNome($tecnico["txtNome"]);
+    $objTecnico->setNome($tecnico["txtNome"]);
 
     $dia  = $tecnico["cmbDia"];
     $mes  = $tecnico["cmbMes"];
     $ano  = $tecnico["cmbAno"];
     $data = $dia."/".$mes."/".$ano;
-    $objtecnico->setData($data);
+    $objTecnico->setData($data);
 
-    $boolRetorno = $objtecnico->inserir($token);
-    $strErros = $objtecnico->getErros();
+    $boolRetorno = $objTecnico->inserir();
+    $strErros = $objTecnico->getErros();
 
     if ($boolRetorno === true) {
         $tecnico["mensagem"] = "Técnico cadastrado com sucesso.";
@@ -139,12 +134,11 @@ if (empty($acao)) {
 } elseif ($acao == 5) {
     $request_body = file_get_contents('php://input');
     $tecnico    = json_decode($request_body, true);
-    $objtecnico = new tecnico();
-    $objtecnico->setCodigoTecnico($id);
-    $objtecnico->setNome($tecnico["txtNome"]);
+    $objTecnico->setCodigoTecnico($id);
+    $objTecnico->setNome($tecnico["txtNome"]);
 
-    $boolRetorno = $objtecnico->alterar($token);
-    $strErros = $objtecnico->getErros();
+    $boolRetorno = $objTecnico->alterar();
+    $strErros = $objTecnico->getErros();
 
     if ($boolRetorno === true) {
         $tecnico["mensagem"] = "Técnico alterado com sucesso.";
@@ -158,11 +152,10 @@ if (empty($acao)) {
     echo $json;
 } elseif ($acao == 6) {
     $tecnico    = "";
-    $objtecnico = new tecnico();
-    $objtecnico->setCodigoTecnico($id);
+    $objTecnico->setCodigoTecnico($id);
 
-    $boolRetorno = $objtecnico->excluir($token);
-    $strErros = $objtecnico->getErros();
+    $boolRetorno = $objTecnico->excluir();
+    $strErros = $objTecnico->getErros();
 
     if ($boolRetorno === true) {
         $tecnico["mensagem"] = "Técnico excluido com sucesso.";
@@ -178,5 +171,4 @@ if (empty($acao)) {
 
 $acao  = "";
 $id    = "";
-$token = "";
 $p     = "";

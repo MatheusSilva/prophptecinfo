@@ -5,7 +5,7 @@ namespace matheus\sistemaRest\api\v1\lib;
 * classe Upload
 *
 * @author  Matheus Silva
-* @since 13/07/2015
+* @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
 */
 abstract class Upload
 {
@@ -13,6 +13,8 @@ abstract class Upload
     * metodo que verifica se arquivo tem extensao valida
     *
     * @access    public
+    * @param     file $arquivo Armazena o arquivo pego pelo php
+    * @param     array $extensoes_permitidas Armazena todas as extensoes permitidas
     * @return    boolean Retorna um boolean que indica se o arquivo tem uma extensao valida
     * @author    Matheus Silva
     * @since     13/07/2015
@@ -35,6 +37,8 @@ abstract class Upload
     * metodo que verifica se arquivo tem minetype valido
     *
     * @access    public
+    * @param     file $arquivo Armazena o arquivo pego pelo php
+    * @param     array $arrMineTypes Armazena todos os minetypes validos
     * @return    boolean Retorna um boolean que indica se o arquivo tem um minetype valido
     * @author    Matheus Silva
     * @since     13/07/2015
@@ -57,6 +61,8 @@ abstract class Upload
     * metodo que verifica se arquivo tem tamanho valido
     *
     * @access    public
+    * @param     $arquivo Armazena o arquivo pego pelo php
+    * @param     $tamanho Armazena o tamanho do arquivo em megaByte
     * @return    boolean Retorna um boolean que indica se o arquivo tem um tamanho valido
     * @author    Matheus Silva
     * @since     13/07/2015
@@ -76,12 +82,14 @@ abstract class Upload
     * metodo que envia o arquivo selecionado para a pasta do servidor
     *
     * @access    public
+    * @param     string Armazena o nome do arquivo
+    * @param     file Armazena arquivo pego pelo php
+    * @param     string Armazena o caminho do arquivo
     * @return    string Retorna um string que contem o caminho relativo do arquivo
     * @author    Matheus Silva
     * @since     13/07/2015
     * @version   0.1
     */
-
     public static function enviar($nome, $arquivo, $caminho = "../../img/")
     {
         //faz upload para o servidor

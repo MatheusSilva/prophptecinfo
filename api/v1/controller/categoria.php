@@ -2,22 +2,22 @@
 require_once "../../../vendor/autoload.php";
 use matheus\sistemaRest\api\v1\model\Categoria;
 
-$acao  = "";
-$id    = "";
-$token = "";
-$p     = "";
+$acao         = "";
+$id           = "";
+$p            = "";
+
+$objCategoria = new Categoria();
 
 if (isset($_REQUEST["a"]) && empty($_REQUEST["a"]) === false) {
     $acao  = $_REQUEST["a"];
 }
-
 
 if (isset($_REQUEST["id"]) && empty($_REQUEST["id"]) === false) {
     $id  = $_REQUEST["id"];
 }
 
 if (isset($_REQUEST["tk"]) && empty($_REQUEST["tk"]) === false) {
-    $token  = $_REQUEST["tk"];
+    $objCategoria->setToken($_REQUEST["tk"]);
 }
 
 if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
@@ -27,7 +27,6 @@ if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
 header('Content-Type: application/json');
 
 if (empty($acao)) {
-    $objCategoria = new Categoria();
     $items = $objCategoria->listarTudo();
     $results = array();
 
@@ -51,7 +50,6 @@ if (empty($acao)) {
         echo json_encode($json);
     }
 } elseif ($acao == 1) {
-    $objCategoria = new Categoria();
     $arrTodasCategorias   = $objCategoria->listarTudo();
     $arrCategoriaTime   = $objCategoria->listaCategoriaPorTime($id, null);
     $results = array();
@@ -96,7 +94,6 @@ if (empty($acao)) {
         echo $json;
     }
 } elseif ($acao == 2) {
-    $objCategoria = new Categoria();
     $items = $objCategoria->listarPorCodigo($id);
 
     if (!empty($items)) {
@@ -113,7 +110,6 @@ if (empty($acao)) {
         $p = $json["p"];
     }
     
-    $objCategoria = new Categoria();
     $items = $objCategoria->listarPorNome($p);
 
     if (!empty($items)) {
@@ -131,10 +127,10 @@ if (empty($acao)) {
 } elseif ($acao == 4) {
     $request_body = file_get_contents('php://input');
     $categoria    = json_decode($request_body, true);
-    $objCategoria = new Categoria();
+
     $objCategoria->setNome($categoria["txtNome"]);
 
-    $boolRetorno = $objCategoria->inserir($token);
+    $boolRetorno = $objCategoria->inserir();
     $strErros = $objCategoria->getErros();
     
     if ($boolRetorno === true) {
@@ -151,11 +147,10 @@ if (empty($acao)) {
     $request_body = file_get_contents('php://input');
     $categoria    = json_decode($request_body, true);
 
-    $objCategoria = new Categoria();
     $objCategoria->setCodigoCategoria($id);
     $objCategoria->setNome($categoria["txtNome"]);
 
-    $boolRetorno = $objCategoria->alterar($token);
+    $boolRetorno = $objCategoria->alterar();
     $strErros = $objCategoria->getErros();
 
     if ($boolRetorno === true) {
@@ -170,9 +165,9 @@ if (empty($acao)) {
     echo $json;
 } elseif ($acao == 6) {
     $categoria    = "";
-    $objCategoria = new Categoria();
+
     $objCategoria->setCodigoCategoria($id);
-    $boolRetorno = $objCategoria->excluir($token);
+    $boolRetorno = $objCategoria->excluir();
     $strErros = $objCategoria->getErros();
 
     if ($boolRetorno === true) {
@@ -189,5 +184,4 @@ if (empty($acao)) {
 
 $acao  = "";
 $id    = "";
-$token = "";
 $p     = "";

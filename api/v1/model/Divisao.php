@@ -8,53 +8,122 @@ use matheus\sistemaRest\api\v1\lib\Conexao;
 * classe Divisao
 *
 * @author    Matheus Silva
-* @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+* @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
 */
 class Divisao extends ClasseBase
 {
+    /**
+    * @access private
+    * @var integer Armazena o codigo da divisão
+    */
     private $codigoDivisao;
+
+    /**
+    * @access private
+    * @var string Armazena o nome da divisão
+    */
     private $nome;
 
+    /**
+    * metodo constutor
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function __construct()
     {
-    }
 
+    }//public function __construct()
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade codigoDivisao
+    *
+    * @access    public
+    * @return    integer Retorna o codigo da divisao
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getCodigoDivisao()
     {
         return $this->codigoDivisao;
-    }
+    }//public function getCodigoDivisao()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade codigoDivisao
+    *
+    * @access    public
+    * @param     integer $codigo Armazena o codigo atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setCodigoDivisao($codigo)
     {
         $this->codigoDivisao = $codigo;
-    }
+    }//public function setCodigoDivisao($codigo)
 
+    /**
+    * metodo acessor Get que retorna a informação da propriedade nome
+    *
+    * @access    public
+    * @return    string Retorna o nome da divisao
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getNome()
     {
         return $this->nome;
-    }
+    }//public function getNome()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade nome
+    *
+    * @access    public
+    * @param     string $nome Armazena o nome atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setNome($nome)
     {
         $this->nome = $nome;
-    }
+    }//public function setNome($nome)
 
-    public function inserir($token)
+    /**
+    * metodo que tem função de inserir a divisão
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function inserir()
     {
         try {
             $retorno = true;
 
-            if ($this->tokenEhValido($token) === false) {
+            if ($this->tokenEhValido() === false) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
-            }//if ($this->tokenEhValido($token) === false) {
+            }//if ($this->tokenEhValido() === false) {
 
             $nome  = $this->getNome();
 
             if (empty($nome)) {
                 $this->setErro("Você deve preencher a divisão.");
                 return 998;
-            }
+            }//if (empty($nome)) {
 
             $sql   = "\n INSERT INTO divisao (";
             $sql  .= "\n nome";
@@ -77,7 +146,7 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public function inserir()
 
     /**
     * metodo que tem função de fazer validacao da restricao de integridade
@@ -87,7 +156,7 @@ class Divisao extends ClasseBase
     * @author    Matheus Silva
     * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
-    * @version   0.1
+    * @version   0.2
     */
     public function existeDivisao()
     {
@@ -109,13 +178,23 @@ class Divisao extends ClasseBase
         }
     }//public function existeDivisao()
 
-    public function alterar($token)
+    /**
+    * metodo que tem função de alterar a divisão
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function alterar()
     {
         try {
-            if ($this->tokenEhValido($token) === false) {
+            if ($this->tokenEhValido() === false) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
-            }//if ($this->tokenEhValido($token) === false) {
+            }//if ($this->tokenEhValido() === false) {
 
             $codigo = $this->getCodigoDivisao();
             $nome   = $this->getNome();
@@ -123,17 +202,17 @@ class Divisao extends ClasseBase
             if (is_numeric($codigo) === false) {
                 $this->setErro("Falha ao alterar divisão. Código inválido.");
                 return 998;
-            }
+            }//if (is_numeric($codigo) === false) {
 
             if ($this->existeDivisao() != 1) {
                 $this->setErro("Falha ao alterar divisão. Código inexistente.");
                 return 997;
-            }
+            }//if ($this->existeDivisao() != 1) {
 
             if (empty($nome)) {
                 $this->setErro("Você deve preencher a divisão.");
                 return 996;
-            }
+            }//if (empty($nome)) {
 
             $sql   = "\n UPDATE divisao";
             $sql  .= "\n SET nome = :nome";
@@ -155,7 +234,7 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public function alterar()
 
     /**
     * metodo que tem função de fazer validacao da restricao de integridade
@@ -165,7 +244,7 @@ class Divisao extends ClasseBase
     * @author    Matheus Silva
     * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
-    * @version   0.1
+    * @version   0.2
     */
     public function validaFkDivisao()
     {
@@ -189,30 +268,40 @@ class Divisao extends ClasseBase
         }
     }//public function validaFkDivisao()
 
-    public function excluir($token)
+    /**
+    * metodo que tem função de excluir a divisão
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function excluir()
     {
         try {
-            if ($this->tokenEhValido($token) !== true) {
+            if ($this->tokenEhValido() !== true) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
-            }//if ($this->tokenEhValido($token) === false) {
+            }//if ($this->tokenEhValido() === false) {
 
             $codigo = $this->getCodigoDivisao();
 
             if (is_numeric($codigo) === false) {
                 $this->setErro("Falha ao excluir divisão. Código inválido.");
                 return 998;
-            }
+            }//if (is_numeric($codigo) === false) {
 
             if ($this->existeDivisao() != 1) {
                 $this->setErro("Falha ao excluir divisão. Código inexistente.");
                 return 997;
-            }
+            }//if ($this->existeDivisao() != 1) {
 
             if ($this->validaFkDivisao()) {
                 $this->setErro("Falha ao excluir divisão. Existem um ou mais times vinculados a esta divisão.");
                 return 996;
-            }
+            }//if ($this->validaFkDivisao()) {
 
             $sql   = "\n DELETE";
             $sql  .= "\n FROM divisao";
@@ -233,8 +322,19 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public function excluir()
 
+    /**
+    * metodo que tem função de listar a divisão pelo código.
+    *
+    * @access    public
+    * @param     integer $codigo Armazena o codigo da divisão.
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function listarPorCodigo($codigo)
     {
         try {
@@ -253,8 +353,19 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
-        
+    }//public static function listarPorCodigo($codigo)
+    
+    /**
+    * metodo que tem função de listar a divisão por nome.
+    *
+    * @access    public
+    * @param     string $nome Armazena o nome da divisão.
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function listarPorNome($nome)
     {
         try {
@@ -274,12 +385,23 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public static function listarPorNome($codigo)
 
+    /**
+    * metodo que tem função de listar as divisoes.
+    *
+    * @access    public
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function listarTudo()
     {
         try {
-            $sql   = "\n SELECT *";
+            $sql   = "\n SELECT codigo_divisao";
+            $sql  .= "\n ,nome";
             $sql  .= "\n FROM divisao";
 
             $stmt = Conexao::getConexao()->prepare($sql);
@@ -291,9 +413,20 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public static function listarTudo()
     
-    public static function listaDivisaoPorTime($intCodigo)
+    /**
+    * metodo que tem função de listar a divisão pelo codigo do time.
+    *
+    * @access    public
+    * @param     integer $intCodigoTime Armazena o codigo do time.
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public static function listaDivisaoPorTime($intCodigoTime)
     {
         try {
             $sql   = "\n SELECT d.codigo_divisao";
@@ -304,7 +437,7 @@ class Divisao extends ClasseBase
             $sql  .= "\n AND t.codigo_time = :codigo";
 
             $stmt = Conexao::getConexao()->prepare($sql);
-            $stmt->bindParam(":codigo", $intCodigo, \PDO::PARAM_INT);
+            $stmt->bindParam(":codigo", $intCodigoTime, \PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
@@ -313,5 +446,5 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
-}
+    }//public static function listaDivisaoPorTime($intCodigo)
+}//class Divisao extends ClasseBase

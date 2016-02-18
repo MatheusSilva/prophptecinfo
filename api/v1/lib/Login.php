@@ -7,11 +7,21 @@ use matheus\sistemaRest\api\v1\model\Torcedor;
 * classe Login
 *
 * @author    Matheus Silva
-* @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+* @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
 */
 class Login
 {
-    
+    /**
+    * metodo que faz o login do usuario no sistema
+    *
+    * @access    public
+    * @param     string $torcedor Armazena o login do torcedor
+    * @param     string $senha Armazena a senha do torcedor
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function entrar($torcedor, $senha)
     {
         require_once "Conexao.php";
@@ -52,12 +62,11 @@ class Login
             $stmt->bindParam(":torcedor", $torcedor);
             $stmt->bindParam(":senha", $senha);
             $retornoUpdate = $stmt->execute();
-            
 
             if ($retornoUpdate) {
                 if (!isset($_SESSION)) {
                     session_start();
-                }
+                }//if (!isset($_SESSION)) {
                 
                 $_SESSION['agentUser']        = $userAgent;
                 $_SESSION['logado']           = 'ok';
@@ -69,19 +78,29 @@ class Login
                 $msg = urlencode('Login falhou! Verifique seus dados');
                 $conexao = null;
                 header("location:../formularios/form.login.php?msg=$msg");
-            }
+            }//if ($retornoUpdate) {
         } else {
             $conexao = null;
             $msg = urlencode('Login falhou! Verifique seus dados');
             header("location:../formularios/form.login.php?msg=$msg");
-        }
-    }
+        }//if (empty($retornoSelect) === false) {
+    }//public static function entrar($torcedor, $senha)
     
+    /**
+    * metodo que verifica se o usuario esta logado
+    *
+    * @access    public
+    * @param     boolean $redirecionar Armazena uma flag que indica se tem que redicionar para outra pagina
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function verificar($redirecionar = true)
     {
         if (!isset($_SESSION)) {
             session_start();
-        }
+        }//if (!isset($_SESSION)) {
         
         if (!isset($_SESSION['logado'])
         || $_SESSION['logado'] != 'ok'
@@ -92,18 +111,28 @@ class Login
             if ($redirecionar) {
                 $msg = urlencode('Acesso restrito. Efetue login para continuar');
                 header("location:../formularios/form.login.php?msg=$msg");
-            }
+            }//if ($redirecionar) {
         } else {
             $token = $_COOKIE["token"];
             setcookie("token", $token, time()+900, "/");
         }
-    }
+    }//public static function verificar($redirecionar = true)
     
+    /**
+    * metodo que faz o logout do usuario
+    *
+    * @access    public
+    * @param     boolean $redirecionar indica se e para redirecionar para outra pagina ou nao ao fazer login
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function sair($redirecionar = true)
     {
         if (!isset($_SESSION)) {
             session_start();
-        }
+        }//if (!isset($_SESSION)) {
 
         setcookie('token', null, -1, '/');
         $_SESSION['logado'] = '';
@@ -125,6 +154,6 @@ class Login
 
         if ($redirecionar) {
             header('location:../../site/paginas/home.html');
-        }
-    }
-}
+        }//if ($redirecionar) {
+    }//public static function sair($redirecionar = true)
+}//class Login

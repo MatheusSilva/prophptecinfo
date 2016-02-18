@@ -2,22 +2,21 @@
 require_once "../../../vendor/autoload.php";
 use matheus\sistemaRest\api\v1\model\Divisao;
 
-$acao  = "";
-$id    = "";
-$token = "";
-$p     = "";
+$acao       = "";
+$id         = "";
+$p          = "";
+$objDivisao = new divisao();
 
 if (isset($_REQUEST["a"]) && empty($_REQUEST["a"]) === false) {
     $acao  = $_REQUEST["a"];
 }
-
 
 if (isset($_REQUEST["id"]) && empty($_REQUEST["id"]) === false) {
     $id  = $_REQUEST["id"];
 }
 
 if (isset($_REQUEST["tk"]) && empty($_REQUEST["tk"]) === false) {
-    $token  = $_REQUEST["tk"];
+    $objDivisao->setToken($_REQUEST["tk"]);
 }
 
 if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
@@ -27,9 +26,7 @@ if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
 header('Content-Type: application/json');
 
 if (empty($acao)) {
-    $divisao = new divisao();
-    $db      = new divisao();
-    $items   = $db->listarTudo();
+    $items   = $objDivisao->listarTudo();
     $results = array();
 
     if (!empty($items)) {
@@ -52,9 +49,8 @@ if (empty($acao)) {
         echo json_encode($json);
     }
 } elseif ($acao == 1) {
-    $divisao = new divisao();
-    $arrTodasDivisoes   = $divisao->listarTudo();
-    $arrDivisaoTime   = $divisao->listaDivisaoPorTime($id, null);
+    $arrTodasDivisoes   = $objDivisao->listarTudo();
+    $arrDivisaoTime   = $objDivisao->listaDivisaoPorTime($id, null);
     $results = array();
     
     if (!empty($arrTodasDivisoes)) {
@@ -97,8 +93,7 @@ if (empty($acao)) {
         echo $json;
     }
 } elseif ($acao == 2) {
-    $divisao = new divisao();
-    $items   = $divisao->listarPorCodigo($id);
+    $items   = $objDivisao->listarPorCodigo($id);
     
     if (!empty($items)) {
         echo json_encode($items);
@@ -107,8 +102,7 @@ if (empty($acao)) {
         echo json_encode($json);
     }
 } elseif ($acao == 3) {
-    $divisao = new divisao();
-    $items   = $divisao->listarPorNome($p);
+    $items   = $objDivisao->listarPorNome($p);
     
     if (!empty($items)) {
         $json = "{\"divisaos\":";
@@ -125,11 +119,10 @@ if (empty($acao)) {
 } elseif ($acao == 4) {
     $request_body = file_get_contents('php://input');
     $divisao    = json_decode($request_body, true);
-    $objdivisao = new divisao();
-    $objdivisao->setNome($divisao["txtNome"]);
+    $objDivisao->setNome($divisao["txtNome"]);
 
-    $boolRetorno = $objdivisao->inserir($token);
-    $strErros    = $objdivisao->getErros();
+    $boolRetorno = $objDivisao->inserir();
+    $strErros    = $objDivisao->getErros();
     
     if ($boolRetorno === true) {
         $divisao["mensagem"] = "Divisão cadastrada com sucesso.";
@@ -144,12 +137,11 @@ if (empty($acao)) {
 } elseif ($acao == 5) {
     $request_body = file_get_contents('php://input');
     $divisao    = json_decode($request_body, true);
-    $objdivisao = new divisao();
-    $objdivisao->setCodigoDivisao($id);
-    $objdivisao->setNome($divisao["txtNome"]);
+    $objDivisao->setCodigoDivisao($id);
+    $objDivisao->setNome($divisao["txtNome"]);
 
-    $boolRetorno = $objdivisao->alterar($token);
-    $strErros    = $objdivisao->getErros();
+    $boolRetorno = $objDivisao->alterar();
+    $strErros    = $objDivisao->getErros();
 
     if ($boolRetorno === true) {
         $divisao["mensagem"] = "Divisão alterada com sucesso.";
@@ -163,11 +155,10 @@ if (empty($acao)) {
     echo $json;
 } elseif ($acao == 6) {
     $divisao    = "";
-    $objdivisao = new divisao();
-    $objdivisao->setCodigoDivisao($id);
+    $objDivisao->setCodigoDivisao($id);
 
-    $boolRetorno = $objdivisao->excluir($token);
-    $strErros    = $objdivisao->getErros();
+    $boolRetorno = $objDivisao->excluir();
+    $strErros    = $objDivisao->getErros();
 
     if ($boolRetorno === true) {
         $divisao["mensagem"] = "Divisão excluida com sucesso.";
@@ -183,5 +174,4 @@ if (empty($acao)) {
 
 $acao  = "";
 $id    = "";
-$token = "";
 $p     = "";

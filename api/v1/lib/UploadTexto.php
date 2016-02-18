@@ -5,10 +5,20 @@ namespace matheus\sistemaRest\api\v1\lib;
 * classe UploadTexto
 *
 * @author    Matheus Silva
-* @copyright © Copyright 2010 Matheus Silva. Todos os direitos reservados.
+* @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
 */
 abstract class UploadTexto
 {
+    /**
+    * metodo que valida o arquivo baseado no minetype
+    *
+    * @access    public
+    * @param     string $tipo Armazena o minetype do arquivo
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function validarTipo($tipo)
     {
         if ($tipo == 'application/msword'
@@ -20,17 +30,38 @@ abstract class UploadTexto
         } else {
             return false;
         }
-    }
+    }//public static function validarTipo($tipo)
     
+    /**
+    * metodo que valida o arquivo baseado no tamanho
+    *
+    * @access    public
+    * @param     integer $tamanho Armazena o tamanho do arquivo
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function validarTamanho($tamanho)
     {
         if ($tamanho <= 409600) {
             return true;
         } else {
             return false;
-        }
-    }
+        }//if ($tamanho <= 409600) {
+    }//public static function validarTamanho($tamanho)
     
+    /**
+    * metodo que faz o upload do arquivo
+    *
+    * @access    public
+    * @param     string $nome Armazena o nome do arquivo
+    * @param     file $arquivo Armazena o arquivo pego pelo php
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function enviar($nome, $arquivo)
     {
         //faz upload para o servidor
@@ -38,7 +69,7 @@ abstract class UploadTexto
         
         if (substr($extensao, 0, 1) !='.') {
             $extensao = '.'.$extensao;
-        }
+        }//if (substr($extensao, 0, 1) !='.') {
     
         $caminho = "../arquivos/textos/$nome$extensao";
         
@@ -47,6 +78,6 @@ abstract class UploadTexto
             return $caminho;
         } else {
             return '0';
-        }
-    }
-}
+        }//if ($arquivo['error'] == 0) {
+    }//public static function enviar($nome, $arquivo)
+}//abstract class UploadTexto

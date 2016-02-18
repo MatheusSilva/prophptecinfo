@@ -8,59 +8,153 @@ use matheus\sistemaRest\api\v1\lib\Conexao;
 * classe Tecnico
 *
 * @author    Matheus Silva
-* @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+* @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
 */
 class Tecnico extends ClasseBase
 {
+    /**
+    * @access private
+    * @var integer Armazena o codigo do tecnico
+    */
     private $codigoTecnico;
+
+    /**
+    * @access private
+    * @var integer Armazena o nome do tecnico
+    */
     private $nome;
+
+    /**
+    * @access private
+    * @var integer Armazena a data de nascimento do tecnico
+    */
     private $data;
 
+    /**
+    * metodo constutor
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function __construct()
     {
-    }
 
+    }//public function __construct()
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade codigoTecnico
+    *
+    * @access    public
+    * @return    integer Retorna o codigo do tecnico
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getCodigoTecnico()
     {
         return $this->codigoTecnico;
-    }
+    }//public function getCodigoTecnico()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade codigoTecnico
+    *
+    * @access    public
+    * @param     integer $codigoTecnico Armazena o codigo atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setCodigoTecnico($codigoTecnico)
     {
         $this->codigoTecnico = $codigoTecnico;
-    }
+    }//public function setCodigoTecnico($codigoTecnico)
 
+    /**
+    * metodo acessor Get que retorna a informação da propriedade nome
+    *
+    * @access    public
+    * @return    string Retorna o nome do tecnico
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getNome()
     {
         return $this->nome;
-    }
+    }//public function getNome()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade nome
+    *
+    * @access    public
+    * @param     integer $nome Armazena o nome atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setNome($nome)
     {
         $this->nome = $nome;
-    }
+    }//public function setNome($nome)
 
+    /**
+    * metodo acessor Get que retorna a informação da propriedade data
+    *
+    * @access    public
+    * @return    string Retorna o data de nascimento do tecnico
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getData()
     {
         return $this->data;
-    }
+    }//public function getData()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade data
+    *
+    * @access    public
+    * @param     integer $data Armazena o data de nascimento do tecnico
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setData($data)
     {
         $data = explode('/', $data);
         $data = $data[2]."-".$data[1]."-".$data[0];
         $this->data = $data;
-    }
+    }//public function setData($data)
 
-    public function inserir($token)
+    /**
+    * metodo que tem função de inserir o tecnico
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function inserir()
     {
         try {
             $retorno = true;
 
-            if ($this->tokenEhValido($token) !== true) {
+            if ($this->tokenEhValido() !== true) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
-            }//if ($this->tokenEhValido($token) === false) {
+            }//if ($this->tokenEhValido() === false) {
 
             $nome  = $this->getNome();
             $data  = $this->getData();
@@ -68,16 +162,16 @@ class Tecnico extends ClasseBase
             if (empty($nome)) {
                 $this->setErro("Você deve preencher o técnico.");
                 $retorno = 998;
-            }
+            }//if (empty($nome)) {
 
             if (empty($data) || mb_strlen($data, mb_detect_encoding($data)) !== 10) {
                 $this->setErro("Você deve preencher a data.");
                 $retorno = 997;
-            }
+            }//if (empty($data) || mb_strlen($data, mb_detect_encoding($data)) !== 10) {
 
             if ($retorno !== true) {
                 return $retorno;
-            }
+            }//if ($retorno !== true) {
 
             $sql   = "\n INSERT INTO tecnico(";
             $sql  .= "\n  nome";
@@ -103,10 +197,10 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public function inserir()
 
-     /**
-    * metodo que tem função de fazer validacao da restricao de integridade
+    /**
+    * metodo que tem função de verificar se existe o tecnico
     *
     * @access    public
     * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
@@ -135,13 +229,23 @@ class Tecnico extends ClasseBase
         }
     }//public function existeTecnico()
 
-    public function alterar($token)
+    /**
+    * metodo que tem função de alterar o tecnico
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function alterar()
     {
         try {
-            if ($this->tokenEhValido($token) === false) {
+            if ($this->tokenEhValido() === false) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
-            }//if ($this->tokenEhValido($token) === false) {
+            }//if ($this->tokenEhValido() === false) {
 
             $codigo = $this->getCodigoTecnico();
             $nome   = $this->getNome();
@@ -149,17 +253,17 @@ class Tecnico extends ClasseBase
             if (is_numeric($codigo) === false) {
                 $this->setErro("Falha ao alterar técnico. Código inválido.");
                 return 998;
-            }
+            }//if (is_numeric($codigo) === false) {
 
             if ($this->existeTecnico() != 1) {
                 $this->setErro("Falha ao alterar técnico. Código inexistente.");
                 return 997;
-            }
+            }//if ($this->existeTecnico() != 1) {
 
             if (empty($nome)) {
                 $this->setErro("Você deve preencher a técnico.");
                 return 996;
-            }
+            }//if (empty($nome)) {
 
             $sql   = "\n UPDATE tecnico";
             $sql  .= "\n SET nome = :nome";
@@ -181,7 +285,7 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public function alterar()
 
     /**
     * metodo que tem função de fazer validacao da restricao de integridade
@@ -193,7 +297,7 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.1
     */
-    public function validaFkTecnico($token)
+    public function validaFkTecnico()
     {
         try {
             $codigo  = $this->getCodigoTecnico();
@@ -217,31 +321,40 @@ class Tecnico extends ClasseBase
         }
     }//public function validaFkTecnico($codigo)
 
-
-    public function excluir($token)
+    /**
+    * metodo que tem função de excluir o tecnico
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function excluir()
     {
         try {
-            if ($this->tokenEhValido($token) !== true) {
+            if ($this->tokenEhValido() !== true) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
-            }//if ($this->tokenEhValido($token) === false) {
+            }//if ($this->tokenEhValido() === false) {
 
             $codigo = $this->getCodigoTecnico();
 
             if (is_numeric($codigo) === false) {
                 $this->setErro("Falha ao excluir técnico. Código inválido.");
                 return 998;
-            }
+            }//if (is_numeric($codigo) === false) {
 
             if ($this->existeTecnico() != 1) {
                 $this->setErro("Falha ao excluir técnico. Código inexistente.");
                 return 997;
-            }
+            }//if ($this->existeTecnico() != 1) {
 
             if ($this->validaFkTecnico()) {
                 $this->setErro("Falha ao excluir técnico. Existem um ou mais times vinculados a este técnico.");
                 return 996;
-            }
+            }//if ($this->validaFkTecnico()) {
 
             $sql   = "\n DELETE";
             $sql  .= "\n FROM tecnico";
@@ -262,8 +375,19 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public function excluir()
 
+    /**
+    * metodo que tem função de listar o tecnico pelo código.
+    *
+    * @access    public
+    * @param     integer $codigo Armazena o codigo da tecnico.
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function listarPorCodigo($codigo)
     {
         try {
@@ -284,8 +408,19 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public static function listarPorCodigo($codigo)
 
+    /**
+    * metodo que tem função de listar o tecnico por nome.
+    *
+    * @access    public
+    * @param     string $nome Armazena o nome do tecnico.
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function listarPorNome($nome)
     {
         try {
@@ -305,8 +440,18 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public static function listarPorNome($nome)
 
+    /**
+    * metodo que tem função de listar todos os tecnicos.
+    *
+    * @access    public
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function listarTudo()
     {
         try {
@@ -324,8 +469,19 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public static function listarTudo()
     
+    /**
+    * metodo que tem função de listar todos os tecnicos por time.
+    *
+    * @access    public
+    * @param     integer $intCodigo Armazena o codigo do time
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function listaTecnicoPorTime($intCodigo)
     {
         try {
@@ -346,5 +502,5 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public static function listaTecnicoPorTime($intCodigo)
 }

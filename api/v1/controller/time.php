@@ -5,8 +5,8 @@ use matheus\sistemaRest\api\v1\lib\Upload;
 
 $acao  = "";
 $id    = "";
-$token = "";
 $p     = "";
+$objTime  = new time();
 
 if (isset($_REQUEST["a"]) && empty($_REQUEST["a"]) === false) {
     $acao  = $_REQUEST["a"];
@@ -17,7 +17,7 @@ if (isset($_REQUEST["id"]) && empty($_REQUEST["id"]) === false) {
 }
 
 if (isset($_REQUEST["tk"]) && empty($_REQUEST["tk"]) === false) {
-    $token  = $_REQUEST["tk"];
+    $objTime->setToken($_REQUEST["tk"]);
 }
 
 if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
@@ -27,8 +27,7 @@ if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
 header('Content-Type: application/json');
 
 if (empty($acao)) {
-    $time      = new time();
-    $items   = $time->listarTudo();
+    $items   = $objTime->listarTudo();
     $results = array();
 
     if (!empty($items)) {
@@ -52,8 +51,7 @@ if (empty($acao)) {
         echo json_encode($json);
     }
 } elseif ($acao == 1) {
-    $time     = new time();
-    $items  = $time->listarPorCodigo($id);
+    $items  = $objTime->listarPorCodigo($id);
     
     if (!empty($items)) {
         echo json_encode($items);
@@ -62,8 +60,7 @@ if (empty($acao)) {
         echo json_encode($json);
     }
 } elseif ($acao == 2) {
-    $time    = new time();
-    $items = $time->listarPorNome($p);
+    $items = $objTime->listarPorNome($p);
 
     if (!empty($items)) {
         $json    = "{\"times\":";
@@ -91,17 +88,16 @@ if (empty($acao)) {
     $capa = Upload::enviar($nome, $foto);
 
     if ($capa !== '0') {
-        $objtime = new Time();
-        $objtime->setNome($nome);
-        $objtime->setCapa($capa);
-        $objtime->setCodigoDivisao($codigodivisao);
-        $objtime->setCodigoCategoria($codigocategoria);
-        $objtime->setCodigoTecnico($codigotecnico);
-        $objtime->setDesempenhotime($desempenhotime);
-        $objtime->setComprarnovojogador($comprarnovojogador);
+        $objTime->setNome($nome);
+        $objTime->setCapa($capa);
+        $objTime->setCodigoDivisao($codigodivisao);
+        $objTime->setCodigoCategoria($codigocategoria);
+        $objTime->setCodigoTecnico($codigotecnico);
+        $objTime->setDesempenhotime($desempenhotime);
+        $objTime->setComprarnovojogador($comprarnovojogador);
 
-        $retorno  = $objtime->inserir($token);
-        $strErros = $objtime->getErros();
+        $retorno  = $objTime->inserir();
+        $strErros = $objTime->getErros();
 
         if ($retorno === true) {
             $time["mensagem"] = "Time cadastrado com sucesso.";
@@ -138,18 +134,17 @@ if (empty($acao)) {
     $time = "";
 
     if ($capa != '0') {
-        $objtime = new Time();
-        $objtime->setCodigoTime($id);
-        $objtime->setNome($nome);
-        $objtime->setCapa($capa);
-        $objtime->setCodigoDivisao($codigodivisao);
-        $objtime->setCodigoCategoria($codigocategoria);
-        $objtime->setCodigoTecnico($codigotecnico);
-        //$objtime->setDesempenhotime($desempenhotime);
-        //$objtime->setComprarnovojogador($comprarnovojogador);
+        $objTime->setCodigoTime($id);
+        $objTime->setNome($nome);
+        $objTime->setCapa($capa);
+        $objTime->setCodigoDivisao($codigodivisao);
+        $objTime->setCodigoCategoria($codigocategoria);
+        $objTime->setCodigoTecnico($codigotecnico);
+        //$objTime->setDesempenhotime($desempenhotime);
+        //$objTime->setComprarnovojogador($comprarnovojogador);
 
-        $retorno  = $objtime->alterar($token);
-        $strErros = $objtime->getErros();
+        $retorno  = $objTime->alterar();
+        $strErros = $objTime->getErros();
 
         if ($retorno === true) {
             $time["mensagem"] = "Time alterado com sucesso.";
@@ -165,10 +160,9 @@ if (empty($acao)) {
     echo json_encode($time);
 } elseif ($acao == 5) {
     $time    = "";
-    $objtime = new time();
-    $objtime->setCodigoTime($id);
-    $retorno = $objtime->excluir($id, $token);
-    $strErros = $objtime->getErros();
+    $objTime->setCodigoTime($id);
+    $retorno = $objTime->excluir();
+    $strErros = $objTime->getErros();
     
     if ($retorno === true) {
         $time["mensagem"] = "Time excluido com sucesso.";
@@ -183,5 +177,4 @@ if (empty($acao)) {
 
 $acao  = "";
 $id    = "";
-$token = "";
 $p     = "";

@@ -8,110 +8,328 @@ use matheus\sistemaRest\api\v1\lib\Conexao;
 * classe Time
 *
 * @author    Matheus Silva
-* @copyright © Copyright 2010-2015 Matheus Silva. Todos os direitos reservados.
+* @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
 */
 class Time extends ClasseBase
 {
+    /**
+    * @access private
+    * @var integer Armazena o codigo do time
+    */
     private $codigoTime;
+
+    /**
+    * @access private
+    * @var string Armazena o nome do time
+    */
     private $nome;
+
+    /**
+    * @access private
+    * @var integer Armazena o codigo da categoria
+    */
     private $codigoCategoria;
+
+    /**
+    * @access private
+    * @var integer Armazena o codigo da divisão
+    */
     private $codigoDivisao;
+
+    /**
+    * @access private
+    * @var integer Armazena o codigo da tecnico
+    */
     private $codigoTecnico;
+
+    /**
+    * @access private
+    * @var string Armazena a capa do time
+    */
     private $capa;
+
+    /**
+    * @access private
+    * @var string Armazena o desepenho do time
+    */
     private $desempenhotime;
+
+    /**
+    * @access private
+    * @var string Armazena um flag indicado se tem que comprar um novo jogador
+    */
     private $comprarnovojogador;
 
+    /**
+    * metodo constutor
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function __construct()
     {
-    }
+    }//public function __construct()
 
-    public function getDesempenhotime()
-    {
-        return $this->desempenhotime;
-    }
-
-    public function setDesempenhotime($desempenhotime)
-    {
-        $this->desempenhotime = $desempenhotime;
-    }
-
-    public function getComprarnovojogador()
-    {
-        return $this->comprarnovojogador;
-    }
-
-    public function setComprarnovojogador($comprarnovojogador)
-    {
-        $this->comprarnovojogador = $comprarnovojogador;
-    }
-
+    /**
+    * metodo acessor Get que retorna a informação da propriedade codigoTime
+    *
+    * @access    public
+    * @return    integer Retorna o codigo do time
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getCodigoTime()
     {
         return $this->codigoTime;
-    }
+    }//public function getCodigoTime()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade codigoTime
+    *
+    * @access    public
+    * @param     integer $codigoTime Armazena o codigo atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setCodigoTime($codigoTime)
     {
         $this->codigoTime = $codigoTime;
-    }
+    }//public function setCodigoTime($codigoTime)
 
+    /**
+    * metodo acessor Get que retorna a informação da propriedade nome
+    *
+    * @access    public
+    * @return    string Retorna o nome do time
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getNome()
     {
         return $this->nome;
-    }
+    }//public function getNome()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade nome
+    *
+    * @access    public
+    * @param     string $nome Armazena o nome do time
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setNome($nome)
     {
         $this->nome = $nome;
-    }
+    }//public function setNome($nome)
 
+    /**
+    * metodo acessor Get que retorna a informação da propriedade codigoCategoria
+    *
+    * @access    public
+    * @return    integer Retorna o codigo da categoria
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getCodigoCategoria()
     {
         return $this->codigoCategoria;
-    }
+    }//public function getCodigoCategoria()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade categoria
+    *
+    * @access    public
+    * @param     string $codigoCategoria Armazena o codigo da categoria
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setCodigoCategoria($codigoCategoria)
     {
         $this->codigoCategoria = $codigoCategoria;
-    }
+    }//public function setCodigoCategoria($codigoCategoria)
 
+    /**
+    * metodo acessor Get que retorna a informação da propriedade codigoDivisao
+    *
+    * @access    public
+    * @return    integer Retorna o codigo da divisão
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getCodigoDivisao()
     {
         return $this->codigoDivisao;
-    }
+    }//public function getCodigoDivisao()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade divisão
+    *
+    * @access    public
+    * @param     integer $codigoDivisao Armazena o codigo da divisão
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setCodigoDivisao($codigoDivisao)
     {
         $this->codigoDivisao = $codigoDivisao;
-    }
+    }//public function setCodigoDivisao($codigoDivisao)
 
+    /**
+    * metodo acessor Get que retorna a informação da propriedade codigoTecnico
+    *
+    * @access    public
+    * @return    integer Retorna o codigo do tecnico
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getCodigoTecnico()
     {
         return $this->codigoTecnico;
-    }
+    }//public function getCodigoTecnico()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade tecnico
+    *
+    * @access    public
+    * @param     integer $codigoTecnico Armazena o codigo do tecnico
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setCodigoTecnico($codigoTecnico)
     {
         $this->codigoTecnico = $codigoTecnico;
-    }
+    }//public function setCodigoTecnico($codigoTecnico)
 
+    /**
+    * metodo acessor Get que retorna a informação da propriedade capa
+    *
+    * @access    public
+    * @return    integer Retorna a capa do time
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getCapa()
     {
         return $this->capa;
-    }
+    }//public function getCapa()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade capa
+    *
+    * @access    public
+    * @param     string $capa Armazena a capa do time
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setCapa($capa)
     {
         $this->capa = $capa;
-    }
+    }//public function setCapa($capa)
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade desempenhotime
+    *
+    * @access    public
+    * @return    string Retorna o desepenho do time
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getDesempenhotime()
+    {
+        return $this->desempenhotime;
+    }//public function getDesempenhotime()
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade desempenhotime
+    *
+    * @access    public
+    * @param     string $desempenhotime Armazena o desepenho do time
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setDesempenhotime($desempenhotime)
+    {
+        $this->desempenhotime = $desempenhotime;
+    }//public function setDesempenhotime($desempenhotime)
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade comprarnovojogador
+    *
+    * @access    public
+    * @return    string Retorna a flag que indica se tem que comprar novo jogador
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getComprarnovojogador()
+    {
+        return $this->comprarnovojogador;
+    }//public function getComprarnovojogador()
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade comprarnovojogador
+    *
+    * @access    public
+    * @param     string $comprarnovojogador Armazena a flag que indica se tem que comprar novo jogador
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setComprarnovojogador($comprarnovojogador)
+    {
+        $this->comprarnovojogador = $comprarnovojogador;
+    }//public function setComprarnovojogador($comprarnovojogador)
         
-    public function inserir($token)
+    /**
+    * metodo que tem função de inserir o time
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function inserir()
     {
         try {
-            if ($this->tokenEhValido($token) !== true) {
+            if ($this->tokenEhValido() !== true) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
-            }
+            }//if ($this->tokenEhValido() !== true) {
 
             $nome               = $this->getNome();
             $capa               = $this->getCapa();
@@ -160,27 +378,38 @@ class Time extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public function inserir()
     
-    public function alterar($token)
+
+    /**
+    * metodo que tem função de alterar o time
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function alterar()
     {
         try {
-            if ($this->tokenEhValido($token) !== true) {
+            if ($this->tokenEhValido() !== true) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
-            }
+            }//if ($this->tokenEhValido() !== true) {
             
             $codigo             = $this->getCodigoTime();
 
             if (is_numeric($codigo) === false) {
                 $this->setErro("Falha ao atualizar time. Código inválido.");
                 return 998;
-            }
+            }//if (is_numeric($codigo) === false) {
 
             if ($this->existeTime($codigo) != 1) {
                 $this->setErro("Falha ao atualizar time. Código inexistente.");
                 return 998;
-            }
+            }//if ($this->existeTime($codigo) != 1) {
 
             $nome               = $this->getNome();
             $codigo_divisao     = $this->getCodigoDivisao();
@@ -193,7 +422,7 @@ class Time extends ClasseBase
             
             if (!empty($capa)) {
                 $sql    .= "\n , capa 			    = :capa";
-            }
+            }//if (!empty($capa)) {
             
             $sql    .= "\n , divisao_codigo_divisao     = :codigo_divisao";
             $sql    .= "\n , categoria_codigo_categoria = :codigo_categoria";
@@ -209,7 +438,7 @@ class Time extends ClasseBase
                 $stmt->bindParam(":capa", $capa);
                 $arrRetorno = self::listarPorCodigo($codigo);
                 unlink("../".$arrRetorno["capa"], \PDO::PARAM_STR, 100);
-            }
+            }//if (!empty($capa)) {
             
             $stmt->bindParam(":codigo_divisao", $codigo_divisao, \PDO::PARAM_INT);
             $stmt->bindParam(":codigo_categoria", $codigo_categoria, \PDO::PARAM_INT);
@@ -226,8 +455,19 @@ class Time extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public function alterar()
     
+    /**
+    * metodo que tem função de verificar se existe time
+    *
+    * @access    public
+    * @param     integer $codigo Armazena o codigo do time
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.1
+    */
     public function existeTime($codigo)
     {
         try {
@@ -249,25 +489,37 @@ class Time extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public function existeTime($codigo)
     
-    public function excluir($codigo, $token)
+    /**
+    * metodo que tem função de excluir o time
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function excluir()
     {
         try {
-            if ($this->tokenEhValido($token) !== true) {
+            if ($this->tokenEhValido() !== true) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
-            }
+            }//if ($this->tokenEhValido() !== true) {
             
+            $codigo = $this->getCodigoTecnico();
+
             if (is_numeric($codigo) === false) {
                 $this->setErro("Falha ao excluir time. Código inválido.");
                 return 998;
-            }
+            }//if (is_numeric($codigo) === false) {
 
             if ($this->existeTime($codigo) != 1) {
                 $this->setErro("Falha ao excluir time. Código inexistente.");
                 return 998;
-            }
+            }//if ($this->existeTime($codigo) != 1) {
 
             $arrRetorno = self::listarPorCodigo($codigo);
             unlink("../".$arrRetorno["capa"]);
@@ -287,7 +539,7 @@ class Time extends ClasseBase
                 $retorno = false;
             } else {
                 $conexao->commit();
-            }
+            }//if (!$retorno) {
             
             $conexao = null;
             return $retorno;
@@ -298,8 +550,18 @@ class Time extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public function excluir($codigo)
 
+    /**
+    * metodo que tem função de listar todos os times.
+    *
+    * @access    public
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function listarTudo()
     {
         try {
@@ -318,8 +580,19 @@ class Time extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
-            
+    }//public static function listarTudo()
+     
+    /**
+    * metodo que tem função de listar o time pelo código.
+    *
+    * @access    public
+    * @param     integer $codigo Armazena o codigo do time.
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */        
     public static function listarPorCodigo($codigo)
     {
         try {
@@ -353,8 +626,19 @@ class Time extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
+    }//public static function listarPorCodigo($codigo)
     
+    /**
+    * metodo que tem função de listar o time por nome.
+    *
+    * @access    public
+    * @param     string $nome Armazena o nome do time.
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public static function listarPorNome($nome)
     {
         try {
@@ -365,13 +649,13 @@ class Time extends ClasseBase
             if ($nome !== "listaTodosTimes") {
                 $sql   .= "\n WHERE nome LIKE :nome";
                 $nome   = $nome."%";
-            }
+            }//if ($nome !== "listaTodosTimes") {
 
             $stmt = Conexao::getConexao()->prepare($sql);
 
             if ($nome !== "listaTodosTimes") {
                 $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 35);
-            }
+            }//if ($nome !== "listaTodosTimes") {
 
             $stmt->execute();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -381,5 +665,5 @@ class Time extends ClasseBase
             fclose($fp);
             return false;
         }
-    }
-}
+    }//public static function listarPorNome($nome)
+}//class Time extends ClasseBase

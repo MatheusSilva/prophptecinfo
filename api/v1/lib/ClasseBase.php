@@ -3,16 +3,51 @@ namespace matheus\sistemaRest\api\v1\lib;
 
 use matheus\sistemaRest\api\v1\lib\Login;
 
+/**
+* classe ClasseBase
+*
+* @author    Matheus Silva
+* @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+*/
 class ClasseBase
 {
+    /**
+    * @access private
+    * @var array Armazena todos os erros escritos sem codigos de erro
+    */
     private $arrErro;
 
+    /**
+    * @access private
+    * @var string Armazena o token de autenticação
+    */
+    private $token;
+
+    /**
+    * metodo constutor
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function __construct()
     {
         require_once "../vendor/autoload.php";
         Login::verificar(false);
-    }
+    }//public function __construct()
     
+    /**
+    * metodo acessor Get que retorna a informação da propriedade arrErro
+    *
+    * @access    public
+    * @return    string Retorna todos os erros escritos sem codigos de erro
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function getErros()
     {
         $strErros = "";
@@ -25,25 +60,86 @@ class ClasseBase
                 } else {
                     $strErros .= $val;
                     $boolPassou = true;
-                }
-            }
-        }
+                }//if ($boolPassou) {
+            }//foreach ($this->arrErro as $val) {
+        }//if (is_array($this->arrErro) && !empty($this->arrErro)) {
 
         return $strErros;
-    }
+    }//public function getErros()
 
+    /**
+    * metodo acessor Set que carrega informação na propriedade arrErro
+    *
+    * @access    public
+    * @param     string $arrErro Armazena os erros escritos sem codigos de erro
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function setErro($strErro)
     {
         $this->arrErro[] = $strErro;
-    }
+    }//public function setErro($strErro)
 
+    /**
+    * metodo acessor que limpa todos os erros escritos sem codigos de erro
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
     public function limpaErros()
     {
         $this->arrErro = array();
-    }
+    }//public function limpaErros()
 
-    public function tokenEhValido($strToken)
+    /**
+    * metodo acessor Get que retorna a informação da propriedade token
+    *
+    * @access    public
+    * @return    string Retorna o token de autenticação
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getToken()
     {
+        return $this->token;
+    }//public function getToken()
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade token
+    *
+    * @access    public
+    * @param     string $token Armazena o token de autenticação
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }//public function setToken($token)
+
+    /**
+    * metodo que verifica se o token e valido
+    *
+    * @access    public
+    * @return    boolean retorna um boolean indicando se tudo esta certo ao não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function tokenEhValido()
+    {
+        $strToken = $this->getToken();
+
         if (empty($strToken)) {
             return false;
         }
@@ -64,5 +160,5 @@ class ClasseBase
         }//if (empty($retorno)) {
 
         return true;
-    }
-}
+    }//public function tokenEhValido($strToken)
+}//class ClasseBase
