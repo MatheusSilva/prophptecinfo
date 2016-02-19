@@ -216,10 +216,10 @@ class Categoria extends ClasseBase
                 return 997;
             }//if ($this->existeCategoria() != 1) {
 
-            if (empty($nome)) {
-                $this->setErro("Você deve preencher a categoria.");
+            if (!(v::alnum()->length(2, 30)->validate($nome))) {
+                $this->setErro("O nome da categoria deve ser alfanumérico de 2 a 30 caracteres.");
                 return 996;
-            }//if (empty($nome)) {
+            }
 
             $sql  = "\n UPDATE categoria";
             $sql .= "\n SET nome = :nome";

@@ -260,11 +260,11 @@ class Tecnico extends ClasseBase
                 $this->setErro("Falha ao alterar técnico. Código inexistente.");
                 return 997;
             }//if ($this->existeTecnico() != 1) {
-
-            if (empty($nome)) {
-                $this->setErro("Você deve preencher a técnico.");
+                
+            if (!(v::alnum()->length(2, 30)->validate($nome))) {
+                $this->setErro("O nome do técnico deve ser alfanumérico de 2 a 30 caracteres.");
                 return 996;
-            }//if (empty($nome)) {
+            }   
 
             $sql   = "\n UPDATE tecnico";
             $sql  .= "\n SET nome = :nome";

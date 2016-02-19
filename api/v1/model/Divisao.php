@@ -210,10 +210,10 @@ class Divisao extends ClasseBase
                 return 997;
             }//if ($this->existeDivisao() != 1) {
 
-            if (empty($nome)) {
-                $this->setErro("Você deve preencher a divisão.");
+            if (!(v::alnum()->length(2, 25)->validate($nome))) {
+                $this->setErro("O nome da divisão deve ser alfanumérico de 2 a 25 caracteres.");
                 return 996;
-            }//if (empty($nome)) {
+            }
 
             $sql   = "\n UPDATE divisao";
             $sql  .= "\n SET nome = :nome";
