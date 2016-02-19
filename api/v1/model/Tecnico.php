@@ -3,6 +3,7 @@ namespace matheus\sistemaRest\api\v1\model;
 
 use matheus\sistemaRest\api\v1\lib\ClasseBase;
 use matheus\sistemaRest\api\v1\lib\Conexao;
+use Respect\Validation\Validator as v;
 
 /**
 * classe Tecnico
@@ -159,15 +160,15 @@ class Tecnico extends ClasseBase
             $nome  = $this->getNome();
             $data  = $this->getData();
 
-            if (empty($nome)) {
-                $this->setErro("Você deve preencher o técnico.");
-                $retorno = 998;
-            }//if (empty($nome)) {
+            if (!(v::alnum()->length(2, 30)->validate($nome))) {
+                $this->setErro("O nome do técnico deve ser alfanumérico de 2 a 30 caracteres.");
+                return 998;
+            }
 
-            if (empty($data) || mb_strlen($data, mb_detect_encoding($data)) !== 10) {
-                $this->setErro("Você deve preencher a data.");
+            if (!v::date('Y-m-d')->validate($data)) {
+                $this->setErro("A data está inválida.");
                 $retorno = 997;
-            }//if (empty($data) || mb_strlen($data, mb_detect_encoding($data)) !== 10) {
+            }//if (!v::date('Y-m-d')->validate($data)) {
 
             if ($retorno !== true) {
                 return $retorno;

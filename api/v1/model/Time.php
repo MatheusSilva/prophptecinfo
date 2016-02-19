@@ -3,6 +3,7 @@ namespace matheus\sistemaRest\api\v1\model;
 
 use matheus\sistemaRest\api\v1\lib\ClasseBase;
 use matheus\sistemaRest\api\v1\lib\Conexao;
+use Respect\Validation\Validator as v;
 
 /**
 * classe Time
@@ -330,8 +331,14 @@ class Time extends ClasseBase
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
             }//if ($this->tokenEhValido() !== true) {
-
+                
             $nome               = $this->getNome();
+                
+            if (!(v::alnum()->length(2, 35)->validate($nome))) {
+                $this->setErro("O nome do time deve ser alfanumérico de 2 a 35 caracteres.");
+                return 998;
+            }
+
             $capa               = $this->getCapa();
             $codigo_divisao     = $this->getCodigoDivisao();
             $codigo_categoria   = $this->getCodigoCategoria();
@@ -408,10 +415,16 @@ class Time extends ClasseBase
 
             if ($this->existeTime($codigo) != 1) {
                 $this->setErro("Falha ao atualizar time. Código inexistente.");
-                return 998;
+                return 997;
             }//if ($this->existeTime($codigo) != 1) {
 
             $nome               = $this->getNome();
+
+            if (!(v::alnum()->length(2, 35)->validate($nome))) {
+                $this->setErro("O nome do time deve ser alfanumérico de 2 a 35 caracteres.");
+                return 996;
+            }
+
             $codigo_divisao     = $this->getCodigoDivisao();
             $codigo_categoria   = $this->getCodigoCategoria();
             $codigo_tecnico     = $this->getCodigoTecnico();
@@ -432,6 +445,7 @@ class Time extends ClasseBase
             $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
+
             $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 35);
             
             if (!empty($capa)) {
@@ -592,7 +606,7 @@ class Time extends ClasseBase
     * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
-    */        
+    */
     public static function listarPorCodigo($codigo)
     {
         try {

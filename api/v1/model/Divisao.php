@@ -3,6 +3,7 @@ namespace matheus\sistemaRest\api\v1\model;
 
 use matheus\sistemaRest\api\v1\lib\ClasseBase;
 use matheus\sistemaRest\api\v1\lib\Conexao;
+use Respect\Validation\Validator as v;
 
 /**
 * classe Divisao
@@ -112,19 +113,19 @@ class Divisao extends ClasseBase
     {
         try {
             $retorno = true;
-
+            
             if ($this->tokenEhValido() === false) {
                 $this->setErro("Sua sessão expirou. Faça o login novamente.");
                 return 999;
             }//if ($this->tokenEhValido() === false) {
 
             $nome  = $this->getNome();
-
-            if (empty($nome)) {
-                $this->setErro("Você deve preencher a divisão.");
+            
+            if (!(v::alnum()->length(2, 25)->validate($nome))) {
+                $this->setErro("O nome da divisão deve ser alfanumérico de 2 a 25 caracteres.");
                 return 998;
-            }//if (empty($nome)) {
-
+            }
+            
             $sql   = "\n INSERT INTO divisao (";
             $sql  .= "\n nome";
             $sql  .= "\n ) VALUES (";
