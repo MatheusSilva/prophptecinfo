@@ -264,7 +264,7 @@ class Tecnico extends ClasseBase
             if (!(v::alnum()->length(2, 30)->validate($nome))) {
                 $this->setErro("O nome do técnico deve ser alfanumérico de 2 a 30 caracteres.");
                 return 996;
-            }   
+            }
 
             $sql   = "\n UPDATE tecnico";
             $sql  .= "\n SET nome = :nome";

@@ -15,6 +15,7 @@ class Login
     * metodo que busca o ip real do usuario
     *
     * @access    public
+    * @return    string Retorna o ip do usuario
     * @author    Matheus Silva
     * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
@@ -27,10 +28,10 @@ class Login
         $remote_addr          = $_SERVER['REMOTE_ADDR'];
          
         /* verifica se o ip existe */
-        if(!empty($http_client_ip)){
+        if (!empty($http_client_ip)) {
             $ip = $http_client_ip;
             /* verifica se o acesso é de um servidor proxy */
-        } elseif(!empty($http_x_forwarded_for)){
+        } elseif (!empty($http_x_forwarded_for)) {
             $ip = $http_x_forwarded_for;
         } else {
             /* caso contrario pega o ip normal do usuario */
