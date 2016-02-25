@@ -12,9 +12,8 @@ class Divisao
 
         if(xhr != undefined) {
             //Montar requisição
-            xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=3",true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.onreadystatechange = function() {
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=3",true);
+            xhr.onload = function(e) {
                 //Verificar pelo estado "4" de pronto.
                 if (xhr.readyState == '4') {
                     //Pegar dados da resposta json
@@ -81,9 +80,12 @@ class Divisao
                     table.innerHTML = strHTML;
                 }
             }
+            
+            var jForm = new FormData();
+            jForm.append('p', pesquisa);
 
             //Enviar
-            xhr.send("p="+pesquisa); 
+            xhr.send(jForm);
         }
     }
     

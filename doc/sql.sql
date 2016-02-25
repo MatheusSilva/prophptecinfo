@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS time (
   tecnico_codigo_tecnico INTEGER UNSIGNED NOT NULL COMMENT 'FK de tecnico',  
   categoria_codigo_categoria INTEGER UNSIGNED NOT NULL COMMENT 'FK de categoria',
   divisao_codigo_divisao INTEGER UNSIGNED NOT NULL COMMENT 'FK de divisao',
-  desempenho_time  CHAR(5) NULL COMMENT 'desempenho do time',
-  comprar_novo_jogador  CHAR(3) NULL COMMENT 'comprar novo jogador para o time',
+  desempenho_time  TINYINT(1) NULL COMMENT 'desempenho do time',
+  comprar_novo_jogador  TINYINT(1) NULL COMMENT 'comprar novo jogador para o time',
   capa VARCHAR(100) NULL COMMENT 'capa do time',
   PRIMARY KEY(codigo_time)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'tabela que armazena os times';

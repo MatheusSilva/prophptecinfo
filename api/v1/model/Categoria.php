@@ -378,11 +378,18 @@ class Categoria extends ClasseBase
             $sql  = "\n SELECT codigo_categoria";
             $sql .= "\n ,nome";
             $sql .= "\n FROM categoria";
-            $sql .= "\n WHERE nome LIKE :nome";
+
+            if (!empty($nome)) {
+                $sql .= "\n WHERE nome LIKE :nome";
+            }//if (!empty($nome)) {
 
             $stmt = Conexao::getConexao()->prepare($sql);
-            $nome .= "%";
-            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
+            
+            if (!empty($nome)) {
+                $nome = trim($nome)."%";
+                $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
+            }//if (!empty($nome)) {
+
             $stmt->execute();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {

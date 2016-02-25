@@ -425,14 +425,22 @@ class Tecnico extends ClasseBase
     public static function listarPorNome($nome)
     {
         try {
-            $nome .= "%";
+            $nome  = trim($nome."%");
             $sql   = "\n SELECT codigo_tecnico";
             $sql  .= "\n ,nome";
             $sql  .= "\n FROM tecnico";
-            $sql  .= "\n WHERE nome LIKE :nome";
+
+            if (!empty($nome)) {
+                $sql  .= "\n WHERE nome LIKE :nome";
+            }//if (!empty($nome)) {
 
             $stmt = Conexao::getConexao()->prepare($sql);
-            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
+
+            if (!empty($nome)) {
+                $nome = trim($nome)."%";
+                $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
+            }//if (!empty($nome)) {
+
             $stmt->execute();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {

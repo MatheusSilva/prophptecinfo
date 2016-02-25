@@ -619,8 +619,18 @@ class Time extends ClasseBase
             $sql    .= "\n ,tec.nome AS nomeTecnico";
             $sql    .= "\n ,cat.codigo_categoria AS codigoCategoria";
             $sql    .= "\n ,cat.nome AS nomeCategoria";
-            $sql    .= "\n ,tim.desempenho_time AS nomeDesempenhoTime";
-            $sql    .= "\n ,tim.comprar_novo_jogador AS NomeComprarNovoJogador";
+
+            $sql    .= "\n ,(CASE tim.desempenho_time";
+            $sql    .= "\n     WHEN '1' THEN 'Ruim'";
+            $sql    .= "\n     WHEN '2' THEN 'Regular'";
+            $sql    .= "\n     WHEN '3' THEN 'Otimo'";
+            $sql    .= "\n END) AS nomeDesempenhoTime";
+
+            $sql    .= "\n ,(CASE tim.comprar_novo_jogador";
+            $sql    .= "\n     WHEN '0' THEN 'Não'";
+            $sql    .= "\n     WHEN '1' THEN 'Sim'";
+            $sql    .= "\n END) AS NomeComprarNovoJogador";
+
             $sql    .= "\n FROM time AS tim";
             $sql    .= "\n , divisao AS dvi";
             $sql    .= "\n , tecnico AS tec";
@@ -656,20 +666,22 @@ class Time extends ClasseBase
     public static function listarPorNome($nome)
     {
         try {
+            //$nome = mb_substr(trim($nome),0,35,mb_detect_encoding($nome));
+
             $sql     = "\n SELECT codigo_time AS codigo";
             $sql    .= "\n ,nome AS nome";
             $sql    .= "\n FROM time";
-
-            if ($nome !== "listaTodosTimes") {
-                $sql   .= "\n WHERE nome LIKE :nome";
-                $nome   = $nome."%";
-            }//if ($nome !== "listaTodosTimes") {
+            
+            if (!empty($nome)) {
+                $sql  .= "\n WHERE nome LIKE :nome";
+            }//if (!empty($nome)) {
 
             $stmt = Conexao::getConexao()->prepare($sql);
 
-            if ($nome !== "listaTodosTimes") {
+            if (!empty($nome)) {
+                $nome = trim($nome)."%";
                 $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 35);
-            }//if ($nome !== "listaTodosTimes") {
+            }//if (!empty($nome)) {
 
             $stmt->execute();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);

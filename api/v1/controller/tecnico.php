@@ -104,7 +104,7 @@ if (empty($acao)) {
         $json .= "}";
         echo $json;
     } else {
-        $json["mensagem"] = "Nenhum técnico cadastrado.";
+        $json["mensagem"] = "Nenhum técnico encontrado com o termo buscado.";
         echo json_encode($json);
     }
 } elseif ($acao == 4) {

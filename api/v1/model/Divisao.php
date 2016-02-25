@@ -370,14 +370,21 @@ class Divisao extends ClasseBase
     public static function listarPorNome($nome)
     {
         try {
-            $nome .= "%";
             $sql   = "\n SELECT codigo_divisao";
             $sql  .= "\n ,nome";
             $sql  .= "\n FROM divisao";
-            $sql  .= "\n WHERE nome LIKE :nome";
+            
+            if (!empty($nome)) {
+                $sql .= "\n WHERE nome LIKE :nome";
+            }//if (!empty($nome)) {
 
             $stmt = Conexao::getConexao()->prepare($sql);
-            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 25);
+            
+            if (!empty($nome)) {
+                $nome = trim($nome)."%";
+                $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 25);
+            }//if (!empty($nome)) {
+
             $stmt->execute();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
