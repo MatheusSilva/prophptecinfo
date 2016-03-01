@@ -201,34 +201,50 @@ class Tecnico extends ClasseBase
     }//public function inserir()
 
     /**
-    * metodo que tem função de verificar se existe o tecnico
+    * metodo que tem função de fazer validacao da restricao de integridade
     *
     * @access    public
     * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
     * @author    Matheus Silva
     * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
-    * @version   0.1
+    * @version   0.2
     */
-    public function existeTecnico()
+    public function validaCodigoTecnico($codigo)
     {
         try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return 999;
+            }//if ($this->tokenEhValido() === false) {
+                
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Código inválido.");
+                return 998;
+            }//if (is_numeric($codigo) === false) {
+
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
             $sql  .= "\n FROM tecnico AS tec";
             $sql  .= "\n WHERE tec.codigo_tecnico = :id";
 
             $stmt = Conexao::getConexao()->prepare($sql);
-            $stmt->bindParam(":id", $this->getCodigoTecnico(), \PDO::PARAM_INT);
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            return $retorno["resultado"];
+
+            if ($retorno["resultado"] != 1) {
+                $this->setErro("Código inexistente.");
+                return 997;
+            }
+
+            return true;
         } catch (\PDOException $e) {
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
             return false;
         }
-    }//public function existeTecnico()
+    }//public function validaCodigoCategoria()
 
     /**
     * metodo que tem função de alterar o tecnico
@@ -243,23 +259,14 @@ class Tecnico extends ClasseBase
     public function alterar()
     {
         try {
-            if ($this->tokenEhValido() === false) {
-                $this->setErro("Sua sessão expirou. Faça o login novamente.");
-                return 999;
-            }//if ($this->tokenEhValido() === false) {
-
             $codigo = $this->getCodigoTecnico();
             $nome   = $this->getNome();
 
-            if (is_numeric($codigo) === false) {
-                $this->setErro("Falha ao alterar técnico. Código inválido.");
-                return 998;
-            }//if (is_numeric($codigo) === false) {
+            $retorno = $this->validaCodigoTecnico($codigo);
 
-            if ($this->existeTecnico() != 1) {
-                $this->setErro("Falha ao alterar técnico. Código inexistente.");
-                return 997;
-            }//if ($this->existeTecnico() != 1) {
+            if (!$retorno) {
+                return $retorno;
+            }//if (!$retorno) {
                 
             if (!(v::alnum()->length(2, 30)->validate($nome))) {
                 $this->setErro("O nome do técnico deve ser alfanumérico de 2 a 30 caracteres.");
@@ -335,22 +342,12 @@ class Tecnico extends ClasseBase
     public function excluir()
     {
         try {
-            if ($this->tokenEhValido() !== true) {
-                $this->setErro("Sua sessão expirou. Faça o login novamente.");
-                return 999;
-            }//if ($this->tokenEhValido() === false) {
-
             $codigo = $this->getCodigoTecnico();
+            $retorno = $this->validaCodigoTecnico($codigo);
 
-            if (is_numeric($codigo) === false) {
-                $this->setErro("Falha ao excluir técnico. Código inválido.");
-                return 998;
-            }//if (is_numeric($codigo) === false) {
-
-            if ($this->existeTecnico() != 1) {
-                $this->setErro("Falha ao excluir técnico. Código inexistente.");
-                return 997;
-            }//if ($this->existeTecnico() != 1) {
+            if (!$retorno) {
+                return $retorno;
+            }//if (!$retorno) {
 
             if ($this->validaFkTecnico()) {
                 $this->setErro("Falha ao excluir técnico. Existem um ou mais times vinculados a este técnico.");
@@ -389,9 +386,14 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarPorCodigo($codigo)
+    public function listarPorCodigo($codigo)
     {
         try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return array();
+            }//if ($this->tokenEhValido() === false) {
+
             $sql   = "\n SELECT codigo_tecnico";
             $sql  .= "\n ,nome";
             $sql  .= "\n ,DATE_FORMAT(data_nascimento,'%d/%m/%Y') AS data_nascimento";
@@ -409,7 +411,7 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listarPorCodigo($codigo)
+    }//public function listarPorCodigo($codigo)
 
     /**
     * metodo que tem função de listar o tecnico por nome.
@@ -422,9 +424,14 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarPorNome($nome)
+    public function listarPorNome($nome)
     {
         try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return array();
+            }//if ($this->tokenEhValido() === false) {
+
             $nome  = trim($nome."%");
             $sql   = "\n SELECT codigo_tecnico";
             $sql  .= "\n ,nome";
@@ -449,7 +456,7 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listarPorNome($nome)
+    }//public function listarPorNome($nome)
 
     /**
     * metodo que tem função de listar todos os tecnicos.
@@ -461,9 +468,14 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarTudo()
+    public function listarTudo()
     {
         try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return array();
+            }//if ($this->tokenEhValido() === false) {
+
             $sql   = "\n SELECT codigo_tecnico";
             $sql  .= "\n ,nome";
             $sql  .= "\n ,DATE_FORMAT(data_nascimento,'%d/%m/%Y') AS data_nascimento";
@@ -478,7 +490,7 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listarTudo()
+    }//public function listarTudo()
     
     /**
     * metodo que tem função de listar todos os tecnicos por time.
@@ -491,9 +503,14 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listaTecnicoPorTime($intCodigo)
+    public function listaTecnicoPorTime($intCodigo)
     {
         try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return array();
+            }//if ($this->tokenEhValido() === false) {
+
             $sql   = "\n SELECT tec.codigo_tecnico";
             $sql  .= "\n ,tec.nome";
             $sql  .= "\n FROM time AS t";
@@ -511,5 +528,5 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listaTecnicoPorTime($intCodigo)
+    }//public function listaTecnicoPorTime($intCodigo)
 }

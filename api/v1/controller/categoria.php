@@ -2,6 +2,9 @@
 require_once "../../../vendor/autoload.php";
 use matheus\sistemaRest\api\v1\model\Categoria;
 
+error_reporting(E_ALL);
+ini_set('display_errors', 'on');
+
 $acao         = "";
 $id           = "";
 $p            = "";
@@ -29,8 +32,9 @@ header('Content-Type: application/json');
 if (empty($acao)) {
     $items = $objCategoria->listarTudo();
     $results = array();
-
-    if (!empty($items)) {
+    $strErros = $objCategoria->getErros();
+    
+    if (is_array($items) && empty($items) !== true) {
         // get all results
         foreach ($items as $row) {
             $itemArray = array(
@@ -40,11 +44,14 @@ if (empty($acao)) {
             array_push($results, $itemArray);
         }
 
-        $json = "{\"categorias\":";
+        $json  = "{\"categorias\":";
         $json .= json_encode($results);
         $json .= "}";
 
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } else {
         $json["mensagem"] = "Nenhum categoria cadastrada";
         echo json_encode($json);
@@ -53,14 +60,15 @@ if (empty($acao)) {
     $arrTodasCategorias   = $objCategoria->listarTudo();
     $arrCategoriaTime   = $objCategoria->listaCategoriaPorTime($id, null);
     $results = array();
+    $strErros = $objCategoria->getErros();
 
-    if (!empty($arrTodasCategorias)) {
+    if (is_array($arrTodasCategorias) && empty($arrTodasCategorias) !== true) {
         // get all results
         foreach ($arrTodasCategorias as $valor) {
             $boolSelected = false;
             $idDivisao = $valor['codigo_categoria'];
             
-            if ($arrCategoriaTime && $idDivisao === $arrCategoriaTime['codigo_categoria']) {
+            if (is_array($arrCategoriaTime) && empty($arrCategoriaTime) !== true && $idDivisao === $arrCategoriaTime['codigo_categoria']) {
                 $boolSelected = true;
             }
             
@@ -78,6 +86,9 @@ if (empty($acao)) {
         $json .= "}";
 
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } else {
         $itemArray = array(
                 'codigo' => "",
@@ -95,9 +106,13 @@ if (empty($acao)) {
     }
 } elseif ($acao == 2) {
     $items = $objCategoria->listarPorCodigo($id);
+    $strErros = $objCategoria->getErros();
 
-    if (!empty($items)) {
+    if (is_array($items) && empty($items) !== true) {
         echo json_encode($items);
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } else {
         $json["mensagem"] = "codigo categoria invalido";
         echo json_encode($json);
@@ -111,12 +126,16 @@ if (empty($acao)) {
     }
     
     $items = $objCategoria->listarPorNome($p);
+    $strErros = $objCategoria->getErros();
 
-    if (!empty($items)) {
+    if (is_array($items) && empty($items) !== true) {
         $json  = "{\"categorias\":";
         $json .= json_encode($items);
         $json .= "}";
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } elseif (!empty($p)) {
         $json["mensagem"] = "Nenhum categoria encontrada com o termo buscado";
         echo json_encode($json);

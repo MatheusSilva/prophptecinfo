@@ -387,6 +387,52 @@ class Time extends ClasseBase
         }
     }//public function inserir()
     
+    /**
+    * metodo que tem função de fazer validacao da restricao de integridade
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function validaCodigoTime($codigo)
+    {
+        try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return 999;
+            }//if ($this->tokenEhValido() === false) {
+                
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Código inválido.");
+                return 998;
+            }//if (is_numeric($codigo) === false) {
+
+            $sql     = "\n SELECT DISTINCT 1 AS retorno";
+            $sql    .= "\n FROM time";
+            $sql    .= "\n WHERE codigo_time = :codigo";
+
+            $stmt = Conexao::getConexao()->prepare($sql);
+            $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($retorno["retorno"] != 1) {
+                $this->setErro("Código inexistente.");
+                return 997;
+            }
+
+            return true;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function validaCodigoTime()
+
 
     /**
     * metodo que tem função de alterar o time
@@ -401,22 +447,12 @@ class Time extends ClasseBase
     public function alterar()
     {
         try {
-            if ($this->tokenEhValido() !== true) {
-                $this->setErro("Sua sessão expirou. Faça o login novamente.");
-                return 999;
-            }//if ($this->tokenEhValido() !== true) {
-            
-            $codigo             = $this->getCodigoTime();
+            $codigo  = $this->getCodigoTime();
+            $retorno = $this->validaCodigoTime($codigo);
 
-            if (is_numeric($codigo) === false) {
-                $this->setErro("Falha ao atualizar time. Código inválido.");
-                return 998;
-            }//if (is_numeric($codigo) === false) {
-
-            if ($this->existeTime($codigo) != 1) {
-                $this->setErro("Falha ao atualizar time. Código inexistente.");
-                return 997;
-            }//if ($this->existeTime($codigo) != 1) {
+            if (!$retorno) {
+                return $retorno;
+            }//if (!$retorno) {
 
             $nome               = $this->getNome();
 
@@ -450,7 +486,7 @@ class Time extends ClasseBase
             
             if (!empty($capa)) {
                 $stmt->bindParam(":capa", $capa);
-                $arrRetorno = self::listarPorCodigo($codigo);
+                $arrRetorno = $this->listarPorCodigo($codigo);
                 unlink("../".$arrRetorno["capa"], \PDO::PARAM_STR, 100);
             }//if (!empty($capa)) {
             
@@ -472,40 +508,6 @@ class Time extends ClasseBase
     }//public function alterar()
     
     /**
-    * metodo que tem função de verificar se existe time
-    *
-    * @access    public
-    * @param     integer $codigo Armazena o codigo do time
-    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.1
-    */
-    public function existeTime($codigo)
-    {
-        try {
-            $sql     = "\n SELECT DISTINCT 1 AS retorno";
-            $sql    .= "\n FROM time";
-            $sql    .= "\n WHERE codigo_time = :codigo";
-
-            $conexao = Conexao::getConexao();
-            $stmt    = $conexao->prepare($sql);
-            $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
-            $stmt->execute();
-            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            $conexao = null;
-            return $retorno["retorno"];
-        } catch (\PDOException $e) {
-            $conexao = null;
-            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
-            fwrite($fp, $e);
-            fclose($fp);
-            return false;
-        }
-    }//public function existeTime($codigo)
-    
-    /**
     * metodo que tem função de excluir o time
     *
     * @access    public
@@ -518,24 +520,14 @@ class Time extends ClasseBase
     public function excluir()
     {
         try {
-            if ($this->tokenEhValido() !== true) {
-                $this->setErro("Sua sessão expirou. Faça o login novamente.");
-                return 999;
-            }//if ($this->tokenEhValido() !== true) {
-            
             $codigo = $this->getCodigoTecnico();
+            $retorno = $this->validaCodigoTime($codigo);
 
-            if (is_numeric($codigo) === false) {
-                $this->setErro("Falha ao excluir time. Código inválido.");
-                return 998;
-            }//if (is_numeric($codigo) === false) {
+            if (!$retorno) {
+                return $retorno;
+            }//if (!$retorno) {
 
-            if ($this->existeTime($codigo) != 1) {
-                $this->setErro("Falha ao excluir time. Código inexistente.");
-                return 998;
-            }//if ($this->existeTime($codigo) != 1) {
-
-            $arrRetorno = self::listarPorCodigo($codigo);
+            $arrRetorno = $this->listarPorCodigo($codigo);
             unlink("../".$arrRetorno["capa"]);
 
             $sql     = "\n DELETE FROM time";
@@ -576,9 +568,14 @@ class Time extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarTudo()
+    public function listarTudo()
     {
         try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return array();
+            }//if ($this->tokenEhValido() === false) {
+
             $sql     = "\n SELECT codigo_time";
             $sql    .= "\n ,divisao_codigo_divisao";
             $sql    .= "\n ,nome";
@@ -594,7 +591,7 @@ class Time extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listarTudo()
+    }//public function listarTudo()
      
     /**
     * metodo que tem função de listar o time pelo código.
@@ -607,9 +604,15 @@ class Time extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarPorCodigo($codigo)
+    public function listarPorCodigo($codigo)
     {
         try {
+            $retorno = $this->validaCodigoTime($codigo);
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if (!$retorno) {
+
             $sql     = "\n SELECT tim.codigo_time AS codigotime";
             $sql    .= "\n ,tim.nome AS nomeTime";
             $sql    .= "\n ,tim.tecnico_codigo_tecnico AS codigoTecnico";
@@ -650,7 +653,7 @@ class Time extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listarPorCodigo($codigo)
+    }//public function listarPorCodigo($codigo)
     
     /**
     * metodo que tem função de listar o time por nome.
@@ -663,11 +666,16 @@ class Time extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarPorNome($nome)
+    public function listarPorNome($nome)
     {
         try {
             //$nome = mb_substr(trim($nome),0,35,mb_detect_encoding($nome));
 
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return array();
+            }//if ($this->tokenEhValido() === false) {
+                
             $sql     = "\n SELECT codigo_time AS codigo";
             $sql    .= "\n ,nome AS nome";
             $sql    .= "\n FROM time";
@@ -691,5 +699,5 @@ class Time extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listarPorNome($nome)
+    }//public function listarPorNome($nome)
 }//class Time extends ClasseBase

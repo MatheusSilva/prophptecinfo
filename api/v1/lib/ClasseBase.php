@@ -2,6 +2,7 @@
 namespace matheus\sistemaRest\api\v1\lib;
 
 use matheus\sistemaRest\api\v1\lib\Login;
+use matheus\sistemaRest\api\v1\lib\Conexao;
 
 /**
 * classe ClasseBase
@@ -9,7 +10,7 @@ use matheus\sistemaRest\api\v1\lib\Login;
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
 */
-class ClasseBase
+abstract class ClasseBase
 {
     /**
     * @access private

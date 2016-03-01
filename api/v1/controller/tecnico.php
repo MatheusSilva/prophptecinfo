@@ -28,8 +28,9 @@ header('Content-Type: application/json');
 if (empty($acao)) {
     $items   = $objTecnico->listarTudo();
     $results = array();
+    $strErros = $objTecnico->getErros();
 
-    if (!empty($items)) {
+    if (is_array($items) && empty($items) !== true) {
         // get all results
         foreach ($items as $row) {
             $itemArray = array(
@@ -44,19 +45,23 @@ if (empty($acao)) {
         $json .= "}";
 
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     }
 } elseif ($acao == 1) {
     $arrTodosTecnico   = $objTecnico->listarTudo();
     $arrTecnicoTime   = $objTecnico->listaTecnicoPorTime($id, null);
     $results = array();
-
-    if (!empty($arrTodosTecnico)) {
+    $strErros = $objTecnico->getErros();
+    
+    if (is_array($arrTodosTecnico) && empty($arrTodosTecnico) !== true) {
         // get all results
         foreach ($arrTodosTecnico as $valor) {
             $boolSelected = false;
             $idDivisao = $valor['codigo_tecnico'];
             
-            if ($arrTecnicoTime && $idDivisao === $arrTecnicoTime['codigo_tecnico']) {
+            if (is_array($arrTecnicoTime) && empty($arrTecnicoTime) !== true && $idDivisao === $arrTecnicoTime['codigo_tecnico']) {
                 $boolSelected = true;
             }
             
@@ -74,6 +79,9 @@ if (empty($acao)) {
         $json .= "}";
 
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } else {
         $itemArray = array(
                 'codigo' => "",
@@ -91,18 +99,26 @@ if (empty($acao)) {
     }
 } elseif ($acao == 2) {
     $items = $objTecnico->listarPorCodigo($id);
-    
-    if (!empty($items)) {
+    $strErros = $objTecnico->getErros();
+
+    if (is_array($items) && empty($items) !== true) {
         echo json_encode($items);
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     }
 } elseif ($acao == 3) {
     $items   = $objTecnico->listarPorNome($p);
+    $strErros = $objTecnico->getErros();
     
-    if (!empty($items)) {
+    if (is_array($items) && empty($items) !== true) {
         $json = "{\"tecnicos\":";
         $json .= json_encode($items);
         $json .= "}";
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } else {
         $json["mensagem"] = "Nenhum técnico encontrado com o termo buscado.";
         echo json_encode($json);

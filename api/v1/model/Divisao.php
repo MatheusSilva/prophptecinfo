@@ -159,25 +159,41 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function existeDivisao()
+    public function validaCodigoDivisao($codigo)
     {
         try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return 999;
+            }//if ($this->tokenEhValido() === false) {
+
+            if (is_numeric($codigo) === false) {
+                $this->setErro("Código inválido.");
+                return 998;
+            }//if (is_numeric($codigo) === false) {    
+
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
             $sql  .= "\n FROM divisao AS dv";
             $sql  .= "\n WHERE dv.codigo_divisao = :id";
 
             $stmt = Conexao::getConexao()->prepare($sql);
-            $stmt->bindParam(":id", $this->getCodigoDivisao(), \PDO::PARAM_INT);
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
-            return $retorno["resultado"];
+
+            if ($retorno["resultado"] != 1) {
+                $this->setErro("Código inexistente.");
+                return 997;
+            }
+
+            return true;
         } catch (\PDOException $e) {
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
             fwrite($fp, $e);
             fclose($fp);
             return false;
         }
-    }//public function existeDivisao()
+    }//public function validaCodigoDivisao()
 
     /**
     * metodo que tem função de alterar a divisão
@@ -197,18 +213,13 @@ class Divisao extends ClasseBase
                 return 999;
             }//if ($this->tokenEhValido() === false) {
 
-            $codigo = $this->getCodigoDivisao();
-            $nome   = $this->getNome();
+            $codigo  = $this->getCodigoDivisao();
+            $nome    = $this->getNome();
+            $retorno = $this->validaCodigoDivisao($codigo);
 
-            if (is_numeric($codigo) === false) {
-                $this->setErro("Falha ao alterar divisão. Código inválido.");
-                return 998;
-            }//if (is_numeric($codigo) === false) {
-
-            if ($this->existeDivisao() != 1) {
-                $this->setErro("Falha ao alterar divisão. Código inexistente.");
-                return 997;
-            }//if ($this->existeDivisao() != 1) {
+            if (!$retorno) {
+                return $retorno;
+            }//if (!$retorno) {
 
             if (!(v::alnum()->length(2, 25)->validate($nome))) {
                 $this->setErro("O nome da divisão deve ser alfanumérico de 2 a 25 caracteres.");
@@ -282,23 +293,13 @@ class Divisao extends ClasseBase
     public function excluir()
     {
         try {
-            if ($this->tokenEhValido() !== true) {
-                $this->setErro("Sua sessão expirou. Faça o login novamente.");
-                return 999;
-            }//if ($this->tokenEhValido() === false) {
-
             $codigo = $this->getCodigoDivisao();
-
-            if (is_numeric($codigo) === false) {
-                $this->setErro("Falha ao excluir divisão. Código inválido.");
-                return 998;
-            }//if (is_numeric($codigo) === false) {
-
-            if ($this->existeDivisao() != 1) {
-                $this->setErro("Falha ao excluir divisão. Código inexistente.");
-                return 997;
-            }//if ($this->existeDivisao() != 1) {
-
+            $retorno = $this->validaCodigoDivisao($codigo);
+            
+            if (!$retorno) {
+                return $retorno;
+            }//if (!$retorno) {
+                
             if ($this->validaFkDivisao()) {
                 $this->setErro("Falha ao excluir divisão. Existem um ou mais times vinculados a esta divisão.");
                 return 996;
@@ -336,9 +337,15 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarPorCodigo($codigo)
+    public function listarPorCodigo($codigo)
     {
         try {
+            $retorno = $this->validaCodigoDivisao($codigo);
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if ($retorno !== true) {
+
             $sql   = "\n SELECT codigo_divisao";
             $sql  .= "\n ,nome";
             $sql  .= "\n FROM divisao";
@@ -354,7 +361,7 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listarPorCodigo($codigo)
+    }//public function listarPorCodigo($codigo)
     
     /**
     * metodo que tem função de listar a divisão por nome.
@@ -367,9 +374,14 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarPorNome($nome)
+    public function listarPorNome($nome)
     {
         try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return array();
+            }//if ($this->tokenEhValido() === false) {
+
             $sql   = "\n SELECT codigo_divisao";
             $sql  .= "\n ,nome";
             $sql  .= "\n FROM divisao";
@@ -393,7 +405,7 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listarPorNome($codigo)
+    }//public function listarPorNome($codigo)
 
     /**
     * metodo que tem função de listar as divisoes.
@@ -405,9 +417,14 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarTudo()
+    public function listarTudo()
     {
         try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return array();
+            }//if ($this->tokenEhValido() === false) {
+
             $sql   = "\n SELECT codigo_divisao";
             $sql  .= "\n ,nome";
             $sql  .= "\n FROM divisao";
@@ -421,7 +438,7 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listarTudo()
+    }//public function listarTudo()
     
     /**
     * metodo que tem função de listar a divisão pelo codigo do time.
@@ -434,9 +451,19 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listaDivisaoPorTime($intCodigoTime)
+    public function listaDivisaoPorTime($intCodigoTime)
     {
         try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return array();
+            }//if ($this->tokenEhValido() === false) {
+
+            if (is_numeric($intCodigoTime) === false) {
+                $this->setErro("Código inválido.");
+                return array();
+            }//if (is_numeric($codigo) === false) {
+                
             $sql   = "\n SELECT d.codigo_divisao";
             $sql  .= "\n ,d.nome";
             $sql  .= "\n FROM time AS t";
@@ -454,5 +481,5 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public static function listaDivisaoPorTime($intCodigo)
+    }//public function listaDivisaoPorTime($intCodigo)
 }//class Divisao extends ClasseBase

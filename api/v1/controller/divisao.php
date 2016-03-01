@@ -2,6 +2,9 @@
 require_once "../../../vendor/autoload.php";
 use matheus\sistemaRest\api\v1\model\Divisao;
 
+error_reporting(E_ALL);
+ini_set('display_errors', 'on');
+
 $acao       = "";
 $id         = "";
 $p          = "";
@@ -28,8 +31,9 @@ header('Content-Type: application/json');
 if (empty($acao)) {
     $items   = $objDivisao->listarTudo();
     $results = array();
+    $strErros = $objDivisao->getErros();
 
-    if (!empty($items)) {
+    if (is_array($items) && empty($items) !== true) {
         // get all results
         foreach ($items as $row) {
             $itemArray = array(
@@ -44,6 +48,9 @@ if (empty($acao)) {
         $json .= "}";
 
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } else {
         $json["mensagem"] = "Nenhum divisão cadastrada.";
         echo json_encode($json);
@@ -52,14 +59,15 @@ if (empty($acao)) {
     $arrTodasDivisoes   = $objDivisao->listarTudo();
     $arrDivisaoTime   = $objDivisao->listaDivisaoPorTime($id, null);
     $results = array();
-    
-    if (!empty($arrTodasDivisoes)) {
+    $strErros = $objDivisao->getErros();
+
+    if (is_array($arrTodasDivisoes) && empty($arrTodasDivisoes) !== true) {
         // get all results
         foreach ($arrTodasDivisoes as $valor) {
             $boolSelected = false;
             $idDivisao = $valor['codigo_divisao'];
             
-            if ($arrDivisaoTime && $idDivisao === $arrDivisaoTime['codigo_divisao']) {
+            if (is_array($arrDivisaoTime) && empty($arrDivisaoTime) !== true && $idDivisao === $arrDivisaoTime['codigo_divisao']) {
                 $boolSelected = true;
             }
             
@@ -77,6 +85,9 @@ if (empty($acao)) {
         $json .= "}";
 
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } else {
         $itemArray = array(
                 'codigo' => "",
@@ -94,21 +105,29 @@ if (empty($acao)) {
     }
 } elseif ($acao == 2) {
     $items   = $objDivisao->listarPorCodigo($id);
-    
-    if (!empty($items)) {
+    $strErros = $objDivisao->getErros();
+
+    if (is_array($items) && empty($items) !== true) {
         echo json_encode($items);
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } else {
         $json["mensagem"] = "codigo divisão invalido.";
         echo json_encode($json);
     }
 } elseif ($acao == 3) {
     $items   = $objDivisao->listarPorNome($p);
+    $strErros = $objDivisao->getErros();
     
-    if (!empty($items)) {
+    if (is_array($items) && empty($items) !== true) {
         $json = "{\"divisaos\":";
         $json .= json_encode($items);
         $json .= "}";
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } elseif (!empty($p)) {
         $json["mensagem"] = "Nenhuma divisão encontrada com o termo buscado.";
         echo json_encode($json);

@@ -18,7 +18,14 @@
 
                 var xhr = Ajax.createXHR();
 
-                xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=2&id="+location.queryString.codigo,true);
+                var token  = Login.getCookie('token');
+                var consulta = "";
+
+                if (token !== "") {
+                    consulta = "&tk="+token;
+                }
+
+                xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=2&id="+location.queryString.codigo+consulta,true);
                     
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function() {

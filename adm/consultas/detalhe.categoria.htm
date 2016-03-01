@@ -18,8 +18,14 @@
                     });
 
                     var xhr = Ajax.createXHR();
+                    var token  = Login.getCookie('token');
+                    var consulta = "";
 
-                    xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=2&id="+location.queryString.codigo,true);
+                    if (token !== "") {
+                        consulta = "&tk="+token;
+                    }
+
+                    xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=2&id="+location.queryString.codigo+consulta,true);
                     
                     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                     xhr.onreadystatechange = function() {

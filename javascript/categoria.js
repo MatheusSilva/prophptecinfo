@@ -9,9 +9,16 @@ class Categoria
         }
 
         var xhr = Ajax.createXHR();
+        var token  = Login.getCookie('token');
+        var consulta = "";
+
+        if (token !== "") {
+            consulta = "&tk="+token;
+        }
+
         if(xhr != undefined){
             //Montar requisição
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=3",true);
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=3"+consulta,true);
             xhr.onload = function(e) {
                     //Verificar pelo estado "4" de pronto.
                 if (xhr.readyState == '4') {

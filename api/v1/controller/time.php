@@ -29,8 +29,9 @@ header('Content-Type: application/json');
 if (empty($acao)) {
     $items   = $objTime->listarTudo();
     $results = array();
+    $strErros = $objTime->getErros();
 
-    if (!empty($items)) {
+    if (is_array($items) && empty($items) !== true) {
         // get all results
         foreach ($items as $row) {
             $itemArray = array(
@@ -46,27 +47,38 @@ if (empty($acao)) {
         $json .= json_encode($results);
         $json .= "}";
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } else {
         $json["mensagem"] = "Nenhum time cadastrado";
         echo json_encode($json);
     }
 } elseif ($acao == 1) {
     $items  = $objTime->listarPorCodigo($id);
-    
-    if (!empty($items)) {
+    $strErros = $objTime->getErros();
+
+    if (is_array($items) && empty($items) !== true) {
         echo json_encode($items);
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } else {
         $json["mensagem"] = "Codigo de time invalido";
         echo json_encode($json);
     }
 } elseif ($acao == 2) {
     $items = $objTime->listarPorNome($p);
-
-    if (!empty($items)) {
+    $strErros = $objTime->getErros();
+    
+    if (is_array($items) && empty($items) !== true) {
         $json    = "{\"times\":";
         $json   .= json_encode($items);
         $json   .= "}";
         echo $json;
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
     } elseif (!empty($p)) {
         $json["mensagem"] = "Nenhum time encontrado com o termo buscado";
         echo json_encode($json);
