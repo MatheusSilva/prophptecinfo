@@ -265,10 +265,11 @@ class Categoria extends ClasseBase
             $sql  .= "\n FROM categoria AS cat";
             $sql  .= "\n ,time AS tim";
             $sql  .= "\n WHERE tim.categoria_codigo_categoria = cat.codigo_categoria";
-            $sql  .= "\n AND cat.codigo_categoria = :id";
+            $sql  .= "\n AND tim.categoria_codigo_categoria = :id";
 
+            $codigo = $this->getCodigoCategoria();
             $stmt = Conexao::getConexao()->prepare($sql);
-            $stmt->bindParam(":id", $this->getCodigoCategoria(), \PDO::PARAM_INT);
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             return $retorno["resultado"];
@@ -453,9 +454,9 @@ class Categoria extends ClasseBase
     public function listaCategoriaPorTime($intCodigo)
     {
         try {
-            if ($this->validaCodigoCategoria($codigo) !== true) {
+            if ($this->validaCodigoCategoria($intCodigo) !== true) {
                 return array();
-            }//if ($this->validaCodigoCategoria($codigo)) {
+            }//if ($this->validaCodigoCategoria($intCodigo)) {
 
             $sql   = "\n SELECT c.codigo_categoria";
             $sql  .= "\n ,c.nome";

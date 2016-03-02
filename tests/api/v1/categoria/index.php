@@ -1,29 +1,36 @@
 <?php
 class CategoriaTest extends PHPUnit_Framework_TestCase
 {
-    private $token = "dc358110b62ae36c3ab26de9c1c6e9c5448b0e77ada20aa817727d8ada948bc9";
+    private $token = "71de332578bee725cfa669649f151906b7a98a63f6fbea5bfd0545ffa758ce02";
 
     private function api($url, $data = array(), $method = "POST")
     {
-        $data_string = json_encode($data);
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt(
-            $ch,
-            CURLOPT_HTTPHEADER,
-            array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($data_string)
-            )
-        );
-        
-        $result = curl_exec($ch);
-        $result = json_decode($result, true);
-        return $result;
+        try {
+            $data_string = json_encode($data);
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt(
+                $ch,
+                CURLOPT_HTTPHEADER,
+                array(
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($data_string)
+                )
+            );
+            
+            $result = curl_exec($ch);
+            $result = json_decode($result, true);
+            return $result;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return "";
+        }
     }
     
     public function testTokenInvalidoSalvarCategoria()
@@ -47,29 +54,44 @@ class CategoriaTest extends PHPUnit_Framework_TestCase
         $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=4&tk='.$this->token;
         $data = array('txtNome' => '');
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Você deve preencher a categoria.', $result["mensagem"]);
+        $this->assertEquals('O nome da categoria deve ser alfanumérico de 2 a 30 caracteres.', $result["mensagem"]);
     }
 
     public function testNomeEmBrancoAlterarCategoria()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=5&id=2&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=5&id=1&tk='.$this->token;
         $data = array('txtNome' => '');
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Você deve preencher a categoria.', $result["mensagem"]);
+        $this->assertEquals('O nome da categoria deve ser alfanumérico de 2 a 30 caracteres.', $result["mensagem"]);
     }
     
     public function testNomeValidoSalvarCategoria()
     {
         $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=4&tk='.$this->token;
-        $data = array('txtNome' => 'testephpunit');
+        $rand = uniqid(rand(), true);
+        $rand = str_replace(".", "", $rand);
+        $rand = str_replace("0", "", $rand);
+        $rand = str_replace("1", "", $rand);
+        $rand = str_replace("2", "", $rand);
+        $rand = str_replace("3", "", $rand);
+        $rand = str_replace("4", "", $rand);
+        $rand = str_replace("5", "", $rand);
+        $rand = str_replace("6", "", $rand);
+        $rand = str_replace("7", "", $rand);
+        $rand = str_replace("8", "", $rand);
+        $rand = str_replace("9", "", $rand);
+        $rand .= "Z";
+
+        $data = array('txtNome' => $rand);
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Categoria cadastrada com sucesso.', $result["mensagem"]);
     }
 
     public function testNomeValidoAlterarCategoria()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=5&id=2&tk='.$this->token;
-        $data = array('txtNome' => 'sub 25');
+        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=5&id=11&tk='.$this->token;
+        //$rand = uniqid(rand(), true);
+        $data = array('txtNome' => "sdasdasdsad11111");
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Categoria alterada com sucesso.', $result["mensagem"]);
     }
@@ -80,7 +102,7 @@ class CategoriaTest extends PHPUnit_Framework_TestCase
         $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=5&id=999&tk='.$this->token;
         $data = array('txtNome' => 'sub 25');
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Falha ao alterar categoria. Código inexistente.', $result["mensagem"]);
+        $this->assertEquals('Código inexistente.', $result["mensagem"]);
     }
 
 
@@ -89,7 +111,7 @@ class CategoriaTest extends PHPUnit_Framework_TestCase
         $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=5&id=asds&tk='.$this->token;
         $data = array('txtNome' => 'sub 25');
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Falha ao alterar categoria. Código inválido.', $result["mensagem"]);
+        $this->assertEquals('Código inválido.', $result["mensagem"]);
     }
 
     public function testExcluirCategoriaInexistente()
@@ -97,7 +119,7 @@ class CategoriaTest extends PHPUnit_Framework_TestCase
         $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=6&id=999&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Falha ao excluir categoria. Código inexistente.', $result["mensagem"]);
+        $this->assertEquals('Código inexistente.', $result["mensagem"]);
     }
 
     public function testExcluirCategoriaInvalida()
@@ -105,7 +127,7 @@ class CategoriaTest extends PHPUnit_Framework_TestCase
         $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=6&id=asds&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Falha ao excluir categoria. Código inválido.', $result["mensagem"]);
+        $this->assertEquals('Código inválido.', $result["mensagem"]);
     }
 
     public function testExcluirCategoriaVinculadaTime()
