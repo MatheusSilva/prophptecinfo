@@ -232,7 +232,7 @@ class Tecnico extends ClasseBase
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if ($retorno["resultado"] != 1) {
+            if ($retorno["resultado"] != true) {
                 $this->setErro("Código inexistente.");
                 return 997;
             }
@@ -264,9 +264,9 @@ class Tecnico extends ClasseBase
 
             $retorno = $this->validaCodigoTecnico($codigo);
 
-            if (!$retorno) {
+            if ($retorno !== true) {
                 return $retorno;
-            }//if (!$retorno) {
+            }//if ($retorno !== true) {
                 
             if (!(v::alnum()->length(2, 30)->validate($nome))) {
                 $this->setErro("O nome do técnico deve ser alfanumérico de 2 a 30 caracteres.");
@@ -345,9 +345,9 @@ class Tecnico extends ClasseBase
             $codigo = $this->getCodigoTecnico();
             $retorno = $this->validaCodigoTecnico($codigo);
 
-            if (!$retorno) {
+            if ($retorno !== true) {
                 return $retorno;
-            }//if (!$retorno) {
+            }//if ($retorno !== true) {
 
             if ($this->validaFkTecnico()) {
                 $this->setErro("Falha ao excluir técnico. Existem um ou mais times vinculados a este técnico.");

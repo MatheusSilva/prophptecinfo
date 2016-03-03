@@ -405,10 +405,7 @@ class Time extends ClasseBase
                 return 999;
             }//if ($this->tokenEhValido() === false) {
                 
-            if (is_numeric($codigo) === false) {
-                $this->setErro("Código inválido.");
-                return 998;
-            }//if (is_numeric($codigo) === false) {
+            
 
             $sql     = "\n SELECT DISTINCT 1 AS retorno";
             $sql    .= "\n FROM time";
@@ -419,11 +416,11 @@ class Time extends ClasseBase
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if ($retorno["retorno"] != 1) {
-                $this->setErro("Código inexistente.");
+            if (is_numeric($codigo) === false || $retorno["retorno"] != true) {
+                $this->setErro("Código inválido.");
                 return 997;
-            }
-
+            }//if ($retorno["retorno"] != true) {
+                
             return true;
         } catch (\PDOException $e) {
             $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
@@ -450,13 +447,13 @@ class Time extends ClasseBase
             $codigo  = $this->getCodigoTime();
             $retorno = $this->validaCodigoTime($codigo);
 
-            if (!$retorno) {
+            if ($retorno !== true) {
                 return $retorno;
-            }//if (!$retorno) {
+            }//if ($retorno !== true) {
 
             $nome               = $this->getNome();
 
-            if (!(v::alnum()->length(2, 35)->validate($nome))) {
+            if (v::alnum()->length(2, 35)->validate($nome) != true) {
                 $this->setErro("O nome do time deve ser alfanumérico de 2 a 35 caracteres.");
                 return 996;
             }
@@ -523,9 +520,9 @@ class Time extends ClasseBase
             $codigo = $this->getCodigoTecnico();
             $retorno = $this->validaCodigoTime($codigo);
 
-            if (!$retorno) {
+            if ($retorno !== true) {
                 return $retorno;
-            }//if (!$retorno) {
+            }//if ($retorno !== true) {
 
             $arrRetorno = $this->listarPorCodigo($codigo);
             unlink("../".$arrRetorno["capa"]);
@@ -540,12 +537,12 @@ class Time extends ClasseBase
 
             $retorno = $stmt->execute();
 
-            if (!$retorno) {
+            if ($retorno !== true) {
                 $this->setErro("Não foi possivel excluir este time.");
                 $retorno = false;
             } else {
                 $conexao->commit();
-            }//if (!$retorno) {
+            }//if ($retorno !== true) {
             
             $conexao = null;
             return $retorno;
@@ -611,7 +608,7 @@ class Time extends ClasseBase
 
             if ($retorno !== true) {
                 return $retorno;
-            }//if (!$retorno) {
+            }//if ($retorno !== true) {
 
             $sql     = "\n SELECT tim.codigo_time AS codigotime";
             $sql    .= "\n ,tim.nome AS nomeTime";

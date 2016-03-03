@@ -217,9 +217,9 @@ class Divisao extends ClasseBase
             $nome    = $this->getNome();
             $retorno = $this->validaCodigoDivisao($codigo);
 
-            if (!$retorno) {
+            if ($retorno !== true) {
                 return $retorno;
-            }//if (!$retorno) {
+            }//if ($retorno !== true) {
 
             if (!(v::alnum()->length(2, 25)->validate($nome))) {
                 $this->setErro("O nome da divisão deve ser alfanumérico de 2 a 25 caracteres.");
@@ -267,8 +267,9 @@ class Divisao extends ClasseBase
             $sql  .= "\n WHERE tim.divisao_codigo_divisao = dv.codigo_divisao";
             $sql  .= "\n AND dv.codigo_divisao = :id";
 
+            $codigoDivisao = $this->getCodigoDivisao();
             $stmt = Conexao::getConexao()->prepare($sql);
-            $stmt->bindParam(":id", $this->getCodigoDivisao(), \PDO::PARAM_INT);
+            $stmt->bindParam(":id", $codigoDivisao, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             return $retorno["resultado"];
@@ -296,9 +297,9 @@ class Divisao extends ClasseBase
             $codigo = $this->getCodigoDivisao();
             $retorno = $this->validaCodigoDivisao($codigo);
             
-            if (!$retorno) {
+            if ($retorno !== true) {
                 return $retorno;
-            }//if (!$retorno) {
+            }//if ($retorno !== true) {
                 
             if ($this->validaFkDivisao()) {
                 $this->setErro("Falha ao excluir divisão. Existem um ou mais times vinculados a esta divisão.");

@@ -1,7 +1,7 @@
 <?php
 class CategoriaTest extends PHPUnit_Framework_TestCase
 {
-    private $token = "71de332578bee725cfa669649f151906b7a98a63f6fbea5bfd0545ffa758ce02";
+    private $token = "c53f326588db3c3242c1abb786e09a62049f3bc9caba3b650342faaad45ec527";
 
     private function api($url, $data = array(), $method = "POST")
     {
@@ -143,7 +143,7 @@ class CategoriaTest extends PHPUnit_Framework_TestCase
 
     public function testExcluirCategoria()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=6&id=19&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=6&id=11&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Categoria excluida com sucesso.', $result["mensagem"]);
