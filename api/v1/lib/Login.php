@@ -23,8 +23,17 @@ class Login
     */
     public static function retornaIpUsuario()
     {
-        $http_client_ip       = $_SERVER['HTTP_CLIENT_IP'];
-        $http_x_forwarded_for = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        $http_client_ip = "";
+        $http_x_forwarded_for = "";
+
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $http_client_ip       = $_SERVER['HTTP_CLIENT_IP'];
+        }//if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $http_x_forwarded_for = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }//if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+
         $remote_addr          = $_SERVER['REMOTE_ADDR'];
          
         /* verifica se o ip existe */

@@ -99,6 +99,82 @@ class Categoria extends ClasseBase
         $this->nome = $nome;
     }//public function setNome($nome)
 
+     /**
+    * metodo que tem função de verificar se ja existe outra categoria com mesmo nome e id
+    *
+    * @access    public
+    * @return    boolean retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function existeNomeComEsseId()
+    {
+        try {
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM categoria AS cat";
+            $sql  .= "\n WHERE cat.codigo_categoria = :id";
+            $sql  .= "\n AND cat.nome = :nome";
+
+            $stmt = Conexao::getConexao()->prepare($sql);
+            $codigo  = $this->getCodigoCategoria();
+            $nome    = $this->getNome();
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($retorno["resultado"] == 1) {
+                return true;
+            }//if ($retorno["resultado"] != 1) {
+
+            return false;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function existeNomeComEsseId()
+
+    /**
+    * metodo que tem função de verificar se ja existe outra categoria com mesmo nome
+    *
+    * @access    public
+    * @return    boolean retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function validaNomeCategoria()
+    {
+        try {
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM categoria AS cat";
+            $sql  .= "\n WHERE cat.nome = :nome";
+
+            $stmt = Conexao::getConexao()->prepare($sql);
+            $nome    = $this->getNome();
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($retorno["resultado"] != 1) {
+                return true;
+            }//if ($retorno["resultado"] != 1) {
+
+            $this->setErro("Categoria duplicada, escolha outro nome.");
+            return false;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function validaNomeCategoria()
+    
     /**
     * metodo que tem função de fazer gravação do registro
     *
@@ -127,6 +203,12 @@ class Categoria extends ClasseBase
                 return 998;
             }
             
+            $retorno = $this->validaNomeCategoria();
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if (!$retorno) {
+
             $sql  = "\n INSERT INTO categoria (";
             $sql .= "\n   `codigo_categoria`";
             $sql .= "\n , `nome`";
@@ -221,10 +303,20 @@ class Categoria extends ClasseBase
                 return $retorno;
             }//if (!$retorno) {
 
+            if ($this->existeNomeComEsseId() == true) {
+                return true;
+            }//if ($this->existeNomeComEsseId()) {
+
             if (!(v::alnum()->length(2, 30)->validate($nome))) {
                 $this->setErro("O nome da categoria deve ser alfanumérico de 2 a 30 caracteres.");
                 return 996;
             }
+
+            $retorno = $this->validaNomeCategoria();
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if (!$retorno) {
 
             $sql  = "\n UPDATE categoria";
             $sql .= "\n SET nome = :nome";

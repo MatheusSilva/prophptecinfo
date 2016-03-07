@@ -313,6 +313,53 @@ class Time extends ClasseBase
     {
         $this->comprarnovojogador = $comprarnovojogador;
     }//public function setComprarnovojogador($comprarnovojogador)
+     
+     /**
+    * metodo que tem função de verificar se ja existe outro time com mesmo nome
+    *
+    * @access    public
+    * @return    boolean retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function validaNomeTime()
+    {
+        try {
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM time AS tim";
+            $sql  .= "\n WHERE tim.nome = :nome";
+            $sql  .= "\n AND tim.divisao_codigo_divisao = :id_divisao";
+            $sql  .= "\n AND tim.categoria_codigo_categoria = :id_categoria";
+            $sql  .= "\n AND tim.tecnico_codigo_tecnico = :id_tecnico";
+
+            $stmt            = Conexao::getConexao()->prepare($sql);
+            $nome            = $this->getNome();
+            $codigoDivisao   = $this->getCodigoDivisao();
+            $codigoCategoria = $this->getCodigoCategoria();
+            $codigoTecnico   = $this->getCodigoTecnico();
+
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR);
+            $stmt->bindParam(":id_divisao", $codigoDivisao, \PDO::PARAM_INT);
+            $stmt->bindParam(":id_categoria", $codigoCategoria, \PDO::PARAM_INT);
+            $stmt->bindParam(":id_tecnico", $codigoTecnico, \PDO::PARAM_INT);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($retorno["resultado"] != 1) {
+                return true;
+            }//if ($retorno["resultado"] != 1) {
+
+            $this->setErro("Time duplicado, escolha outro nome.");
+            return false;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function validaNomeTime()
         
     /**
     * metodo que tem função de inserir o time
@@ -338,6 +385,12 @@ class Time extends ClasseBase
                 $this->setErro("O nome do time deve ser alfanumérico de 2 a 35 caracteres.");
                 return 998;
             }
+
+            $retorno = $this->validaNomeTime();
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if (!$retorno) {
 
             $capa               = $this->getCapa();
             $codigo_divisao     = $this->getCodigoDivisao();

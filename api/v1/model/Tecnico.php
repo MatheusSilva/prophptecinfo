@@ -138,6 +138,90 @@ class Tecnico extends ClasseBase
     }//public function setData($data)
 
     /**
+    * metodo que tem função de verificar se ja existe outro tecnico com mesmo nome e id
+    *
+    * @access    public
+    * @return    boolean retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function existeNomeComEsseId()
+    {
+        try {
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM tecnico AS tec";
+            $sql  .= "\n WHERE tec.codigo_tecnico = :id";
+            $sql  .= "\n AND tec.nome = :nome";
+            $sql  .= "\n AND tec.data_nascimento = :data";
+
+            $stmt = Conexao::getConexao()->prepare($sql);
+            $codigo  = $this->getCodigoTecnico();
+            $nome    = $this->getNome();
+            $data    = $this->getData();
+
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR);
+            $stmt->bindParam(":data", $data);
+
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($retorno["resultado"] == 1) {
+                return true;
+            }//if ($retorno["resultado"] != 1) {
+
+            return false;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function existeNomeComEsseId()
+
+    /**
+    * metodo que tem função de verificar se ja existe outro tecnico com mesmo nome
+    *
+    * @access    public
+    * @return    boolean retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function validaNomeTecnico()
+    {
+        try {
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM tecnico AS tec";
+            $sql  .= "\n WHERE tec.nome = :nome";
+            $sql  .= "\n AND tec.data_nascimento = :data";
+
+            $stmt = Conexao::getConexao()->prepare($sql);
+            $nome    = $this->getNome();
+            $data    = $this->getData();
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR);
+            $stmt->bindParam(":data", $data);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($retorno["resultado"] != 1) {
+                return true;
+            }//if ($retorno["resultado"] != 1) {
+
+            $this->setErro("Técnico duplicado, escolha outro nome.");
+            return false;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function validaNomeTecnico()
+
+    /**
     * metodo que tem função de inserir o tecnico
     *
     * @access    public
@@ -164,6 +248,12 @@ class Tecnico extends ClasseBase
                 $this->setErro("O nome do técnico deve ser alfanumérico de 2 a 30 caracteres.");
                 return 998;
             }
+
+            $retorno = $this->validaNomeTecnico();
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if (!$retorno) {
 
             if (!v::date('Y-m-d')->validate($data)) {
                 $this->setErro("A data está inválida.");
@@ -267,11 +357,21 @@ class Tecnico extends ClasseBase
             if ($retorno !== true) {
                 return $retorno;
             }//if ($retorno !== true) {
+
+            if ($this->existeNomeComEsseId() == true) {
+                return true;
+            }//if ($this->existeNomeComEsseId()) {    
                 
             if (!(v::alnum()->length(2, 30)->validate($nome))) {
                 $this->setErro("O nome do técnico deve ser alfanumérico de 2 a 30 caracteres.");
                 return 996;
             }
+
+            $retorno = $this->validaNomeTecnico();
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if (!$retorno) {
 
             $sql   = "\n UPDATE tecnico";
             $sql  .= "\n SET nome = :nome";

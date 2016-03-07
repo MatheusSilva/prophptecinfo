@@ -100,6 +100,82 @@ class Divisao extends ClasseBase
     }//public function setNome($nome)
 
     /**
+    * metodo que tem função de verificar se ja existe outra divisao com mesmo nome e id
+    *
+    * @access    public
+    * @return    boolean retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function existeNomeComEsseId()
+    {
+        try {
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM divisao AS dvi";
+            $sql  .= "\n WHERE dvi.codigo_divisao = :id";
+            $sql  .= "\n AND dvi.nome = :nome";
+
+            $stmt = Conexao::getConexao()->prepare($sql);
+            $codigo  = $this->getCodigoDivisao();
+            $nome    = $this->getNome();
+            $stmt->bindParam(":id", $codigo, \PDO::PARAM_INT);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($retorno["resultado"] == 1) {
+                return true;
+            }//if ($retorno["resultado"] != 1) {
+
+            return false;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function existeNomeComEsseId()
+
+    /**
+    * metodo que tem função de verificar se ja existe outra divisao com mesmo nome
+    *
+    * @access    public
+    * @return    boolean retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function validaNomeDivisao()
+    {
+        try {
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM divisao AS dvi";
+            $sql  .= "\n WHERE dvi.nome = :nome";
+
+            $stmt = Conexao::getConexao()->prepare($sql);
+            $nome    = $this->getNome();
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($retorno["resultado"] != 1) {
+                return true;
+            }//if ($retorno["resultado"] != 1) {
+
+            $this->setErro("Divisão duplicada, escolha outro nome.");
+            return false;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function validaNomeDivisao()
+
+    /**
     * metodo que tem função de inserir a divisão
     *
     * @access    public
@@ -126,6 +202,12 @@ class Divisao extends ClasseBase
                 return 998;
             }
             
+            $retorno = $this->validaNomeDivisao();
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if (!$retorno) {
+
             $sql   = "\n INSERT INTO divisao (";
             $sql  .= "\n nome";
             $sql  .= "\n ) VALUES (";
@@ -221,10 +303,20 @@ class Divisao extends ClasseBase
                 return $retorno;
             }//if ($retorno !== true) {
 
+            if ($this->existeNomeComEsseId() == true) {
+                return true;
+            }//if ($this->existeNomeComEsseId()) {
+                
             if (!(v::alnum()->length(2, 25)->validate($nome))) {
                 $this->setErro("O nome da divisão deve ser alfanumérico de 2 a 25 caracteres.");
                 return 996;
             }
+
+            $retorno = $this->validaNomeDivisao();
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if (!$retorno) {
 
             $sql   = "\n UPDATE divisao";
             $sql  .= "\n SET nome = :nome";
