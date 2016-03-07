@@ -19,7 +19,7 @@ abstract class Conexao
     * @access public
     * @var string Armazena o host do banco
     */
-    public static $strHost     = "mysql:host=127.0.0.1;dbname=dbatime";
+    public static $strHost     = "mysql:host=127.0.0.1;dbname=dbatime;charset=utf8mb4";
 
     /**
     * @access public
@@ -48,14 +48,15 @@ abstract class Conexao
             self::$objConexao = new \PDO(
                 self::$strHost,
                 self::$strUsuario,
-                self::$strSenha,
-                array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+                self::$strSenha
             );
+
+            self::$objConexao->setAttribute(\PDO::MYSQL_ATTR_INIT_COMMAND, "SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' ");
+            self::$objConexao->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);    
+            self::$objConexao->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            self::$objConexao->setAttribute(\PDO::ATTR_ORACLE_NULLS, \PDO::NULL_EMPTY_STRING);
         }//if (!isset(self::$objConexao)) {
-
-        self::$objConexao->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        self::$objConexao->setAttribute(\PDO::ATTR_ORACLE_NULLS, \PDO::NULL_EMPTY_STRING);
-
+            
         return self::$objConexao;
     }//public static function getConexao()
 }//abstract class Conexao

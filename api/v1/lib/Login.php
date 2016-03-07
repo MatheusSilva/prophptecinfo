@@ -9,7 +9,7 @@ use matheus\sistemaRest\api\v1\model\Torcedor;
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
 */
-class Login
+abstract class Login
 {
     /**
     * metodo que busca o ip real do usuario
