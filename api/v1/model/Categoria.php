@@ -482,6 +482,7 @@ class Categoria extends ClasseBase
             }//if (!empty($nome)) {
 
             $stmt = Conexao::getConexao()->prepare($sql);
+            Conexao::fechaConexao();
             
             if (!empty($nome)) {
                 $nome = trim($nome)."%";

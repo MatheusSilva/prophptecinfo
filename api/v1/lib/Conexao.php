@@ -59,4 +59,18 @@ abstract class Conexao
             
         return self::$objConexao;
     }//public static function getConexao()
+
+    /**
+    * metodo que fecha a conexao do banco de dados
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public static function fechaConexao()
+    {
+        self::$objConexao = null;
+    }//public static function fechaConexao()
 }//abstract class Conexao
