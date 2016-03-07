@@ -1,4 +1,7 @@
 <?php
+error_reporting(-1);
+ini_set('display_errors', 'on');
+
 require_once "../../../vendor/autoload.php";
 use matheus\sistemaRest\api\v1\model\Time;
 use matheus\sistemaRest\api\v1\lib\Upload;

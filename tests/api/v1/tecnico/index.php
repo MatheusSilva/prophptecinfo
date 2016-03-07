@@ -1,7 +1,7 @@
 <?php
 class TecnicoTest extends PHPUnit_Framework_TestCase
 {
-    private $token = "c53f326588db3c3242c1abb786e09a62049f3bc9caba3b650342faaad45ec527";
+    private $token = "ba649e591465913a9d270ed1f50e0fa9e42ac298ec55faaeb3c87a758ff1a263";
 
     private function api($url, $data = array(), $method = "POST")
     {
@@ -29,7 +29,13 @@ class TecnicoTest extends PHPUnit_Framework_TestCase
     public function testTokenInvalidoSalvarTecnico()
     {
         $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=4&tk=asdasd';
-        $data = array('txtNome' => 'NBI');
+        $data = array(
+            'txtNome' => ""
+            ,'cmbDia' => ""
+            ,'cmbMes' => ""
+            ,'cmbAno' => ""
+        );
+
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Sua sessão expirou. Faça o login novamente.', $result["mensagem"]);
     }
@@ -37,7 +43,13 @@ class TecnicoTest extends PHPUnit_Framework_TestCase
     public function testTokenInvalidoAlterarTecnico()
     {
         $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=5&tk=asdasd';
-        $data = array('txtNome' => 'NBI');
+        $data = array(
+            'txtNome' => ""
+            ,'cmbDia' => ""
+            ,'cmbMes' => ""
+            ,'cmbAno' => ""
+        );
+
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Sua sessão expirou. Faça o login novamente.', $result["mensagem"]);
     }
@@ -45,7 +57,13 @@ class TecnicoTest extends PHPUnit_Framework_TestCase
     public function testNomeEmBrancoSalvarTecnico()
     {
         $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=4&tk='.$this->token;
-        $data = array();
+        $data = array(
+            'txtNome' => ""
+            ,'cmbDia' => ""
+            ,'cmbMes' => ""
+            ,'cmbAno' => ""
+        );
+
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('O nome do técnico deve ser alfanumérico de 2 a 30 caracteres.', $result["mensagem"]);
     }
@@ -53,7 +71,13 @@ class TecnicoTest extends PHPUnit_Framework_TestCase
     public function testNomeEmBrancoAlterarTecnico()
     {
         $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=5&id=1&tk='.$this->token;
-        $data = array();
+        $data = array(
+            'txtNome' => ""
+            ,'cmbDia' => ""
+            ,'cmbMes' => ""
+            ,'cmbAno' => ""
+        );
+
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('O nome do técnico deve ser alfanumérico de 2 a 30 caracteres.', $result["mensagem"]);
     }
@@ -61,6 +85,37 @@ class TecnicoTest extends PHPUnit_Framework_TestCase
     public function testNomeValidoSalvarTecnico()
     {
         $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=4&tk='.$this->token;
+
+        $rand = uniqid(rand(), true);
+        $rand = str_replace(".", "", $rand);
+        $rand = str_replace("0", "", $rand);
+        $rand = str_replace("1", "", $rand);
+        $rand = str_replace("2", "", $rand);
+        $rand = str_replace("3", "", $rand);
+        $rand = str_replace("4", "", $rand);
+        $rand = str_replace("5", "", $rand);
+        $rand = str_replace("6", "", $rand);
+        $rand = str_replace("7", "", $rand);
+        $rand = str_replace("8", "", $rand);
+        $rand = str_replace("9", "", $rand);
+        $rand .= "Y";
+
+        $data = array(
+            'txtNome' => $rand
+            ,'cmbDia' => 12
+            ,'cmbMes' => 12
+            ,'cmbAno' => 2012
+        );
+
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Técnico cadastrado com sucesso.', $result["mensagem"]);
+    }
+
+
+    public function testNomeDuplicadoSalvarTecnico()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=4&tk='.$this->token;
+
         $data = array(
             'txtNome' => 'testephpunit'
             ,'cmbDia' => 12
@@ -69,7 +124,7 @@ class TecnicoTest extends PHPUnit_Framework_TestCase
         );
 
         $result = $this->api($url, $data, "POST");
-        $this->assertEquals('Técnico cadastrado com sucesso.', $result["mensagem"]);
+        $this->assertEquals('Técnico duplicado, escolha outro nome.', $result["mensagem"]);
     }
 
     public function testNomeValidoAlterarTecnico()
@@ -81,6 +136,7 @@ class TecnicoTest extends PHPUnit_Framework_TestCase
             ,'cmbMes' => 11
             ,'cmbAno' => 2011
         );
+
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Técnico alterado com sucesso.', $result["mensagem"]);
     }
@@ -89,7 +145,13 @@ class TecnicoTest extends PHPUnit_Framework_TestCase
     public function testAlterarTecnicoInexistente()
     {
         $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=5&id=999&tk='.$this->token;
-        $data = array('txtNome' => 'sub 25');
+       $data = array(
+            'txtNome' => ""
+            ,'cmbDia' => ""
+            ,'cmbMes' => ""
+            ,'cmbAno' => ""
+        );
+
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Código inexistente.', $result["mensagem"]);
     }
@@ -98,7 +160,13 @@ class TecnicoTest extends PHPUnit_Framework_TestCase
     public function testAlterarTecnicoInvalida()
     {
         $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=5&id=asds&tk='.$this->token;
-        $data = array('txtNome' => 'sub 25');
+        $data = array(
+            'txtNome' => ""
+            ,'cmbDia' => ""
+            ,'cmbMes' => ""
+            ,'cmbAno' => ""
+        );
+
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Código inválido.', $result["mensagem"]);
     }
@@ -132,7 +200,7 @@ class TecnicoTest extends PHPUnit_Framework_TestCase
 
     public function testExcluirTecnico()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=6&id=2&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=6&id=31&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Técnico excluido com sucesso.', $result["mensagem"]);

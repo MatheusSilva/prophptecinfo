@@ -1,7 +1,7 @@
 <?php
 class CategoriaTest extends PHPUnit_Framework_TestCase
 {
-    private $token = "c53f326588db3c3242c1abb786e09a62049f3bc9caba3b650342faaad45ec527";
+    private $token = "ba649e591465913a9d270ed1f50e0fa9e42ac298ec55faaeb3c87a758ff1a263";
 
     private function api($url, $data = array(), $method = "POST")
     {
@@ -87,9 +87,18 @@ class CategoriaTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Categoria cadastrada com sucesso.', $result["mensagem"]);
     }
 
+    public function testNomeDuplicadoSalvarCategoria()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=4&tk='.$this->token;
+
+        $data = array('txtNome' => "ddbe");
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Categoria duplicada, escolha outro nome.', $result["mensagem"]);
+    }
+
     public function testNomeValidoAlterarCategoria()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=5&id=11&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=5&id=18&tk='.$this->token;
         //$rand = uniqid(rand(), true);
         $data = array('txtNome' => "sdasdasdsad11111");
         $result = $this->api($url, $data, "POST");
@@ -143,7 +152,7 @@ class CategoriaTest extends PHPUnit_Framework_TestCase
 
     public function testExcluirCategoria()
     {
-        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=6&id=11&tk='.$this->token;
+        $url = 'http://localhost/sistemaRest/api/v1/controller/categoria.php?a=6&id=27&tk='.$this->token;
         $data = array();
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Categoria excluida com sucesso.', $result["mensagem"]);

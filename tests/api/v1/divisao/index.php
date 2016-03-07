@@ -1,7 +1,7 @@
 <?php
 class DivisaoTest extends PHPUnit_Framework_TestCase
 {
-    private $token = "c53f326588db3c3242c1abb786e09a62049f3bc9caba3b650342faaad45ec527";
+    private $token = "ba649e591465913a9d270ed1f50e0fa9e42ac298ec55faaeb3c87a758ff1a263";
 
     private function api($url, $data = array(), $method = "POST")
     {
@@ -78,6 +78,15 @@ class DivisaoTest extends PHPUnit_Framework_TestCase
         $data = array('txtNome' => $rand);
         $result = $this->api($url, $data, "POST");
         $this->assertEquals('Divisão cadastrada com sucesso.', $result["mensagem"]);
+    }
+
+    public function testNomeDuplicadoSalvarDivisao()
+    {
+        $url = 'http://localhost/sistemaRest/api/v1/controller/divisao.php?a=4&tk='.$this->token;
+
+        $data = array('txtNome' => "ddbe");
+        $result = $this->api($url, $data, "POST");
+        $this->assertEquals('Divisão duplicada, escolha outro nome.', $result["mensagem"]);
     }
 
     public function testNomeValidoAlterarDivisao()
