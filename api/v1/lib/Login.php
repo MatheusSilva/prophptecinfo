@@ -12,6 +12,65 @@ use matheus\sistemaRest\api\v1\model\Torcedor;
 abstract class Login
 {
     /**
+    * metodo que faz uma criptografia customizada estatica
+    *
+    * @access    public
+    * @return    string Retorna o conteudo criptografado
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public static function criptografiaEstatica(
+        $strConteudo = '',
+        $algCripto = 'sha256',
+        $salt1 = 'Xr7zjx1D14E55qRxHDutiQZkhyhmnk78asy793',
+        $salt2 = 'h17E66DHuiQZr7zj1Dkhyh7mnk8asyqRx84'
+    ) {
+        if (
+            trim($strConteudo) == '' 
+            || trim($algCripto) == '' 
+            || trim($salt1) == '' 
+            || trim($salt2) == ''
+        ) {
+            return '';
+        }
+
+        return hash($algCripto, $salt2.$strConteudo.$salt1);
+    }//public static function criptografiaRandomica()
+
+    /**
+    * metodo que faz uma criptografia customizada randomica
+    *
+    * @access    public
+    * @return    string Retorna o conteudo criptografado
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public static function criptografiaRandomica(
+        $strConteudo = '',
+        $algCripto = 'sha256',
+        $salt1 = 'jcxzknhxjajdulHGHAQZkhyhmnk789553',
+        $salt2 = '893343hjgsjhbjlAHLKJHIDJiertokrjtkr'
+    ) {
+        $rand = uniqid(rand(), true);
+
+        if (
+            trim($strConteudo) == '' 
+            || trim($algCripto) == '' 
+            || trim($salt1) == '' 
+            || trim($salt2) == ''
+        ) {
+            return '';
+        }
+
+        return hash($algCripto, $salt2.$rand.$strConteudo.$salt1);
+    }//public static function criptografiaRandomica()
+
+
+    /**
     * metodo que busca o ip real do usuario
     *
     * @access    public
@@ -89,12 +148,9 @@ abstract class Login
             $sql  .= "\n WHERE login = :torcedor";
             $sql  .= "\n AND senha   = :senha";
 
-            $salt1      = "jcxzknhxjajduhlJHDGHAQZkhyhmnk789553";
-            $salt2      = "893343hjgsjhbjlAHLKJHIDJiertokrjtkr";
-            $rand       = uniqid(rand(), true);
             $userAgent  = $_SERVER['HTTP_USER_AGENT'];
             $ip         = self::retornaIpUsuario();
-            $token = hash('sha256', $userAgent.$salt2.$rand.$senha.$salt1.$ip);
+            $token = self::criptografiaRandomica($userAgent.$torcedor.$ip);
 
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(":token", $token);
@@ -107,8 +163,8 @@ abstract class Login
                     session_start();
                 }//if (!isset($_SESSION)) {
                 
-                $_SESSION['ip']               = $ip;
-                $_SESSION['agentUser']        = $userAgent;
+                $_SESSION['ip']               = self::criptografiaEstatica($ip);
+                $_SESSION['agentUser']        = self::criptografiaEstatica($userAgent);
                 $_SESSION['logado']           = 'ok';
                 $_SESSION['u']                = $retornoSelect['login'];
                 $conexao = null;
@@ -144,8 +200,8 @@ abstract class Login
         
         if (!isset($_SESSION['logado'])
         || $_SESSION['logado'] != 'ok'
-        || $_SESSION['agentUser'] != $_SERVER['HTTP_USER_AGENT']
-        || $_SESSION['ip'] != self::retornaIpUsuario()
+        || $_SESSION['agentUser'] != self::criptografiaEstatica($_SERVER['HTTP_USER_AGENT'])
+        || $_SESSION['ip'] != self::criptografiaEstatica(self::retornaIpUsuario())
         || !isset($_COOKIE['token'])) {
             self::sair($redirecionar);
 
