@@ -34,6 +34,7 @@
 					<li><a href="../admin/lista.time.htm">Adminsitrar Time</a></li>
 					<li><a href="../admin/lista.categoria.htm">Adminsitrar categoria</a></li>
 					<li><a href="../admin/lista.divisao.htm">Adminsitrar divisao</a></li>
+					<li><a href="../admin/autenticacao2fatores.htm">Autenticação 2 fatores</a></li>
 				</ul>
 			</div>
 			

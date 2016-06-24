@@ -16,10 +16,18 @@ class ComposerStaticInit1d991266519f241bf3f79efffdddc93b
         array (
             'Respect\\Validation\\' => 19,
         ),
+        'O' => 
+        array (
+            'Otp\\' => 4,
+        ),
         'M' => 
         array (
             'MatthiasMullie\\PathConverter\\' => 29,
             'MatthiasMullie\\Minify\\' => 22,
+        ),
+        'B' => 
+        array (
+            'Base32\\' => 7,
         ),
     );
 
@@ -36,6 +44,10 @@ class ComposerStaticInit1d991266519f241bf3f79efffdddc93b
         array (
             0 => __DIR__ . '/..' . '/respect/validation/library',
         ),
+        'Otp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/christian-riesen/otp/src',
+        ),
         'MatthiasMullie\\PathConverter\\' => 
         array (
             0 => __DIR__ . '/..' . '/matthiasmullie/path-converter/src',
@@ -43,6 +55,10 @@ class ComposerStaticInit1d991266519f241bf3f79efffdddc93b
         'MatthiasMullie\\Minify\\' => 
         array (
             0 => __DIR__ . '/..' . '/matthiasmullie/minify/src',
+        ),
+        'Base32\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/christian-riesen/base32/src',
         ),
     );
 

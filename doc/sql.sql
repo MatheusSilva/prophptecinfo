@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS torcedor (
   login VARCHAR(20) NOT NULL UNIQUE COMMENT 'login do torcedor',
   senha CHAR(128) NOT NULL COMMENT 'senha do torcedor',
   token CHAR(64) NULL COMMENT 'token de autenticacao do torcedor',
+  otpsecret CHAR(16) NULL COMMENT 'Armazena a chave de autenticacao de 2 fatores do google autenticator',
+  otpativado TINYINT(1) DEFAULT 0 NULL COMMENT 'flag que indica que autenticacao de 2 fatores foi ativada',
   PRIMARY KEY(codigo_torcedor) 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'tabela que armazena os torcedores';
 

@@ -9,6 +9,8 @@ return array(
     'matheus\\sistemaRest\\api\\v1\\model\\' => array($baseDir . '/api/v1/model'),
     'matheus\\sistemaRest\\api\\v1\\lib\\' => array($baseDir . '/api/v1/lib'),
     'Respect\\Validation\\' => array($vendorDir . '/respect/validation/library'),
+    'Otp\\' => array($vendorDir . '/christian-riesen/otp/src'),
     'MatthiasMullie\\PathConverter\\' => array($vendorDir . '/matthiasmullie/path-converter/src'),
     'MatthiasMullie\\Minify\\' => array($vendorDir . '/matthiasmullie/minify/src'),
+    'Base32\\' => array($vendorDir . '/christian-riesen/base32/src'),
 );

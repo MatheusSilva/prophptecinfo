@@ -130,7 +130,7 @@ abstract class Login
         $objTorcedor->setSenha($senha);
         $senha = $objTorcedor->getSenha();
 
-        $sql   = "\n SELECT nome, login";
+        $sql   = "\n SELECT nome, login, otpsecret, otpAtivado";
         $sql  .= "\n FROM torcedor";
         $sql  .= "\n WHERE login = :torcedor";
         $sql  .= "\n AND senha = :senha";
@@ -165,11 +165,16 @@ abstract class Login
                 
                 $_SESSION['ip']               = self::criptografiaEstatica($ip);
                 $_SESSION['agentUser']        = self::criptografiaEstatica($userAgent);
-                $_SESSION['logado']           = 'ok';
                 $_SESSION['u']                = $retornoSelect['login'];
                 $conexao = null;
                 setcookie("token", $token, time()+900, "/");
-                header('location:../paginas/home.php');
+
+                if ($retornoSelect['otpAtivado'] == 1) {
+                    header('location:../paginas/valida.autenticacao2fatores.htm');
+                } else if (empty($retornoSelect['otpsecret']) || $retornoSelect['otpAtivado'] != 1) {
+                    $_SESSION['logado']           = 'ok';
+                    header('location:../paginas/home.php');
+                }
             } else {
                 $msg = urlencode('Login falhou! Verifique seus dados');
                 $conexao = null;
@@ -213,6 +218,31 @@ abstract class Login
             $token = $_COOKIE["token"];
             setcookie("token", $token, time()+900, "/");
         }
+    }//public static function verificar($redirecionar = true)
+
+
+    /**
+    * metodo que verifica se o usuario esta logado com duas etapas
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public static function verificarCom2Etapas()
+    {
+        if (!isset($_SESSION)) {
+            session_start();
+        }//if (!isset($_SESSION)) {
+        
+        if ($_SESSION['agentUser'] != self::criptografiaEstatica($_SERVER['HTTP_USER_AGENT'])
+        || $_SESSION['ip'] != self::criptografiaEstatica(self::retornaIpUsuario())
+        || !isset($_COOKIE['token'])) {
+           return false;
+        }
+
+        return true;
     }//public static function verificar($redirecionar = true)
     
     /**

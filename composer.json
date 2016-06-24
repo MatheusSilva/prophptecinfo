@@ -2,6 +2,7 @@
 	"require": {
         "respect/validation": "*"
         ,"matthiasmullie/minify": "*"
+        ,"christian-riesen/otp": "^2.0"
     },
 	"autoload": {
 		"psr-0": {
@@ -13,3 +14,4 @@
 	    }
 	}
 }
+
