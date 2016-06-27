@@ -25,19 +25,22 @@ abstract class Login
         $strConteudo = '',
         $algCripto = 'sha256',
         $salt1 = 'Xr7zjx1D14E55qRxHDutiQZkhyhmnk78asy793',
-        $salt2 = 'h17E66DHuiQZr7zj1Dkhyh7mnk8asyqRx84'
+        $salt2 = 'h17E66DHuiQZr7zj1Dkhyh7mnk8asyqRx84',
+        $salt3 = 'x24D8X3gTlqS8xK2aQwWy9nmfr5sAoQsx62',
+        $numIteracoes = 2,
+        $numCaracterSaida = 64
     ) {
         if (
             trim($strConteudo) == '' 
             || trim($algCripto) == '' 
             || trim($salt1) == '' 
             || trim($salt2) == ''
+            || trim($salt3) == ''
         ) {
             return '';
         }
-
-        return hash($algCripto, $salt2.$strConteudo.$salt1);
-    }//public static function criptografiaRandomica()
+        return hash_pbkdf2($algCripto, $salt2.$strConteudo.$salt1, $salt3, $numIteracoes, $numCaracterSaida);
+    }//public static function criptografiaEstatica()
 
     /**
     * metodo que faz uma criptografia customizada randomica
@@ -53,7 +56,10 @@ abstract class Login
         $strConteudo = '',
         $algCripto = 'sha256',
         $salt1 = 'jcxzknhxjajdulHGHAQZkhyhmnk789553',
-        $salt2 = '893343hjgsjhbjlAHLKJHIDJiertokrjtkr'
+        $salt2 = '893343hjgsjhbjlAHLKJHIDJiertokrjtkr',
+        $salt3 = 'x24D8X3gTlqS8xK2aQwWy9nmfr5sAoQsx62',
+        $numIteracoes = 2,
+        $numCaracterSaida = 64
     ) {
         $rand = uniqid(rand(), true);
 
@@ -62,11 +68,12 @@ abstract class Login
             || trim($algCripto) == '' 
             || trim($salt1) == '' 
             || trim($salt2) == ''
+            || trim($salt3) == ''
         ) {
             return '';
         }
-
-        return hash($algCripto, $salt2.$rand.$strConteudo.$salt1);
+        
+        return hash_pbkdf2($algCripto, $salt2.$rand.$strConteudo.$salt1, $salt3, $numIteracoes, $numCaracterSaida);
     }//public static function criptografiaRandomica()
 
 

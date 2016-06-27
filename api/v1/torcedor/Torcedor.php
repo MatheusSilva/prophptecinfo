@@ -2,6 +2,7 @@
 namespace matheus\sistemaRest\api\v1\model;
 
 use matheus\sistemaRest\api\v1\lib\Conexao;
+use matheus\sistemaRest\api\v1\lib\Login;
 
 /**
 * classe Torcedor
@@ -168,7 +169,8 @@ class Torcedor
     {
         $salt1 = "15353oiwHSDDKFJNGmfnsjfjqbhdgkjk";
         $salt2 = "NSBDFSDBFisoetiihskkdfgjfdkj56767";
-        $this->senha = hash('sha512', $salt1.$senha.$salt2);
+        $salt3 = "zXCdsqGHiSpYxwHqJ8r7F21pFe93452";
+        $this->senha =  Login::criptografiaEstatica($senha, 'sha512', $salt1, $salt2, $salt3, 4, 128);
     }//public function setSenha($senha)
     
     /**
