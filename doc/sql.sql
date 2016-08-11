@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS torcedor (
   codigo_torcedor INTEGER UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK',
   nome VARCHAR(35) NOT NULL COMMENT 'nome do torcedor',
   login VARCHAR(20) NOT NULL UNIQUE COMMENT 'login do torcedor',
+  email VARCHAR(100) NOT NULL UNIQUE COMMENT 'email do torcedor',
   senha CHAR(128) NOT NULL COMMENT 'senha do torcedor',
   token CHAR(64) NULL COMMENT 'token de autenticacao do torcedor',
   otpsecret CHAR(16) NULL COMMENT 'Armazena a chave de autenticacao de 2 fatores do google autenticator',

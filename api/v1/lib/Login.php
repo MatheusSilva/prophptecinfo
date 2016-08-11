@@ -39,6 +39,7 @@ abstract class Login
         ) {
             return '';
         }
+        
         return hash_pbkdf2($algCripto, $salt2.$strConteudo.$salt1, $salt3, $numIteracoes, $numCaracterSaida);
     }//public static function criptografiaEstatica()
 

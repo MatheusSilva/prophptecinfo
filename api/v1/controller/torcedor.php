@@ -3,12 +3,12 @@ error_reporting(-1);
 ini_set('display_errors', 'on');
 
 require_once "../../../vendor/autoload.php";
-use matheus\sistemaRest\api\v1\model\Torcedor;
+use matheus\sistemaRest\api\v1\model\Torcedor AS modTorcedor;
 use matheus\sistemaRest\api\v1\lib\Login;
 
 $acao        = "";
 $key         = "";
-$objTorcedor = new torcedor();
+$objTorcedor = new modTorcedor();
 
 if (isset($_REQUEST["a"]) && empty($_REQUEST["a"]) === false) {
     $acao  = $_REQUEST["a"];
@@ -96,7 +96,7 @@ if ($acao == 1) {
 
     $json = json_encode($torcedor);
     echo $json;
-} else if ($acao == 5) {
+} elseif ($acao == 5) {
     $imgbase64["imgbase64"] = $objTorcedor->retornaBase64ImgAutenticacao2fatores();
     $torcedor  = "{\"torcedor\":";//[{
     $torcedor .= json_encode($imgbase64);
@@ -120,6 +120,51 @@ if ($acao == 1) {
 
     $json = json_encode($torcedor);
     echo $json;
+} elseif ($acao == 7) {
+    $arrDadosTorcedor = $objTorcedor->retornaDadosTorcedor();
+    $strErros = $objTorcedor->getErros();
+
+    if (is_array($arrDadosTorcedor) && empty($arrDadosTorcedor) !== true) {
+        echo json_encode($arrDadosTorcedor);
+    } elseif (!empty($strErros)) {
+        $json["mensagem"] = $strErros;
+        echo json_encode($json);
+    }
+} elseif ($acao == 8) {
+    $request_body = file_get_contents('php://input');
+    $torcedor    = json_decode($request_body, true);
+    $objTorcedor->setNome($torcedor["txtNome"]);
+    $objTorcedor->setEmail($torcedor["txtEmail"]);
+    
+    if (isset($torcedor["txtSenhaAtual"])) {
+        $objTorcedor->setSenhaAtual($torcedor["txtSenhaAtual"]);
+    }
+
+    if (isset($torcedor["txtSenha"])) {
+        $objTorcedor->setSenha($torcedor["txtSenha"]);
+    }
+
+    if (isset($torcedor["txtConfSenha"])) {
+        $objTorcedor->setConfSenha($torcedor["txtConfSenha"]);
+    }
+
+    $boolRetorno = $objTorcedor->alterar();
+    $strErros = $objTorcedor->getErros();
+
+    $torcedor = "";
+
+    if ($boolRetorno === true) {
+        $torcedor["mensagem"] = "Torcedor alterado com sucesso.";
+    } elseif (!empty($strErros)) {
+        $torcedor["mensagem"] = $strErros;
+    } else {
+        $torcedor["mensagem"] = "Falha ao atualizar torcedor";
+    }
+
+    $json = json_encode($torcedor);
+    echo $json;
+
+
 }
 
 $acao  = "";

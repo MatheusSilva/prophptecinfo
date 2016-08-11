@@ -17,6 +17,181 @@ use Base32\Base32;
 class Torcedor extends ClasseBase
 {
     /**
+    * @access private
+    * @var string Armazena o nome da categoria
+    */
+    private $nome;
+
+    /**
+    * @access private
+    * @var string Armazena o senha da categoria
+    */
+    private $senha;
+
+    /**
+    * @access private
+    * @var string Armazena a confirmação senha da categoria
+    */
+    private $confSenha;
+
+    /**
+    * @access private
+    * @var string Armazena a senha atual da categoria
+    */
+    private $senhaAtual;
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade nome
+    *
+    * @access    public
+    * @return    string Retorna o nome da categoria
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getNome()
+    {
+        return $this->nome;
+    }//public function getNome()
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade nome
+    *
+    * @access    public
+    * @param     string $nome Armazena a nome atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setNome($nome)
+    {
+        $this->nome = $nome;
+    }//public function setNome($nome)
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade email
+    *
+    * @access    public
+    * @return    string Retorna o email do torcedor
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getEmail()
+    {
+        return $this->email;
+    }//public function getEmail()
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade email
+    *
+    * @access    public
+    * @param     string $email Armazena o email do torcedor
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }//public function setEmail($email)
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade senhaAtual
+    *
+    * @access    public
+    * @return    string Retorna a senha da categoria
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getSenhaAtual()
+    {
+        return $this->senhaAtual;
+    }//public function getSenhaAtual()
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade senhaAtual
+    *
+    * @access    public
+    * @param     string $senhaAtual Armazena a senha atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setSenhaAtual($senhaAtual)
+    {
+        $this->senhaAtual = $senhaAtual;
+    }//public function setSenhaAtual($senha)
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade senha
+    *
+    * @access    public
+    * @return    string Retorna a senha da categoria
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getSenha()
+    {
+        return $this->senha;
+    }//public function getSenha()
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade senha
+    *
+    * @access    public
+    * @param     string $senha Armazena a senha atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setSenha($senha)
+    {
+        $this->senha = $senha;
+    }//public function setSenha($senha)
+
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade confSenha
+    *
+    * @access    public
+    * @return    string Retorna a confirmação da senha
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getConfSenha()
+    {
+        return $this->confSenha;
+    }//public function getConfSenha()
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade confSenha
+    *
+    * @access    public
+    * @param     string $confSenha Armazena a confirmação da senha
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setConfSenha($confSenha)
+    {
+        $this->confSenha = $confSenha;
+    }//public function setConfSenha($senha)
+    
+    /**
     * metodo constutor
     *
     * @access    public
@@ -27,7 +202,9 @@ class Torcedor extends ClasseBase
     */
     public function __construct()
     {
-
+        if (!isset($_SESSION)) {
+            session_start();
+        }//if (!isset($_SESSION)) {
     }//public function __construct()
 
     /**
@@ -296,4 +473,148 @@ class Torcedor extends ClasseBase
             return false;
         }
     }
+
+    /**
+    * metodo que tem função de fazer validacao da restricao de integridade
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function validaTorcedor($login)
+    {
+        try {
+            if ($this->tokenEhValido() === false) {
+                $this->setErro("Sua sessão expirou. Faça o login novamente.");
+                return 999;
+            }//if ($this->tokenEhValido() === false) {
+
+            $sql   = "\n SELECT DISTINCT 1 AS resultado";
+            $sql  .= "\n FROM torcedor AS tor";
+            $sql  .= "\n WHERE tor.login = :login";
+
+            $stmt = Conexao::getConexao()->prepare($sql);
+            $stmt->bindParam(":login", $login, \PDO::PARAM_INT);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($retorno["resultado"] != 1) {
+                $this->setErro("Usuário inexistente.");
+                return 997;
+            }
+
+            return true;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function validaCodigoTorcedor($codigo)
+
+    /**
+    * metodo que tem função de listar os dados do torcedor pelo código.
+    *
+    * @access    public
+    * @return    array retorna as informacoes
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function retornaDadosTorcedor()
+    {
+        try {
+            $usuario  = $_SESSION['u'];
+            $retorno = $this->validaTorcedor($usuario);
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if (!$retorno) {
+
+            $sql   = "\n SELECT nome, email";
+            $sql  .= "\n FROM torcedor";
+            $sql  .= "\n WHERE login = :usuario";
+
+            $stmt = Conexao::getConexao()->prepare($sql);
+            $stmt->bindParam(":usuario", $usuario, \PDO::PARAM_STR);
+            $stmt->execute();
+            $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
+            return $retorno;
+        } catch (\PDOException $e) {
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function retornaDadosTorcedor()
+
+    /**
+    * metodo que tem função de fazer alteração do registro
+    *
+    * @access    public
+    * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function alterar()
+    {
+        try {
+            $usuario   = $_SESSION['u'];
+            $nome      = $this->getNome();
+            $email     = $this->getEmail();
+            $senha     = $this->getSenha();
+            $confSenha = $this->getConfSenha();
+
+            $retorno = $this->validaTorcedor($usuario);
+
+            if ($retorno !== true) {
+                return $retorno;
+            }//if (!$retorno) {
+
+            if (!(v::alnum()->length(2, 30)->validate($nome))) {
+                $this->setErro("O seu nome deve ser alfanumérico de 2 a 30 caracteres.");
+                return 996;
+            }
+
+            //verificar se senha atual esta certa, verifica se nova senha bate com a confirmação
+
+            $sql  = "\n UPDATE torcedor";
+            $sql .= "\n SET nome = :nome";
+            $sql .= "\n ,email = :email";
+
+            if (!empty($senha)) {
+                $sql .= "\n ,senha = :senha";
+            }
+
+            $sql .= "\n WHERE login = :usuario";
+
+            $conexao = Conexao::getConexao();
+            $conexao->beginTransaction();
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(":usuario", $usuario, \PDO::PARAM_STR);
+            $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
+            $stmt->bindParam(":email", $email, \PDO::PARAM_STR, 100);
+
+            if (!empty($senha)) {
+                $stmt->bindParam(":senha", $senha, \PDO::PARAM_STR, 128);
+            }
+
+            $retorno = $stmt->execute();
+            $conexao->commit();
+            $conexao = null;
+            return $retorno;
+        } catch (\PDOException $e) {
+            $conexao = null;
+            $fp = fopen('34hsGAxZSgdfwksz1356.log', 'a');
+            fwrite($fp, $e);
+            fclose($fp);
+            return false;
+        }
+    }//public function alterar($codigo)
 }

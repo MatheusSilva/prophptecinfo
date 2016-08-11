@@ -1,5 +1,50 @@
 class Torcedor
 {
+    static formToJSON(form) 
+    {
+        var codigo        = '';
+        var txtNome       = '';
+        var txtLogin      = '';
+        var txtEmail      = '';
+        var txtSenhaAtual = '';
+        var txtSenha      = '';
+        var txtConfSenha  = '';
+
+        if (form.codigo != undefined) {
+            codigo = form.codigo.value;
+        }
+
+        if (form.txtNome != undefined) {
+            txtNome = form.txtNome.value;
+        }
+
+        if (form.txtEmail != undefined) {
+            txtEmail = form.txtEmail.value;
+        }
+
+        if (form.txtLogin != undefined) {
+            txtLogin = form.txtLogin.value;
+        }
+
+        if (form.txtSenha != undefined) {
+            txtSenha = form.txtSenha.value;
+        }
+
+        if (form.txtConfSenha != undefined) {
+            txtConfSenha = form.txtConfSenha.value;
+        }
+
+        return JSON.stringify({
+            "codigo":  codigo,
+            "txtNome":  txtNome,
+            "txtEmail":  txtEmail,
+            "txtLogin":  txtLogin,
+            "txtSenhaAtual" : txtSenhaAtual,
+            "txtSenha":  txtSenha,
+            "txtConfSenha": txtConfSenha
+        });
+    }
+
     static ativarAutenticacao2fatores()
     {
         var xhr = Ajax.createXHR();
@@ -151,6 +196,75 @@ class Torcedor
         }
     }
 
+    static atualizar(form) 
+    {
+        document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";  
+        var xhr = Ajax.createXHR();
+        var mensagem = "";
+
+        if (form.txtNome.value == "") {
+            mensagem += "<br /><b>Você não preencheu a técnico</b>";
+        }
+        
+        var token  = Login.getCookie('token');
+        
+        var consulta = "";
+
+        if (token !== "") {
+            consulta = "&tk="+token;
+        }
+
+        if(mensagem == "" && xhr != undefined) {
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/torcedor.php?a=8"+consulta,true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
+                //Verificar pelo estado "4" de pronto.
+
+                if (xhr.readyState == '4' && xhr.status == '200') {
+                    //Pegar dados da resposta json
+                    var json = JSON.parse(xhr.responseText);
+                    document.getElementById("mensagem").innerHTML = "<br /><b>"+json.mensagem+"</b>";  
+                }
+            }
+            
+            xhr.send(Torcedor.formToJSON(form));
+        } else {
+            document.getElementById("mensagem").innerHTML = mensagem;
+        } 
+    }
+
+    static insereDadosTorcedorRetornados()  
+    {
+        var xhr = Ajax.createXHR();
+
+        var token  = Login.getCookie('token');
+        var consulta = "";
+
+        if (token !== "") {
+            consulta = "&tk="+token;
+        }
+
+        xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/torcedor.php?a=7"+consulta,true);   
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function() {
+            //Verificar pelo estado "4" de pronto.
+
+            if (xhr.readyState == '4' && xhr.status == '200') {
+                //Pegar dados da resposta json
+                var json = JSON.parse(xhr.responseText);
+
+                if (json.mensagem == undefined) {
+                    document.getElementById("txtNome").value = json.nome;
+                    document.getElementById("txtEmail").value = json.email;
+                } else {
+                    alert(json.mensagem);
+                }
+                
+            }
+        }
+
+        xhr.send();
+    }
 
     static autenticacao2fatoresEstaAtivada()
     {
