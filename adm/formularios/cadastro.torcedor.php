@@ -27,7 +27,7 @@
 				<form method="post" 
 				action="../adaptadores/adaptador.torcedor.php"
 				name="frmCadastro"
-				id="frmCadastro" onSubmit="return Torcedor.valida(this);">
+				id="frmCadastro" onSubmit="">
 					<table>
 						<tr>
 							<td>Nome:</td>
@@ -40,6 +40,13 @@
 							<td>Login:</td>
 							<td>
 								<input type="text" name="txtLogin" id="txtLogin" />
+							</td>
+						</tr>
+
+						<tr>
+							<td>E-mail:</td>
+							<td>
+								<input type="text" name="txtEmail" id="txtEmail" />
 							</td>
 						</tr>
 						

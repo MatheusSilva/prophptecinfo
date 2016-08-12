@@ -18,27 +18,33 @@ class Torcedor extends ClasseBase
 {
     /**
     * @access private
-    * @var string Armazena o nome da categoria
+    * @var string Armazena o nome do torcedor
     */
     private $nome;
 
     /**
     * @access private
-    * @var string Armazena o senha da categoria
+    * @var string Armazena a senha do torcedor
     */
     private $senha;
 
     /**
     * @access private
-    * @var string Armazena a confirmação senha da categoria
+    * @var string Armazena a confirmação senha do torcedor
     */
     private $confSenha;
 
     /**
     * @access private
-    * @var string Armazena a senha atual da categoria
+    * @var string Armazena a senha atual do torcedor
     */
     private $senhaAtual;
+
+    /**
+    * @access private
+    * @var string Armazena o email atual do torcedor
+    */
+    private $email;
 
     /**
     * metodo acessor Get que retorna a informação da propriedade nome

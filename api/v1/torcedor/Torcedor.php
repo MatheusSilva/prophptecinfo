@@ -26,6 +26,12 @@ class Torcedor
 
     /**
     * @access private
+    * @var string Armazena o email do torcedor
+    */
+    private $email;
+
+    /**
+    * @access private
     * @var string Armazena o login do torcedor
     */
     private $login;
@@ -79,6 +85,36 @@ class Torcedor
     {
         $this->codigoTorcedor = $codigo;
     }//public function setCodigoTorcedor($codigo)
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade email
+    *
+    * @access    public
+    * @return    string Retorna o email do torcedor
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     12/08/2016
+    * @version   0.1
+    */
+    public function getEmail()
+    {
+        return $this->email;
+    }//public function getEmail()
+    
+    /**
+    * metodo acessor Set que carrega informação na propriedade email
+    *
+    * @access    public
+    * @param     string $email Armazena o email do torcedor
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     12/08/2016
+    * @version   0.1
+    */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }//public function setEmail($email)
     
     /**
     * metodo acessor Get que retorna a informação da propriedade nome
@@ -186,17 +222,20 @@ class Torcedor
     public function inserir()
     {
         try {
-            $nome  = $this->getNome();
-            $login = $this->getLogin();
-            $senha = $this->getSenha();
+            $nome   = $this->getNome();
+            $login  = $this->getLogin();
+            $senha  = $this->getSenha();
+            $email  = $this->getEmail();
             
             $sql    = "\n INSERT INTO `torcedor`(";
             $sql   .= "\n nome";
             $sql   .= "\n ,login";
+            $sql   .= "\n ,email";
             $sql   .= "\n ,senha";
             $sql   .= "\n ) VALUES (";
             $sql   .= "\n :nome";
             $sql   .= "\n ,:login";
+            $sql   .= "\n ,:email";
             $sql   .= "\n ,:senha";
             $sql   .= "\n )";
 
@@ -205,6 +244,7 @@ class Torcedor
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(":nome", $nome);
             $stmt->bindParam(":login", $login);
+            $stmt->bindParam(":email", $email);
             $stmt->bindParam(":senha", $senha);
             $retorno = $stmt->execute();
             $conexao->commit();
@@ -235,11 +275,13 @@ class Torcedor
             $nome   = $this->getNome();
             $login  = $this->getLogin();
             $senha  = $this->getSenha();
+            $email  = $this->getEmail();
             
             $sql    = "\n UPDATE torcedor";
-            $sql   .= "\n SET nome 			    = :nome";
-            $sql   .= "\n ,login   			    = :login";
-            $sql   .= "\n ,senha   			    = :senha";
+            $sql   .= "\n SET nome              = :nome";
+            $sql   .= "\n ,login                = :login";
+            $sql   .= "\n ,senha                = :senha";
+            $sql   .= "\n ,email                = :email";
             $sql   .= "\n WHERE codigo_torcedor = :codigo";
                     
             $conexao = Conexao::getConexao();
@@ -248,6 +290,7 @@ class Torcedor
             $stmt->bindParam(":nome", $nome);
             $stmt->bindParam(":login", $login);
             $stmt->bindParam(":senha", $senha);
+            $stmt->bindParam(":email", $email);
             $stmt->bindParam(":codigo", $codigo);
             $retorno = $stmt->execute();
             $conexao->commit();
