@@ -4,7 +4,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Cat&aacute;logo de Jogos</title>
 		<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
-		<script language="javascript" src="../../javascript/scripts.min.js"></script>
+		<script  src="../../javascript/scripts.min.js"></script>
 	</head>
 	
 	<body>

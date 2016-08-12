@@ -5,7 +5,7 @@
 	<title>Cat&aacute;logo de Jogos</title>
 	<link rel="stylesheet" type="text/css" href="../../css/layoutadm.css" />
 	
-	<script language="javascript" type="text/javascript">
+	<script type="text/javascript">
 		function confirmar(codigo)
 		{
 			var ok = window.confirm("Você tem certeza que deseja excluir");
