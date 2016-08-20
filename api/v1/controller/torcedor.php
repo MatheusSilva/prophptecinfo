@@ -6,21 +6,11 @@ require_once "../../../vendor/autoload.php";
 use matheus\sistemaRest\api\v1\model\Torcedor AS modTorcedor;
 use matheus\sistemaRest\api\v1\lib\Login;
 
-$acao        = "";
-$key         = "";
 $objTorcedor = new modTorcedor();
 
-if (isset($_REQUEST["a"]) && empty($_REQUEST["a"]) === false) {
-    $acao  = $_REQUEST["a"];
-}
-
-if (isset($_REQUEST["tk"]) && empty($_REQUEST["tk"]) === false) {
-    $objTorcedor->setToken($_REQUEST["tk"]);
-}
-
-if (isset($_REQUEST["key"]) && empty($_REQUEST["key"]) === false) {
-    $key = $_REQUEST["key"];
-}
+$objTorcedor->setToken(isset($_REQUEST['tk']) ? $_REQUEST['tk'] : '');
+$acao = isset($_REQUEST['a']) ? $_REQUEST['a'] : 0;
+$key   = isset($_REQUEST['key']) ? $_REQUEST['key'] : '';
 
 header('Content-Type: application/json');
 

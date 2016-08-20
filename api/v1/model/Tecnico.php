@@ -1,4 +1,6 @@
 <?php
+//declare(strict_types=1);//nao utilizar pois qualquer tipo de dados diferente vai parar a aplicação, validar dados pelo validator
+
 namespace matheus\sistemaRest\api\v1\model;
 
 use matheus\sistemaRest\api\v1\lib\ClasseBase;
@@ -42,8 +44,24 @@ class Tecnico extends ClasseBase
     */
     public function __construct()
     {
-
+        $this->limpaPropriedades();
     }//public function __construct()
+
+    /**
+    * metodo limpa todas as propriedades da classe
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     20/08/2016
+    * @version   0.1
+    */
+    public function limpaPropriedades()
+    {
+        $this->setData('');
+        $this->setNome('');
+        $this->setCodigoTecnico(0);
+    }//public function limpaPropriedades()
 
     /**
     * metodo acessor Get que retorna a informação da propriedade codigoTecnico
@@ -55,10 +73,10 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getCodigoTecnico()
+    public function getCodigoTecnico() : int
     {
         return $this->codigoTecnico;
-    }//public function getCodigoTecnico()
+    }//public function getCodigoTecnico() : int
 
     /**
     * metodo acessor Set que carrega informação na propriedade codigoTecnico
@@ -70,10 +88,10 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setCodigoTecnico($codigoTecnico)
+    public function setCodigoTecnico(int $codigoTecnico)
     {
         $this->codigoTecnico = $codigoTecnico;
-    }//public function setCodigoTecnico($codigoTecnico)
+    }//public function setCodigoTecnico(int $codigoTecnico)
 
     /**
     * metodo acessor Get que retorna a informação da propriedade nome
@@ -85,10 +103,10 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getNome()
+    public function getNome() : string
     {
         return $this->nome;
-    }//public function getNome()
+    }//public function getNome() : string
 
     /**
     * metodo acessor Set que carrega informação na propriedade nome
@@ -100,10 +118,10 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setNome($nome)
+    public function setNome(string $nome)
     {
         $this->nome = $nome;
-    }//public function setNome($nome)
+    }//public function setNome(string $nome)
 
     /**
     * metodo acessor Get que retorna a informação da propriedade data
@@ -115,10 +133,10 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getData()
+    public function getData() : string
     {
         return $this->data;
-    }//public function getData()
+    }//public function getData() : string
 
     /**
     * metodo acessor Set que carrega informação na propriedade data
@@ -130,12 +148,15 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setData($data)
+    public function setData(string $data)
     {
-        $data = explode('/', $data);
-        $data = $data[2]."-".$data[1]."-".$data[0];
+        if (!empty($data)) {
+            $data = explode('/', $data);
+            $data = $data[2]."-".$data[1]."-".$data[0];
+        }
+
         $this->data = $data;
-    }//public function setData($data)
+    }//public function setData(string $data)
 
     /**
     * metodo que tem função de verificar se ja existe outro tecnico com mesmo nome e id
@@ -147,7 +168,7 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function existeNomeComEsseId()
+    public function existeNomeComEsseId() : bool
     {
         try {
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
@@ -179,7 +200,7 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function existeNomeComEsseId()
+    }//public function existeNomeComEsseId() : bool
 
     /**
     * metodo que tem função de verificar se ja existe outro tecnico com mesmo nome
@@ -191,7 +212,7 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function validaNomeTecnico()
+    public function validaNomeTecnico() : bool
     {
         try {
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
@@ -219,7 +240,7 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function validaNomeTecnico()
+    }//public function validaNomeTecnico() : bool
 
     /**
     * metodo que tem função de inserir o tecnico
@@ -300,7 +321,7 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function validaCodigoTecnico($codigo)
+    public function validaCodigoTecnico(int $codigo)
     {
         try {
             if ($this->tokenEhValido() === false) {
@@ -334,7 +355,7 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function validaCodigoCategoria()
+    }//public function validaCodigoTecnico(int $codigo)
 
     /**
     * metodo que tem função de alterar o tecnico
@@ -427,7 +448,7 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function validaFkTecnico($codigo)
+    }//public function validaFkTecnico()
 
     /**
     * metodo que tem função de excluir o tecnico
@@ -486,7 +507,7 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function listarPorCodigo($codigo)
+    public function listarPorCodigo(int $codigo)
     {
         try {
             if ($this->tokenEhValido() === false) {
@@ -511,7 +532,7 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function listarPorCodigo($codigo)
+    }//public function listarPorCodigo(int $codigo)
 
     /**
     * metodo que tem função de listar o tecnico por nome.
@@ -524,7 +545,7 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function listarPorNome($nome)
+    public function listarPorNome(string $nome)
     {
         try {
             if ($this->tokenEhValido() === false) {
@@ -556,7 +577,7 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function listarPorNome($nome)
+    }//public function listarPorNome(string $nome)
 
     /**
     * metodo que tem função de listar todos os tecnicos.
@@ -603,7 +624,7 @@ class Tecnico extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function listaTecnicoPorTime($intCodigo)
+    public function listaTecnicoPorTime(int $intCodigo)
     {
         try {
             if ($this->tokenEhValido() === false) {
@@ -628,5 +649,5 @@ class Tecnico extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function listaTecnicoPorTime($intCodigo)
+    }//public function listaTecnicoPorTime(int $intCodigo)
 }

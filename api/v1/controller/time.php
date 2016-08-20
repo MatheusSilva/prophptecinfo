@@ -6,30 +6,16 @@ require_once "../../../vendor/autoload.php";
 use matheus\sistemaRest\api\v1\model\Time;
 use matheus\sistemaRest\api\v1\lib\Upload;
 
-$acao  = "";
-$id    = "";
-$p     = "";
-$objTime  = new time();
+$objTime  = new Time();
 
-if (isset($_REQUEST["a"]) && empty($_REQUEST["a"]) === false) {
-    $acao  = $_REQUEST["a"];
-}
-
-if (isset($_REQUEST["id"]) && empty($_REQUEST["id"]) === false) {
-    $id  = $_REQUEST["id"];
-}
-
-if (isset($_REQUEST["tk"]) && empty($_REQUEST["tk"]) === false) {
-    $objTime->setToken($_REQUEST["tk"]);
-}
-
-if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
-    $p  = $_REQUEST["p"];
-}
+$objTime->setToken(isset($_REQUEST['tk']) ? $_REQUEST['tk'] : '');
+$acao = isset($_REQUEST['a']) ? $_REQUEST['a'] : 0;
+$id   = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$p    = isset($_REQUEST['p']) ? $_REQUEST['p'] : '';
 
 header('Content-Type: application/json');
 
-if (empty($acao)) {
+if ($acao === 0) {
     $items   = $objTime->listarTudo();
     $results = array();
     $strErros = $objTime->getErros();
@@ -129,10 +115,10 @@ if (empty($acao)) {
 } elseif ($acao == 4) {
     $foto = "";
     
-    if (isset($_FILES["txtFoto"]) && !empty($_FILES["txtFoto"])) {
+    if (isset($_FILES["txtFoto"]['name'])) {
         $foto           = $_FILES["txtFoto"];
     }
-    
+   
     $nome               = $_POST['txtNome'];
     $codigodivisao      = $_POST['cmbDivisao'];
     $codigocategoria    = $_POST['cmbCategoria'];
@@ -157,7 +143,7 @@ if (empty($acao)) {
         $objTime->setCodigoTecnico($codigotecnico);
         //$objTime->setDesempenhotime($desempenhotime);
         //$objTime->setComprarnovojogador($comprarnovojogador);
-
+        
         $retorno  = $objTime->alterar();
         $strErros = $objTime->getErros();
 

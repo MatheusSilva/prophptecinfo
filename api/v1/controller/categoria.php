@@ -5,31 +5,16 @@ ini_set('display_errors', 'on');
 require_once "../../../vendor/autoload.php";
 use matheus\sistemaRest\api\v1\model\Categoria;
 
-$acao         = "";
-$id           = "";
-$p            = "";
-
 $objCategoria = new Categoria();
 
-if (isset($_REQUEST["a"]) && empty($_REQUEST["a"]) === false) {
-    $acao  = $_REQUEST["a"];
-}
-
-if (isset($_REQUEST["id"]) && empty($_REQUEST["id"]) === false) {
-    $id  = $_REQUEST["id"];
-}
-
-if (isset($_REQUEST["tk"]) && empty($_REQUEST["tk"]) === false) {
-    $objCategoria->setToken($_REQUEST["tk"]);
-}
-
-if (isset($_REQUEST["p"]) && empty($_REQUEST["p"]) === false) {
-    $p  = $_REQUEST["p"];
-}
+$objCategoria->setToken(isset($_REQUEST['tk']) ? $_REQUEST['tk'] : '');
+$acao = isset($_REQUEST['a']) ? $_REQUEST['a'] : 0;
+$id   = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$p    = isset($_REQUEST['p']) ? $_REQUEST['p'] : '';
 
 header('Content-Type: application/json');
 
-if (empty($acao)) {
+if ($acao == 0) {
     $items = $objCategoria->listarTudo();
     $results = array();
     $strErros = $objCategoria->getErros();

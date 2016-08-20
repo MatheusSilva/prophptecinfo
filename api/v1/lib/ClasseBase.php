@@ -1,4 +1,6 @@
 <?php
+//declare(strict_types=1);//nao utilizar pois qualquer tipo de dados diferente vai parar a aplicação, validar dados pelo validator
+
 namespace matheus\sistemaRest\api\v1\lib;
 
 use matheus\sistemaRest\api\v1\lib\Login;
@@ -49,7 +51,7 @@ abstract class ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getErros()
+    public function getErros() : string
     {
         $strErros = "";
 
@@ -66,7 +68,7 @@ abstract class ClasseBase
         }//if (is_array($this->arrErro) && !empty($this->arrErro)) {
 
         return $strErros;
-    }//public function getErros()
+    }//public function getErros() : string
 
     /**
     * metodo acessor Set que carrega informação na propriedade arrErro
@@ -78,10 +80,10 @@ abstract class ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setErro($strErro)
+    public function setErro(string $strErro)
     {
         $this->arrErro[] = $strErro;
-    }//public function setErro($strErro)
+    }//public function setErro(string $strErro)
 
     /**
     * metodo acessor que limpa todos os erros escritos sem codigos de erro
@@ -107,10 +109,10 @@ abstract class ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getToken()
+    public function getToken() : string
     {
         return $this->token;
-    }//public function getToken()
+    }//public function getToken() : string
 
     /**
     * metodo acessor Set que carrega informação na propriedade token
@@ -122,10 +124,10 @@ abstract class ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setToken($token)
+    public function setToken(string $token)
     {
         $this->token = $token;
-    }//public function setToken($token)
+    }//public function setToken(string $token)
 
     /**
     * metodo que verifica se o token e valido
@@ -137,7 +139,7 @@ abstract class ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function tokenEhValido()
+    public function tokenEhValido() : bool
     {
         $strToken = $this->getToken();
 
@@ -161,5 +163,5 @@ abstract class ClasseBase
         }//if (empty($retorno)) {
 
         return true;
-    }//public function tokenEhValido($strToken)
+    }//public function tokenEhValido() : bool
 }//class ClasseBase

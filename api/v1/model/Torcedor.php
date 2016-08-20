@@ -1,4 +1,6 @@
 <?php
+//declare(strict_types=1);//nao utilizar pois qualquer tipo de dados diferente vai parar a aplicação, validar dados pelo validator
+
 namespace matheus\sistemaRest\api\v1\model;
 
 use matheus\sistemaRest\api\v1\lib\ClasseBase;
@@ -9,7 +11,7 @@ use Otp\GoogleAuthenticator;
 use Base32\Base32;
 
 /**
-* classe Tecnico
+* classe Torcedor
 *
 * @author    Matheus Silva
 * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
@@ -47,157 +49,6 @@ class Torcedor extends ClasseBase
     private $email;
 
     /**
-    * metodo acessor Get que retorna a informação da propriedade nome
-    *
-    * @access    public
-    * @return    string Retorna o nome da categoria
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public function getNome()
-    {
-        return $this->nome;
-    }//public function getNome()
-
-    /**
-    * metodo acessor Set que carrega informação na propriedade nome
-    *
-    * @access    public
-    * @param     string $nome Armazena a nome atual
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public function setNome($nome)
-    {
-        $this->nome = $nome;
-    }//public function setNome($nome)
-
-    /**
-    * metodo acessor Get que retorna a informação da propriedade email
-    *
-    * @access    public
-    * @return    string Retorna o email do torcedor
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public function getEmail()
-    {
-        return $this->email;
-    }//public function getEmail()
-
-    /**
-    * metodo acessor Set que carrega informação na propriedade email
-    *
-    * @access    public
-    * @param     string $email Armazena o email do torcedor
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }//public function setEmail($email)
-
-    /**
-    * metodo acessor Get que retorna a informação da propriedade senhaAtual
-    *
-    * @access    public
-    * @return    string Retorna a senha da categoria
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public function getSenhaAtual()
-    {
-        return $this->senhaAtual;
-    }//public function getSenhaAtual()
-
-    /**
-    * metodo acessor Set que carrega informação na propriedade senhaAtual
-    *
-    * @access    public
-    * @param     string $senhaAtual Armazena a senha atual
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public function setSenhaAtual($senhaAtual)
-    {
-        $this->senhaAtual = $senhaAtual;
-    }//public function setSenhaAtual($senha)
-
-    /**
-    * metodo acessor Get que retorna a informação da propriedade senha
-    *
-    * @access    public
-    * @return    string Retorna a senha da categoria
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public function getSenha()
-    {
-        return $this->senha;
-    }//public function getSenha()
-
-    /**
-    * metodo acessor Set que carrega informação na propriedade senha
-    *
-    * @access    public
-    * @param     string $senha Armazena a senha atual
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public function setSenha($senha)
-    {
-        $this->senha = $senha;
-    }//public function setSenha($senha)
-
-
-    /**
-    * metodo acessor Get que retorna a informação da propriedade confSenha
-    *
-    * @access    public
-    * @return    string Retorna a confirmação da senha
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public function getConfSenha()
-    {
-        return $this->confSenha;
-    }//public function getConfSenha()
-
-    /**
-    * metodo acessor Set que carrega informação na propriedade confSenha
-    *
-    * @access    public
-    * @param     string $confSenha Armazena a confirmação da senha
-    * @author    Matheus Silva
-    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
-    * @since     14/12/2010
-    * @version   0.2
-    */
-    public function setConfSenha($confSenha)
-    {
-        $this->confSenha = $confSenha;
-    }//public function setConfSenha($senha)
-    
-    /**
     * metodo constutor
     *
     * @access    public
@@ -211,7 +62,178 @@ class Torcedor extends ClasseBase
         if (!isset($_SESSION)) {
             session_start();
         }//if (!isset($_SESSION)) {
+
+        $this->limpaPropriedades();    
     }//public function __construct()
+
+    /**
+    * metodo limpa todas as propriedades da classe
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     20/08/2016
+    * @version   0.1
+    */
+    public function limpaPropriedades()
+    {
+        $this->setNome('');
+        $this->setSenha('');
+        $this->setConfSenha('');
+        $this->setSenhaAtual('');
+        $this->setEmail('');
+    }//public function limpaPropriedades()
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade nome
+    *
+    * @access    public
+    * @return    string Retorna o nome da categoria
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getNome() : string
+    {
+        return $this->nome;
+    }//public function getNome() : string
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade nome
+    *
+    * @access    public
+    * @param     string $nome Armazena a nome atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setNome(string $nome)
+    {
+        $this->nome = $nome;
+    }//public function setNome(string $nome)
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade email
+    *
+    * @access    public
+    * @return    string Retorna o email do torcedor
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getEmail() : string
+    {
+        return $this->email;
+    }//public function getEmail() : string
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade email
+    *
+    * @access    public
+    * @param     string $email Armazena o email do torcedor
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setEmail(string $email)
+    {
+        $this->email = $email;
+    }//public function setEmail(string $email)
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade senhaAtual
+    *
+    * @access    public
+    * @return    string Retorna a senha da categoria
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getSenhaAtual() : string
+    {
+        return $this->senhaAtual;
+    }//public function getSenhaAtual() : string
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade senhaAtual
+    *
+    * @access    public
+    * @param     string $senhaAtual Armazena a senha atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setSenhaAtual(string $senhaAtual)
+    {
+        $this->senhaAtual = $senhaAtual;
+    }//public function setSenhaAtual(string $senha)
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade senha
+    *
+    * @access    public
+    * @return    string Retorna a senha da categoria
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getSenha() : string
+    {
+        return $this->senha;
+    }//public function getSenha() : string
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade senha
+    *
+    * @access    public
+    * @param     string $senha Armazena a senha atual
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setSenha(string $senha)
+    {
+        $this->senha = $senha;
+    }//public function setSenha(string $senha)
+
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade confSenha
+    *
+    * @access    public
+    * @return    string Retorna a confirmação da senha
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getConfSenha() : string
+    {
+        return $this->confSenha;
+    }//public function getConfSenha() : string
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade confSenha
+    *
+    * @access    public
+    * @param     string $confSenha Armazena a confirmação da senha
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setConfSenha(string $confSenha)
+    {
+        $this->confSenha = $confSenha;
+    }//public function setConfSenha(string $senha)
 
     /**
     * metodo que tem função de excluir o tecnico
@@ -301,7 +323,7 @@ class Torcedor extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function desativarAutenticacao2fatores()
+    }//public function ativarAutenticacao2fatores()
 
     /**
     * metodo que tem função de verificar se autenticação 2 fatores esta ativa
@@ -341,7 +363,7 @@ class Torcedor extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function desativarAutenticacao2fatores()
+    }//public function tokenAutenticacao2fatores()
 
 
     /**
@@ -379,20 +401,21 @@ class Torcedor extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function desativarAutenticacao2fatores()
+    }//public function retornaBase64ImgAutenticacao2fatores()
 
 
     /**
     * metodo que tem função de verificar se autenticação 2 fatores esta ativa
     *
     * @access    public
+    * @param     integer $key Chave de autenticacao de dois fatores a ser validado
     * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
     * @author    Matheus Silva
     * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
-    public function tokenAutenticacao2fatoresEhValido($key)
+    public function tokenAutenticacao2fatoresEhValido(int $key)
     {
         try {
             if ($this->tokenEhValido() === false) {
@@ -484,13 +507,14 @@ class Torcedor extends ClasseBase
     * metodo que tem função de fazer validacao da restricao de integridade
     *
     * @access    public
+    * @param     string $login Armazena o login do usuario
     * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
     * @author    Matheus Silva
     * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
-    public function validaTorcedor($login)
+    public function validaTorcedor(string $login)
     {
         try {
             if ($this->tokenEhValido() === false) {
@@ -503,7 +527,7 @@ class Torcedor extends ClasseBase
             $sql  .= "\n WHERE tor.login = :login";
 
             $stmt = Conexao::getConexao()->prepare($sql);
-            $stmt->bindParam(":login", $login, \PDO::PARAM_INT);
+            $stmt->bindParam(":login", $login, \PDO::PARAM_STR);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -519,7 +543,7 @@ class Torcedor extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function validaCodigoTorcedor($codigo)
+    }//public function validaCodigoTorcedor(string $login)
 
     /**
     * metodo que tem função de listar os dados do torcedor pelo código.
@@ -622,5 +646,5 @@ class Torcedor extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function alterar($codigo)
+    }//public function alterar()
 }

@@ -1,4 +1,6 @@
 <?php
+//declare(strict_types=1);//nao utilizar pois qualquer tipo de dados diferente vai parar a aplicação, validar dados pelo validator
+
 namespace matheus\sistemaRest\api\v1\lib;
 
 /**
@@ -20,7 +22,7 @@ abstract class Upload
     * @since     13/07/2015
     * @version   0.1
     */
-    public static function validarExtensao($arquivo, $extensoes_permitidas = array('.jpg', '.png'))
+    public static function validarExtensao($arquivo, array $extensoes_permitidas = array('.jpg', '.png')) : bool
     {
         // Faz a verificação da extensão do arquivo enviado
         $extensao = strrchr($arquivo['name'], '.');
@@ -44,7 +46,7 @@ abstract class Upload
     * @since     13/07/2015
     * @version   0.1
     */
-    public static function validarTipo($arquivo, $arrMineTypes = array("image/jpeg", "image/jpg", "image/png"))
+    public static function validarTipo($arquivo, array $arrMineTypes = array("image/jpeg", "image/jpg", "image/png")) : bool
     {
         $boolPassou = false;
 
@@ -68,14 +70,14 @@ abstract class Upload
     * @since     13/07/2015
     * @version   0.1
     */
-    public static function validarTamanho($arquivo, $tamanho = 5)
+    public static function validarTamanho($arquivo, int $tamanho = 5) : bool
     {
         if ($arquivo['size'] <= ($tamanho*1024*1024)) {
             return true;
         } else {
             return false;
         }//if ($arquivo['size'] <= ($tamanho*1024*1024)) {
-    }//public static function validarTamanho($arquivo, $tamanho = 5)
+    }//public static function validarTamanho($arquivo, $tamanho = 5) : bool
 
 
     /**
@@ -90,7 +92,7 @@ abstract class Upload
     * @since     13/07/2015
     * @version   0.1
     */
-    public static function enviar($nome, $arquivo, $caminho = "../../img/")
+    public static function enviar(string $nome, $arquivo, string $caminho = "../../img/") : string
     {
         //faz upload para o servidor
 

@@ -1,4 +1,6 @@
 <?php
+//declare(strict_types=1);//nao utilizar pois qualquer tipo de dados diferente vai parar a aplicação, validar dados pelo validator
+
 namespace matheus\sistemaRest\api\v1\model;
 
 use matheus\sistemaRest\api\v1\lib\ClasseBase;
@@ -36,8 +38,23 @@ class Divisao extends ClasseBase
     */
     public function __construct()
     {
-
+        $this->limpaPropriedades();
     }//public function __construct()
+    
+    /**
+    * metodo limpa todas as propriedades da classe
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     20/08/2016
+    * @version   0.1
+    */
+    public function limpaPropriedades()
+    {
+        $this->setNome('');
+        $this->setCodigoDivisao(0);
+    }//public function limpaPropriedades()
 
     /**
     * metodo acessor Get que retorna a informação da propriedade codigoDivisao
@@ -49,10 +66,10 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getCodigoDivisao()
+    public function getCodigoDivisao() : int
     {
         return $this->codigoDivisao;
-    }//public function getCodigoDivisao()
+    }//public function getCodigoDivisao() : int
 
     /**
     * metodo acessor Set que carrega informação na propriedade codigoDivisao
@@ -64,10 +81,10 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setCodigoDivisao($codigo)
+    public function setCodigoDivisao(int $codigo)
     {
         $this->codigoDivisao = $codigo;
-    }//public function setCodigoDivisao($codigo)
+    }//public function setCodigoDivisao(int $codigo)
 
     /**
     * metodo acessor Get que retorna a informação da propriedade nome
@@ -79,10 +96,10 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getNome()
+    public function getNome() : string
     {
         return $this->nome;
-    }//public function getNome()
+    }//public function getNome() : string
 
     /**
     * metodo acessor Set que carrega informação na propriedade nome
@@ -94,10 +111,10 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setNome($nome)
+    public function setNome(string $nome)
     {
         $this->nome = $nome;
-    }//public function setNome($nome)
+    }//public function setNome(string $nome)
 
     /**
     * metodo que tem função de verificar se ja existe outra divisao com mesmo nome e id
@@ -109,7 +126,7 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function existeNomeComEsseId()
+    public function existeNomeComEsseId() : bool
     {
         try {
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
@@ -136,7 +153,7 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function existeNomeComEsseId()
+    }//public function existeNomeComEsseId() : bool
 
     /**
     * metodo que tem função de verificar se ja existe outra divisao com mesmo nome
@@ -148,7 +165,7 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function validaNomeDivisao()
+    public function validaNomeDivisao() : bool
     {
         try {
             $sql   = "\n SELECT DISTINCT 1 AS resultado";
@@ -173,7 +190,7 @@ class Divisao extends ClasseBase
             fclose($fp);
             return false;
         }
-    }//public function validaNomeDivisao()
+    }//public function validaNomeDivisao() : bool
 
     /**
     * metodo que tem função de inserir a divisão
@@ -235,13 +252,14 @@ class Divisao extends ClasseBase
     * metodo que tem função de fazer validacao da restricao de integridade
     *
     * @access    public
+    * @param     integer $codigo Armazena o codigo da divisao
     * @return    boolean|integer retorna um valor indicando se tudo ocorreu bem ou não
     * @author    Matheus Silva
     * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
     * @since     14/12/2010
     * @version   0.2
     */
-    public function validaCodigoDivisao($codigo)
+    public function validaCodigoDivisao(int $codigo)
     {
         try {
             if ($this->tokenEhValido() === false) {
@@ -430,7 +448,7 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function listarPorCodigo($codigo)
+    public function listarPorCodigo(int $codigo)
     {
         try {
             $retorno = $this->validaCodigoDivisao($codigo);
@@ -467,7 +485,7 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function listarPorNome($nome)
+    public function listarPorNome(string $nome)
     {
         try {
             if ($this->tokenEhValido() === false) {
@@ -544,7 +562,7 @@ class Divisao extends ClasseBase
     * @since     14/12/2010
     * @version   0.2
     */
-    public function listaDivisaoPorTime($intCodigoTime)
+    public function listaDivisaoPorTime(int $intCodigoTime)
     {
         try {
             if ($this->tokenEhValido() === false) {

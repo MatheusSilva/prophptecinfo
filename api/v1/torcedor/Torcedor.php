@@ -1,4 +1,6 @@
 <?php
+//declare(strict_types=1);//nao utilizar pois qualquer tipo de dados diferente vai parar a aplicação, validar dados pelo validator
+
 namespace matheus\sistemaRest\api\v1\model;
 
 use matheus\sistemaRest\api\v1\lib\Conexao;
@@ -54,8 +56,27 @@ class Torcedor
     public function __construct()
     {
         require_once "../../vendor/autoload.php";
+        $this->limpaPropriedades();
     }//public function __construct()
     
+    /**
+    * metodo limpa todas as propriedades da classe
+    *
+    * @access    public
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     20/08/2016
+    * @version   0.1
+    */
+    public function limpaPropriedades()
+    {
+        $this->setCodigoTorcedor(0);
+        $this->setNome('');
+        $this->setEmail('');
+        $this->setLogin('');
+        $this->setSenha('');
+    }//public function limpaPropriedades()
+
     /**
     * metodo acessor Get que retorna a informação da propriedade codigoTorcedor
     *
@@ -66,10 +87,10 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getCodigoTorcedor()
+    public function getCodigoTorcedor() : int
     {
         return $this->codigoTorcedor;
-    }//public function getCodigoTorcedor()
+    }//public function getCodigoTorcedor() : int
     
     /**
     * metodo acessor Set que carrega informação na propriedade codigoTorcedor
@@ -81,10 +102,10 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setCodigoTorcedor($codigo)
+    public function setCodigoTorcedor(int $codigo)
     {
         $this->codigoTorcedor = $codigo;
-    }//public function setCodigoTorcedor($codigo)
+    }//public function setCodigoTorcedor(int $codigo)
 
     /**
     * metodo acessor Get que retorna a informação da propriedade email
@@ -96,10 +117,10 @@ class Torcedor
     * @since     12/08/2016
     * @version   0.1
     */
-    public function getEmail()
+    public function getEmail() : string
     {
         return $this->email;
-    }//public function getEmail()
+    }//public function getEmail() : string
     
     /**
     * metodo acessor Set que carrega informação na propriedade email
@@ -111,10 +132,10 @@ class Torcedor
     * @since     12/08/2016
     * @version   0.1
     */
-    public function setEmail($email)
+    public function setEmail(string $email)
     {
         $this->email = $email;
-    }//public function setEmail($email)
+    }//public function setEmail(string $email)
     
     /**
     * metodo acessor Get que retorna a informação da propriedade nome
@@ -126,10 +147,10 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getNome()
+    public function getNome() : string
     {
         return $this->nome;
-    }//public function getNome()
+    }//public function getNome() : string
     
     /**
     * metodo acessor Set que carrega informação na propriedade nome
@@ -141,10 +162,10 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setNome($nome)
+    public function setNome(string $nome)
     {
         $this->nome = $nome;
-    }//public function setNome($nome)
+    }//public function setNome(string $nome)
     
     /**
     * metodo acessor Get que retorna a informação da propriedade login
@@ -156,10 +177,10 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getLogin()
+    public function getLogin() : string
     {
         return $this->login;
-    }//public function getLogin()
+    }//public function getLogin() : string
     
     /**
     * metodo acessor Set que carrega informação na propriedade login
@@ -171,10 +192,10 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setLogin($login)
+    public function setLogin(string $login)
     {
         $this->login = $login;
-    }//public function setLogin($login)
+    }//public function setLogin(string $login)
     
     /**
     * metodo acessor Get que retorna a informação da propriedade senha
@@ -186,10 +207,10 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public function getSenha()
+    public function getSenha() : string
     {
         return $this->senha;
-    }//public function getSenha()
+    }//public function getSenha() : string
     
     /**
     * metodo acessor Set que carrega informação na propriedade senha
@@ -201,13 +222,13 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public function setSenha($senha)
+    public function setSenha(string $senha)
     {
         $salt1 = "15353oiwHSDDKFJNGmfnsjfjqbhdgkjk";
         $salt2 = "NSBDFSDBFisoetiihskkdfgjfdkj56767";
         $salt3 = "zXCdsqGHiSpYxwHqJ8r7F21pFe93452";
         $this->senha =  Login::criptografiaEstatica($senha, 'sha512', $salt1, $salt2, $salt3, 4, 128);
-    }//public function setSenha($senha)
+    }//public function setSenha(string $senha)
     
     /**
     * metodo que tem função de inserir o torcedor
@@ -315,7 +336,7 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public function excluir($codigo)
+    public function excluir(int $codigo)
     {
         try {
             $sql     = "\n DELETE";
@@ -336,7 +357,7 @@ class Torcedor
             fclose($fp);
             return false;
         }
-    }//public function excluir($codigo)
+    }//public function excluir(int $codigo)
     
     /**
     * metodo que tem função de listar o torcedor por codigo
@@ -349,7 +370,7 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarPorCodigo($codigo)
+    public static function listarPorCodigo(int $codigo)
     {
         try {
             $sql     = "\n SELECT codigo_torcedor";
@@ -370,7 +391,7 @@ class Torcedor
             fclose($fp);
             return false;
         }
-    }//public static function listarPorCodigo($codigo)
+    }//public static function listarPorCodigo(int $codigo)
     
     /**
     * metodo que tem função de listar o torcedor por nome
@@ -383,7 +404,7 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarPorNome($nome)
+    public static function listarPorNome(string $nome)
     {
         try {
             $sql     = "\n SELECT codigo_torcedor";
@@ -405,7 +426,7 @@ class Torcedor
             fclose($fp);
             return false;
         }
-    }//public static function listarPorNome($nome)
+    }//public static function listarPorNome(string $nome)
     
     /**
     * metodo que tem função de listar o torcedor por login
@@ -418,7 +439,7 @@ class Torcedor
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function listarPorLogin($login)
+    public static function listarPorLogin(string $login)
     {
         try {
             $sql     = "\n SELECT codigo_torcedor";
@@ -440,7 +461,7 @@ class Torcedor
             fclose($fp);
             return false;
         }
-    }//public static function listarPorLogin($login)
+    }//public static function listarPorLogin(string $login)
     
     /**
     * metodo que tem função de listar todos os torcedores

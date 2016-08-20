@@ -1,4 +1,6 @@
 <?php
+//declare(strict_types=1);//nao utilizar pois qualquer tipo de dados diferente vai parar a aplicação, validar dados pelo validator
+
 namespace matheus\sistemaRest\api\v1\lib;
 
 use matheus\sistemaRest\api\v1\model\Torcedor;
@@ -22,14 +24,14 @@ abstract class Login
     * @version   0.2
     */
     public static function criptografiaEstatica(
-        $strConteudo = '',
-        $algCripto = 'sha256',
-        $salt1 = 'Xr7zjx1D14E55qRxHDutiQZkhyhmnk78asy793',
-        $salt2 = 'h17E66DHuiQZr7zj1Dkhyh7mnk8asyqRx84',
-        $salt3 = 'x24D8X3gTlqS8xK2aQwWy9nmfr5sAoQsx62',
-        $numIteracoes = 2,
-        $numCaracterSaida = 64
-    ) {
+        string $strConteudo = '',
+        string $algCripto = 'sha256',
+        string $salt1 = 'Xr7zjx1D14E55qRxHDutiQZkhyhmnk78asy793',
+        string $salt2 = 'h17E66DHuiQZr7zj1Dkhyh7mnk8asyqRx84',
+        string $salt3 = 'x24D8X3gTlqS8xK2aQwWy9nmfr5sAoQsx62',
+        int $numIteracoes = 2,
+        int $numCaracterSaida = 64
+    ) : string {
         if (
             trim($strConteudo) == '' 
             || trim($algCripto) == '' 
@@ -54,15 +56,16 @@ abstract class Login
     * @version   0.2
     */
     public static function criptografiaRandomica(
-        $strConteudo = '',
-        $algCripto = 'sha256',
-        $salt1 = 'jcxzknhxjajdulHGHAQZkhyhmnk789553',
-        $salt2 = '893343hjgsjhbjlAHLKJHIDJiertokrjtkr',
-        $salt3 = 'x24D8X3gTlqS8xK2aQwWy9nmfr5sAoQsx62',
-        $numIteracoes = 2,
-        $numCaracterSaida = 64
-    ) {
-        $rand = uniqid(rand(), true);
+        string $strConteudo = '',
+        string $algCripto = 'sha256',
+        string $salt1 = 'jcxzknhxjajdulHGHAQZkhyhmnk789553',
+        string $salt2 = '893343hjgsjhbjlAHLKJHIDJiertokrjtkr',
+        string $salt3 = 'x24D8X3gTlqS8xK2aQwWy9nmfr5sAoQsx62',
+        int $numIteracoes = 2,
+        int $numCaracterSaida = 64
+    ) : string {
+        $rand = (string)rand();
+        $rand = uniqid($rand, true);
 
         if (
             trim($strConteudo) == '' 
@@ -88,7 +91,7 @@ abstract class Login
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function retornaIpUsuario()
+    public static function retornaIpUsuario() : string
     {
         $http_client_ip = "";
         $http_x_forwarded_for = "";
@@ -114,7 +117,7 @@ abstract class Login
             $ip = $remote_addr;
         }
 
-        return $ip;
+        return (string)$ip;
     }//public static function retornaIpUsuario()
 
     /**
@@ -128,7 +131,7 @@ abstract class Login
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function entrar($torcedor, $senha)
+    public static function entrar(string $torcedor, string $senha)
     {
         require_once "Conexao.php";
         require_once "../../api/v1/torcedor/Torcedor.php";
@@ -205,7 +208,7 @@ abstract class Login
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function verificar($redirecionar = true)
+    public static function verificar(bool $redirecionar = true)
     {
         if (!isset($_SESSION)) {
             session_start();
@@ -238,7 +241,7 @@ abstract class Login
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function verificarCom2Etapas()
+    public static function verificarCom2Etapas() : bool
     {
         if (!isset($_SESSION)) {
             session_start();
@@ -263,13 +266,13 @@ abstract class Login
     * @since     14/12/2010
     * @version   0.2
     */
-    public static function sair($redirecionar = true)
+    public static function sair(bool $redirecionar = true)
     {
         if (!isset($_SESSION)) {
             session_start();
         }//if (!isset($_SESSION)) {
             
-        setcookie('token', null, -1, '/');
+        setcookie('token', '', -1, '/');
         
         $sql   = "\n UPDATE torcedor";
         $sql  .= "\n SET    token = :token";
@@ -291,5 +294,5 @@ abstract class Login
         if ($redirecionar) {
             header('location:../../site/paginas/home.html');
         }//if ($redirecionar) {
-    }//public static function sair($redirecionar = true)
+    }//public static function sair(bool $redirecionar = true)
 }//class Login

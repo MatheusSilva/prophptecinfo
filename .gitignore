@@ -1,5 +1,6 @@
-/api/cache/
-/adm/fotos/
-/logs/
-/javascript/node_modules/
+/img
 /nbproject/private/
+.settings
+.project
+.buildpath
+temp.txt
