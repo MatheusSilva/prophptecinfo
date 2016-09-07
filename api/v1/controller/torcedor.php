@@ -9,7 +9,8 @@ use matheus\sistemaRest\api\v1\lib\Login;
 $objTorcedor = new modTorcedor();
 
 $objTorcedor->setToken(isset($_REQUEST['tk']) ? $_REQUEST['tk'] : '');
-$acao = isset($_REQUEST['a']) ? $_REQUEST['a'] : 0;
+$acao  = isset($_REQUEST['a']) ? $_REQUEST['a'] : 0;
+$id    = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
 $key   = isset($_REQUEST['key']) ? $_REQUEST['key'] : '';
 
 header('Content-Type: application/json');
@@ -111,6 +112,7 @@ if ($acao == 1) {
     $json = json_encode($torcedor);
     echo $json;
 } elseif ($acao == 7) {
+    $objTorcedor->setCodigoTorcedor($id);
     $arrDadosTorcedor = $objTorcedor->retornaDadosTorcedor();
     $strErros = $objTorcedor->getErros();
 
@@ -123,6 +125,8 @@ if ($acao == 1) {
 } elseif ($acao == 8) {
     $request_body = file_get_contents('php://input');
     $torcedor    = json_decode($request_body, true);
+
+    $objTorcedor->setCodigoTorcedor($torcedor["codigo"]);
     $objTorcedor->setNome($torcedor["txtNome"]);
     $objTorcedor->setEmail($torcedor["txtEmail"]);
     

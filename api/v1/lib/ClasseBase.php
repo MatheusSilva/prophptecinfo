@@ -18,13 +18,13 @@ abstract class ClasseBase
     * @access private
     * @var array Armazena todos os erros escritos sem codigos de erro
     */
-    private $arrErro;
+    private $arrErro = array();
 
     /**
     * @access private
     * @var string Armazena o token de autenticação
     */
-    private $token;
+    private $token = '';
 
     /**
     * metodo constutor

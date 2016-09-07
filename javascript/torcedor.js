@@ -10,6 +10,10 @@ class Torcedor
         var txtSenha      = '';
         var txtConfSenha  = '';
 
+        if (form.id != undefined) {
+            codigo = form.id.value;
+        }
+
         if (form.codigo != undefined) {
             codigo = form.codigo.value;
         }
@@ -28,6 +32,10 @@ class Torcedor
 
         if (form.txtSenha != undefined) {
             txtSenha = form.txtSenha.value;
+        }
+
+        if (form.txtSenhaAtual != undefined) {
+            txtSenhaAtual = form.txtSenhaAtual.value;
         }
 
         if (form.txtConfSenha != undefined) {
@@ -233,7 +241,7 @@ class Torcedor
         } 
     }
 
-    static insereDadosTorcedorRetornados()  
+    static insereDadosTorcedorRetornados(codigo)  
     {
         var xhr = Ajax.createXHR();
 
@@ -244,7 +252,7 @@ class Torcedor
             consulta = "&tk="+token;
         }
 
-        xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/torcedor.php?a=7"+consulta,true);   
+        xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/torcedor.php?a=7&id="+codigo+consulta,true);   
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onreadystatechange = function() {
             //Verificar pelo estado "4" de pronto.

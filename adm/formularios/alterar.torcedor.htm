@@ -8,7 +8,16 @@
 
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function() {
-                Torcedor.insereDadosTorcedorRetornados();
+                location.queryString = {};
+                location.search.substr(1).split("&").forEach(function (pair) {
+                    if (pair === "") return;
+                    var parts = pair.split("=");
+                    location.queryString[parts[0]] = parts[1] &&
+                        decodeURIComponent(parts[1].replace(/\+/g, " "));
+                });
+
+                document.getElementById("codigo").value = location.queryString.id;
+                Torcedor.insereDadosTorcedorRetornados(location.queryString.id);
             });
         </script>
     </head>
@@ -44,13 +53,6 @@
                             <td>E-mail:</td>
                             <td>
                                 <input type="text" name="txtEmail" id="txtEmail" value="" />
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Senha Atual:</td>
-                            <td>
-                                <input type="password" name="txtSenhaAtual" id="txtSenhaAtual" value="" />
                             </td>
                         </tr>
 

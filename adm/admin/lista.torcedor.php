@@ -49,7 +49,9 @@
 
 				    <?php
                     require_once "../../api/v1/torcedor/Torcedor.php";
-                    $vetor = Torcedor::listarTudo();
+                    use matheus\sistemaRest\api\v1\model\Torcedor;
+                    $objTorcedor = new Torcedor();
+                    $vetor = $objTorcedor->listarTudo();
                     
                     if ($vetor != 0) {
                         $linha = 0;
@@ -65,8 +67,8 @@
                             echo "<td>$codigo</td>";
                             echo "<td>$nome</td>";
                             
-                            $detalhes = "<a href=\"../consultas/detalhe.torcedor.php?codigo=$codigo\">[D]</a>";
-                            $alterar = "<a href=\"../formularios/alterar.torcedor.php?codigo=$codigo\">[A]</a>";
+                            $detalhes = "<a href=\"../consultas/detalhe.torcedor.php?id=$codigo\">[D]</a>";
+                            $alterar = "<a href=\"../formularios/alterar.torcedor.htm?id=$codigo\">[A]</a>";
                             $excluir = "<a href=\"javascript:confirmar($codigo)\">[X]</a>";
                             
                             echo "<td>$detalhes $alterar $excluir</td>";

@@ -57,6 +57,7 @@
 					<?php
                     if (isset($_GET['btnConsultar'])) {
                         require_once "../../api/v1/torcedor/Torcedor.php";
+                        use matheus\sistemaRest\api\v1\model\Torcedor;
                         $vetor = Torcedor::listarPorNome($_GET['txtNome']);
                         
                         if ($vetor != 0) {

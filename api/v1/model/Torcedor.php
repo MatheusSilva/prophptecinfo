@@ -5,6 +5,7 @@ namespace matheus\sistemaRest\api\v1\model;
 
 use matheus\sistemaRest\api\v1\lib\ClasseBase;
 use matheus\sistemaRest\api\v1\lib\Conexao;
+use matheus\sistemaRest\api\v1\lib\Login;
 use Respect\Validation\Validator as v;
 use Otp\Otp;
 use Otp\GoogleAuthenticator;
@@ -18,6 +19,12 @@ use Base32\Base32;
 */
 class Torcedor extends ClasseBase
 {
+    /**
+    * @access private
+    * @var int Armazena o codigo do torcedor
+    */
+    private $codigoTorcedor;
+
     /**
     * @access private
     * @var string Armazena o nome do torcedor
@@ -77,12 +84,44 @@ class Torcedor extends ClasseBase
     */
     public function limpaPropriedades()
     {
+        $this->setCodigoTorcedor(0);
         $this->setNome('');
         $this->setSenha('');
         $this->setConfSenha('');
         $this->setSenhaAtual('');
         $this->setEmail('');
     }//public function limpaPropriedades()
+
+    /**
+    * metodo acessor Get que retorna a informação da propriedade codigoTorcedor
+    *
+    * @access    public
+    * @return    integer Retorna o codigo do torcedor
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function getCodigoTorcedor() : int
+    {
+        return $this->codigoTorcedor;
+    }//public function getCodigoTorcedor() : int
+
+    /**
+    * metodo acessor Set que carrega informação na propriedade codigoTorcedor
+    *
+    * @access    public
+    * @param     integer $codigoTorcedor Armazena o codigo do torcedor
+    * @author    Matheus Silva
+    * @copyright © Copyright 2010-2016 Matheus Silva. Todos os direitos reservados.
+    * @since     14/12/2010
+    * @version   0.2
+    */
+    public function setCodigoTorcedor(int $codigoTorcedor)
+    {
+        $this->codigoTorcedor = $codigoTorcedor;
+    }//public function setCodigoTorcedor(int $codigoTorcedor)
+
 
     /**
     * metodo acessor Get que retorna a informação da propriedade nome
@@ -201,7 +240,10 @@ class Torcedor extends ClasseBase
     */
     public function setSenha(string $senha)
     {
-        $this->senha = $senha;
+        $salt1 = "15353oiwHSDDKFJNGmfnsjfjqbhdgkjk";
+        $salt2 = "NSBDFSDBFisoetiihskkdfgjfdkj56767";
+        $salt3 = "zXCdsqGHiSpYxwHqJ8r7F21pFe93452";
+        $this->senha =  Login::criptografiaEstatica($senha, 'sha512', $salt1, $salt2, $salt3, 4, 128);
     }//public function setSenha(string $senha)
 
 
@@ -558,19 +600,20 @@ class Torcedor extends ClasseBase
     public function retornaDadosTorcedor()
     {
         try {
-            $usuario  = $_SESSION['u'];
-            $retorno = $this->validaTorcedor($usuario);
+            $codigo  = $this->getCodigoTorcedor();
+            //$usuario  = $_SESSION['u'];
+            //$retorno = $this->validaTorcedor($usuario);
 
-            if ($retorno !== true) {
-                return $retorno;
-            }//if (!$retorno) {
+            //if ($retorno !== true) {
+                //return $retorno;
+            //}//if (!$retorno) {
 
             $sql   = "\n SELECT nome, email";
             $sql  .= "\n FROM torcedor";
-            $sql  .= "\n WHERE login = :usuario";
+            $sql  .= "\n WHERE codigo_torcedor = :codigo";
 
             $stmt = Conexao::getConexao()->prepare($sql);
-            $stmt->bindParam(":usuario", $usuario, \PDO::PARAM_STR);
+            $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
             $stmt->execute();
             $retorno =  $stmt->fetch(\PDO::FETCH_ASSOC);
             return $retorno;
@@ -595,17 +638,17 @@ class Torcedor extends ClasseBase
     public function alterar()
     {
         try {
-            $usuario   = $_SESSION['u'];
+            $codigo   = $this->getCodigoTorcedor();
             $nome      = $this->getNome();
             $email     = $this->getEmail();
             $senha     = $this->getSenha();
             $confSenha = $this->getConfSenha();
 
-            $retorno = $this->validaTorcedor($usuario);
+            //$retorno = $this->validaTorcedor($usuario);
 
-            if ($retorno !== true) {
-                return $retorno;
-            }//if (!$retorno) {
+            //if ($retorno !== true) {
+                //return $retorno;
+            //}//if (!$retorno) {
 
             if (!(v::alnum()->length(2, 30)->validate($nome))) {
                 $this->setErro("O seu nome deve ser alfanumérico de 2 a 30 caracteres.");
@@ -622,12 +665,12 @@ class Torcedor extends ClasseBase
                 $sql .= "\n ,senha = :senha";
             }
 
-            $sql .= "\n WHERE login = :usuario";
+            $sql .= "\n WHERE codigo_torcedor = :codigo";
 
             $conexao = Conexao::getConexao();
             $conexao->beginTransaction();
             $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":usuario", $usuario, \PDO::PARAM_STR);
+            $stmt->bindParam(":codigo", $codigo, \PDO::PARAM_INT);
             $stmt->bindParam(":nome", $nome, \PDO::PARAM_STR, 30);
             $stmt->bindParam(":email", $email, \PDO::PARAM_STR, 100);
 

@@ -4,6 +4,8 @@
         ,"matthiasmullie/minify": "1.*"
         ,"christian-riesen/otp": "2.*"
         ,"swiftmailer/swiftmailer": "5.*"
+        ,"slim/slim": "3.*"
+        ,"doctrine/orm": "2.*"
     },
 	"autoload": {
 		"psr-0": {

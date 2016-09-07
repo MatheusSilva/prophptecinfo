@@ -6,6 +6,7 @@ namespace matheus\sistemaRest\api\v1\model;
 use matheus\sistemaRest\api\v1\lib\Conexao;
 use matheus\sistemaRest\api\v1\lib\Login;
 
+//conflito de classes juntar esta classe ao outra , mesmo nome e mesmo namespace
 /**
 * classe Torcedor
 *

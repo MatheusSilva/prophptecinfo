@@ -19,21 +19,16 @@
 		       		<a href="../formularios/logout.php">Sair</a>
 		    	</nav>
       		</header>
-
-			<div id="menu_superior">
-				<a href="../paginas/home.php">Home</a> ::
-				<a href="../paginas/cadastros.php">Cadastros</a> ::
-				<a href="../paginas/administrar.php">Administrar</a> ::
-				<a href="../paginas/consultas.php">Consultas</a> ::
-				<a href="logout.php">Sair</a>
-			</div>
 			
 			<div id="conteudo">
 				<h2 class="titulo">Detalhe de Torcedor</h2>
 				<?php
                 require_once "../../api/v1/torcedor/Torcedor.php";
-                $codigo = $_GET['codigo'];
-                $dados  = Torcedor::listarPorCodigo($codigo);
+                use matheus\sistemaRest\api\v1\model\Torcedor;
+                $objTorcedor = new Torcedor();
+
+                $codigo = $_GET['id'];
+                $dados  = $objTorcedor->listarPorCodigo($codigo);
                 
                 if ($dados != 0) {
                     $codigo_torcedor = $dados['codigo_torcedor'];

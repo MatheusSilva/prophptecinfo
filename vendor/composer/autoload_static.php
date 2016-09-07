@@ -7,6 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInit1d991266519f241bf3f79efffdddc93b
 {
     public static $files = array (
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
     );
 
@@ -16,9 +18,19 @@ class ComposerStaticInit1d991266519f241bf3f79efffdddc93b
             'matheus\\sistemaRest\\api\\v1\\model\\' => 33,
             'matheus\\sistemaRest\\api\\v1\\lib\\' => 31,
         ),
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Component\\Console\\' => 26,
+            'Slim\\' => 5,
+        ),
         'R' => 
         array (
             'Respect\\Validation\\' => 19,
+        ),
+        'P' => 
+        array (
+            'Psr\\Http\\Message\\' => 17,
         ),
         'O' => 
         array (
@@ -28,6 +40,20 @@ class ComposerStaticInit1d991266519f241bf3f79efffdddc93b
         array (
             'MatthiasMullie\\PathConverter\\' => 29,
             'MatthiasMullie\\Minify\\' => 22,
+        ),
+        'I' => 
+        array (
+            'Interop\\Container\\' => 18,
+        ),
+        'F' => 
+        array (
+            'FastRoute\\' => 10,
+        ),
+        'D' => 
+        array (
+            'Doctrine\\Instantiator\\' => 22,
+            'Doctrine\\Common\\Cache\\' => 22,
+            'Doctrine\\Common\\' => 16,
         ),
         'B' => 
         array (
@@ -44,9 +70,25 @@ class ComposerStaticInit1d991266519f241bf3f79efffdddc93b
         array (
             0 => __DIR__ . '/../..' . '/api/v1/lib',
         ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Component\\Console\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/console',
+        ),
+        'Slim\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/slim/slim/Slim',
+        ),
         'Respect\\Validation\\' => 
         array (
             0 => __DIR__ . '/..' . '/respect/validation/library',
+        ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Otp\\' => 
         array (
@@ -60,6 +102,26 @@ class ComposerStaticInit1d991266519f241bf3f79efffdddc93b
         array (
             0 => __DIR__ . '/..' . '/matthiasmullie/minify/src',
         ),
+        'Interop\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
+        ),
+        'FastRoute\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nikic/fast-route/src',
+        ),
+        'Doctrine\\Instantiator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
+        ),
+        'Doctrine\\Common\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
+        ),
+        'Doctrine\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/common/lib/Doctrine/Common',
+        ),
         'Base32\\' => 
         array (
             0 => __DIR__ . '/..' . '/christian-riesen/base32/src',
@@ -72,6 +134,40 @@ class ComposerStaticInit1d991266519f241bf3f79efffdddc93b
             'sistemaRest/tests' => 
             array (
                 0 => __DIR__ . '/../..' . '/',
+            ),
+        ),
+        'P' => 
+        array (
+            'Pimple' => 
+            array (
+                0 => __DIR__ . '/..' . '/pimple/pimple/src',
+            ),
+        ),
+        'D' => 
+        array (
+            'Doctrine\\ORM\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/orm/lib',
+            ),
+            'Doctrine\\DBAL\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/dbal/lib',
+            ),
+            'Doctrine\\Common\\Lexer\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
+            ),
+            'Doctrine\\Common\\Inflector\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
+            ),
+            'Doctrine\\Common\\Collections\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/collections/lib',
+            ),
+            'Doctrine\\Common\\Annotations\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/annotations/lib',
             ),
         ),
     );
