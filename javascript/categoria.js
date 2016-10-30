@@ -1,24 +1,36 @@
 class Categoria
 {
+    static formToJSON(form) 
+    {
+        var codigo = "", nome = "";
+
+        if (form.codigo != undefined) {
+            codigo = form.codigo.value;
+        }
+
+        if (form.txtNome != undefined) {
+            nome = form.txtNome.value;
+        }
+
+        return JSON.stringify({
+            "codigo": codigo,
+            "txtNome": nome
+        });
+    }
+
     static consultar(form)
     {
-        var pesquisa = '';
+        var url = "http://localhost/sistemaRest/api/v1/categoria/";
 
-        if (form != null && form.txtNome.value != undefined) {
-            pesquisa = form.txtNome.value;
+        if (form != null && form.txtNome.value != undefined && form.txtNome.value != '') {
+            url += "pesquisanome/"+form.txtNome.value;
         }
 
         var xhr = Ajax.createXHR();
-        var token  = Login.getCookie('token');
-        var consulta = "";
-
-        if (token !== "") {
-            consulta = "&tk="+token;
-        }
 
         if(xhr != undefined){
             //Montar requisição
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=3"+consulta,true);
+            xhr.open("GET", url, true);
             xhr.onload = function(e) {
                     //Verificar pelo estado "4" de pronto.
                 if (xhr.readyState == '4') {
@@ -87,28 +99,13 @@ class Categoria
                 }
             }
 
-            var jForm = new FormData();
-            jForm.append('p', pesquisa);
-
             //Enviar
-            xhr.send(jForm);
+            xhr.setRequestHeader('tk', Login.getCookie('token'));
+            xhr.send(); 
         }
     }
     
-    static formToJSON(form) 
-    {
-        var codigo = "";
-
-        if (form.codigo != undefined) {
-            codigo = form.codigo.value;
-        }
-
-
-        return JSON.stringify({
-            "codigo": codigo,
-            "txtNome": form.txtNome.value
-        });
-    }
+    
 
     static confirmar(codigo)
     {
@@ -119,21 +116,16 @@ class Categoria
             document.getElementById("ajax-loader").style.display='block';	
             var mensagem = "";
 
-            if (codigo == "") {
-                mensagem += "Código invalido";
-            } else {
-                codigo = "&id="+codigo;
+            if (Login.getCookie('token') == "") {
+                mensagem += "Token invalido";
             }
 
-            var token  = Login.getCookie('token');
-            var consulta = "";
-
-            if (token !== "") {
-                consulta = "&tk="+token;
+            if (codigo == "") {
+                mensagem += "Código invalido";
             }
                     
             if (mensagem == "" && xhr != undefined) {
-                xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=6"+codigo+consulta,true);
+                xhr.open("DELETE","http://localhost/sistemaRest/api/v1/categoria/"+codigo,true);
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
@@ -147,6 +139,7 @@ class Categoria
                     }
                 }
 
+                xhr.setRequestHeader('tk', Login.getCookie('token'));
                 xhr.send(); 
             } else {
                 alert(mensagem);
@@ -164,15 +157,12 @@ class Categoria
             mensagem += "<br /><b>Você não preencheu a categoria</b>";
         }
 
-        var token  = Login.getCookie('token');
-        var consulta = "";
-
-        if (token !== "") {
-            consulta = "&tk="+token;
+        if (Login.getCookie('token') == "") {
+            mensagem += "Token invalido";
         }
 
         if (mensagem == "" && xhr != undefined) {
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=4"+consulta,true);
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/categoria/",true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -185,6 +175,7 @@ class Categoria
                 }
             }
 
+            xhr.setRequestHeader('tk', Login.getCookie('token'));
             xhr.send(Categoria.formToJSON(form));
         } else {
             document.getElementById("mensagem").innerHTML = mensagem;
@@ -194,29 +185,28 @@ class Categoria
     static atualizar(form) 
     {
         document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";
-        var xhr = Ajax.createXHR();
+        
         var codigo = form.codigo.value;
         var mensagem = "";
 
-        if (codigo == "") {
+        if (Login.getCookie('token') == "") {
+            mensagem += "Token invalido";
+        }
+
+        if (codigo == "" || codigo == undefined) {
             mensagem += "Código invalido";
-        } else {
-            codigo = "&id="+codigo;
         }
         
         if (document.getElementById("txtNome").value == "") {
             mensagem += "<br /><b>Você não preencheu a Categoria</b>";
         }
-
-        var token  = Login.getCookie('token');
-        var consulta = "";
         
-        if (token !== "") {
-            consulta = "&tk="+token;
-        }
+        var consulta = "";
+
+        var xhr = Ajax.createXHR();
 
         if(mensagem == "" && xhr != undefined) {
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=5"+codigo+consulta,true);
+            xhr.open("PUT","http://localhost/sistemaRest/api/v1/categoria/"+codigo,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -228,6 +218,7 @@ class Categoria
                 }
             }
 
+            xhr.setRequestHeader('tk', Login.getCookie('token'));
             xhr.send(Categoria.formToJSON(form));
         } else {
             document.getElementById("mensagem").innerHTML = mensagem;

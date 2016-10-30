@@ -5,25 +5,27 @@
     use matheus\sistemaRest\api\v1\model\Categoria;
     $objCategoria = new Categoria();
 
-    $this->get('/{tk}', function ($request, $response, $args) use ($objCategoria) {
-        $objCategoria->setToken(isset($args['tk']) ? $args['tk'] : '');
+    $this->get('/', function ($request, $response, $args) use ($objCategoria) {
+        $objCategoria->setToken($request->getHeader('tk')[0]);
 
     	$items = $objCategoria->listarTudo();
         $results = array();
         $strErros = $objCategoria->getErros();
-        
+
         if (is_array($items) && empty($items) !== true) {
             // get all results
+
+            /*
             foreach ($items as $row) {
                 $itemArray = array(
                     'codigo' => $row['codigo_categoria'],
                     'nome' => $row['nome'],
                 );
                 array_push($results, $itemArray);
-            }
+            }*/
 
             $json  = "{\"categorias\":";
-            $json .= json_encode($results);
+            $json .= json_encode($items);
             $json .= "}";
         } elseif (!empty($strErros)) {
             $json["mensagem"] = $strErros;
@@ -40,8 +42,8 @@
         ->write($json);
     });
 
-    $this->get('/{tk}/{id}', function ($request, $response, $args) use ($objCategoria) {
-        $objCategoria->setToken(isset($args['tk']) ? $args['tk'] : '');
+    $this->get('/{id}', function ($request, $response, $args) use ($objCategoria) {
+        $objCategoria->setToken($request->getHeader('tk')[0]);
 
         $items = $objCategoria->listarPorCodigo($args['id']);
         $strErros = $objCategoria->getErros();
@@ -61,8 +63,82 @@
         ->withJson($json);//usar apenas quando a variavel é um array quando for json em forma de string usar write
     });
 
-    $this->get('/{tk}/categoriatime/', function ($request, $response, $args) use ($objCategoria) {
-        $objCategoria->setToken(isset($args['tk']) ? $args['tk'] : '');
+    $this->post('/', function ($request, $response, $args) use ($objCategoria) {
+        $categoria = $request->getParsedBody();
+
+        $objCategoria->setToken($request->getHeader('tk')[0]);
+        $objCategoria->setNome($categoria["txtNome"]);
+
+        $boolRetorno = $objCategoria->inserir();
+        $strErros = $objCategoria->getErros();
+        
+        if ($boolRetorno === true) {
+            $categoria["mensagem"] = "Categoria cadastrada com sucesso.";
+        } elseif (!empty($strErros)) {
+            $categoria["mensagem"] = $strErros;
+        } else {
+            $categoria["mensagem"] = "Falha ao cadastrar categoria.";
+        }
+        
+        $status_code = 200;
+
+        return $response->withStatus((int) $status_code)
+            ->withHeader('Content-Type', 'application/json;charset=utf-8')
+            ->withJson($categoria);//usar apenas quando a variavel é um array quando for json em forma de string usar write
+    });
+
+    $this->put('/{id}', function ($request, $response, $args) use ($objCategoria) {
+        $categoria = $request->getParsedBody();
+
+        $objCategoria->setCodigoCategoria(isset($args['id']) ? $args['id'] : '');
+        $objCategoria->setToken($request->getHeader('tk')[0]);
+        $objCategoria->setNome($categoria["txtNome"]);
+
+        $boolRetorno = $objCategoria->alterar();
+        $strErros = $objCategoria->getErros();
+
+        if ($boolRetorno === true) {
+            $categoria["mensagem"] = "Categoria alterada com sucesso.";
+        } elseif (!empty($strErros)) {
+            $categoria["mensagem"] = $strErros;
+        } else {
+            $categoria["mensagem"] = "Falha ao atualizar categoria";
+        }
+
+        $status_code = 200;
+
+        return $response->withStatus((int) $status_code)
+            ->withHeader('Content-Type', 'application/json;charset=utf-8')
+            ->withJson($categoria);//usar apenas quando a variavel é um array quando for json em forma de string usar write
+    });
+
+    $this->delete('/{id}', function ($request, $response, $args) use ($objCategoria) {
+        $categoria = $request->getParsedBody();
+
+        $objCategoria->setCodigoCategoria(isset($args['id']) ? $args['id'] : '');
+        $objCategoria->setToken($request->getHeader('tk')[0]);
+
+        $categoria    = "";
+        $boolRetorno = $objCategoria->excluir();
+        $strErros = $objCategoria->getErros();
+
+        if ($boolRetorno === true) {
+            $categoria["mensagem"] = "Categoria excluida com sucesso.";
+        } elseif (!empty($strErros)) {
+            $categoria["mensagem"] = $strErros;
+        } else {
+            $categoria["mensagem"] = "Falha ao excluir categoria";
+        }
+
+        $status_code = 200;
+
+        return $response->withStatus((int) $status_code)
+            ->withHeader('Content-Type', 'application/json;charset=utf-8')
+            ->withJson($categoria);//usar apenas quando a variavel é um array quando for json em forma de string usar write
+    });
+
+    $this->get('/categoriatime/', function ($request, $response, $args) use ($objCategoria) {
+        $objCategoria->setToken($request->getHeader('tk')[0]);
 
         $arrTodasCategorias   = $objCategoria->listarTudo();
         $arrCategoriaTime   = $objCategoria->listaCategoriaPorTime(0, null);
@@ -115,8 +191,8 @@
     });
 
 
-    $this->get('/{tk}/categoriatime/{id}', function ($request, $response, $args) use ($objCategoria) {
-        $objCategoria->setToken(isset($args['tk']) ? $args['tk'] : '');
+    $this->get('/categoriatime/{id}', function ($request, $response, $args) use ($objCategoria) {
+        $objCategoria->setToken($request->getHeader('tk')[0]);
 
         $arrTodasCategorias   = $objCategoria->listarTudo();
         $arrCategoriaTime   = $objCategoria->listaCategoriaPorTime($args['id'], null);
@@ -169,10 +245,10 @@
     });
 
 
-    $this->get('/{tk}/pesquisanome/{nome}', function ($request, $response, $args) use ($objCategoria) {
-        $objCategoria->setToken(isset($args['tk']) ? $args['tk'] : '');
+    $this->get('/pesquisanome/{nome}', function ($request, $response, $args) use ($objCategoria) {
+        $objCategoria->setToken($request->getHeader('tk')[0]);
 
-        $items = $objCategoria->listarPorNome($args['nome']);
+        $items = $objCategoria->listarPorNome("%".$args['nome']);
         $strErros = $objCategoria->getErros();
 
         if (is_array($items) && empty($items) !== true) {
@@ -197,97 +273,4 @@
             ->write($json);//usar write quando for json em string quando for array usar withJson
     });
 
-    $this->post('/{tk}', function ($request, $response, $args) use ($objCategoria) {
-        $objCategoria->setToken(isset($args['tk']) ? $args['tk'] : '');
-
-        //$request_body = file_get_contents('php://input');
-        $categoria    = json_decode($request, true);
-
-        $objCategoria->setNome($categoria["txtNome"]);
-
-        $boolRetorno = $objCategoria->inserir();
-        $strErros = $objCategoria->getErros();
-        
-        if ($boolRetorno === true) {
-            $categoria["mensagem"] = "Categoria cadastrada com sucesso.";
-        } elseif (!empty($strErros)) {
-            $categoria["mensagem"] = $strErros;
-        } else {
-            $categoria["mensagem"] = "Falha ao cadastrar categoria.";
-        }
-        
-        $status_code = 200;
-
-        return $response->withStatus((int) $status_code)
-            ->withHeader('Content-Type', 'application/json;charset=utf-8')
-            ->withJson($categoria);//usar apenas quando a variavel é um array quando for json em forma de string usar write
-    });
-
-    $this->put('/{tk}/{id}', function ($request, $response, $args) use ($objCategoria) {
-        $objCategoria->setToken(isset($args['tk']) ? $args['tk'] : '');
-       
-        //$request_body = file_get_contents('php://input');
-        $categoria    = json_decode($request, true);
-
-        $objCategoria->setCodigoCategoria($id);
-        $objCategoria->setNome($categoria["txtNome"]);
-
-        $boolRetorno = $objCategoria->alterar();
-        $strErros = $objCategoria->getErros();
-
-        if ($boolRetorno === true) {
-            $categoria["mensagem"] = "Categoria alterada com sucesso.";
-        } elseif (!empty($strErros)) {
-            $categoria["mensagem"] = $strErros;
-        } else {
-            $categoria["mensagem"] = "Falha ao atualizar categoria";
-        }
-
-        $status_code = 200;
-
-        return $response->withStatus((int) $status_code)
-            ->withHeader('Content-Type', 'application/json;charset=utf-8')
-            ->withJson($categoria);//usar apenas quando a variavel é um array quando for json em forma de string usar write
-    });
-
-    $this->delete('/{tk}/{id}', function ($request, $response, $args) use ($objCategoria) {
-        $objCategoria->setToken(isset($args['tk']) ? $args['tk'] : '');
-
-        $categoria    = "";
-
-        $objCategoria->setCodigoCategoria($args['id']);
-        $boolRetorno = $objCategoria->excluir();
-        $strErros = $objCategoria->getErros();
-
-        if ($boolRetorno === true) {
-            $categoria["mensagem"] = "Categoria excluida com sucesso.";
-        } elseif (!empty($strErros)) {
-            $categoria["mensagem"] = $strErros;
-        } else {
-            $categoria["mensagem"] = "Falha ao excluir categoria";
-        }
-
-        $status_code = 200;
-
-        return $response->withStatus((int) $status_code)
-            ->withHeader('Content-Type', 'application/json;charset=utf-8')
-            ->withJson($categoria);//usar apenas quando a variavel é um array quando for json em forma de string usar write
-    }); 
-
-    $this->any('/', function ($request, $response, $args) use ($objCategoria) {
-            $arrJson["msg"] = "Token inválido";
-            $status_code = 200;
-
-            return $response->withStatus((int) $status_code)
-            ->withHeader('Content-Type', 'application/json;charset=utf-8')
-            ->withJson($arrJson);//usar apenas quando a variavel é um array quando for json em forma de string usar write
-    });
-
-    $this->any('', function ($request, $response, $args) use ($objCategoria) {
-            $arrJson["msg"] = "Token inválido";
-            $status_code = 200;
-
-            return $response->withStatus((int) $status_code)
-            ->withHeader('Content-Type', 'application/json;charset=utf-8')
-            ->withJson($arrJson);//usar apenas quando a variavel é um array quando for json em forma de string usar write
-    });
+    
