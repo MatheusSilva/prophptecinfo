@@ -18,6 +18,26 @@ class Categoria
         });
     }
 
+    static detalhe(codigo)
+    {
+        var xhr = Ajax.createXHR();
+        xhr.open("GET","http://localhost/sistemaRest/api/v1/categoria/"+codigo,true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function() {
+            //Verificar pelo estado "4" de pronto.
+
+            if (xhr.readyState == '4' && xhr.status == '200') {
+                //Pegar dados da resposta json
+                var data = JSON.parse(xhr.responseText);
+                document.getElementById("codigo").value = data.codigo_categoria;
+                document.getElementById("txtNome").value = data.nome;
+            }
+        }
+
+        xhr.setRequestHeader('tk', Login.getCookie('token'));
+        xhr.send();
+    }
+
     static consultar(form)
     {
         var url = "http://localhost/sistemaRest/api/v1/categoria/";
