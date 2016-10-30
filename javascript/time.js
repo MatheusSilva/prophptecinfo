@@ -476,22 +476,14 @@ class Time
     static carregaCategoria(codigo)
     {
         var xhr = Ajax.createXHR();
-        var token  = Login.getCookie('token');
-        var consulta = "";
-
-        if (token !== "") {
-            consulta = "&tk="+token;
-        }
 
         if(xhr != undefined) {
-            if (codigo != undefined) {
-                codigo = "&id="+codigo;
-            } else {
+            if (codigo == undefined) {
                 codigo = "";
             }
 
             //Montar requisição
-            xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/categoria.php?a=1"+codigo+consulta,true);
+            xhr.open("GET","http://localhost/sistemaRest/api/v1/categoria/"+codigo,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -522,6 +514,7 @@ class Time
                 }
             }
 
+            xhr.setRequestHeader('tk', Login.getCookie('token'));
             xhr.send(); 
         }
     }
