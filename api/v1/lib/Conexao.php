@@ -31,7 +31,7 @@ abstract class Conexao
     * @access public
     * @var string Armazena a senha do banco
     */
-    public static $strSenha    = "";
+    public static $strSenha    = "root";
 
     /**
     * metodo que cria uma nova conexão com o banco de dados caso nao exista e retorna a conexão atual

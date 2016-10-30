@@ -219,7 +219,7 @@ abstract class Login
         || $_SESSION['agentUser'] != self::criptografiaEstatica($_SERVER['HTTP_USER_AGENT'])
         || $_SESSION['ip'] != self::criptografiaEstatica(self::retornaIpUsuario())
         || !isset($_COOKIE['token'])) {
-            self::sair($redirecionar);
+            //self::sair($redirecionar);
 
             if ($redirecionar) {
                 $msg = urlencode('Acesso restrito. Efetue login para continuar');
