@@ -41,6 +41,7 @@ class Categoria
     static consultar(form)
     {
         var url = "http://localhost/sistemaRest/api/v1/categoria/";
+        //var url = "http://127.0.0.1:8084/restful/cliente/listarTodos";
 
         if (form != null && form.txtNome.value != undefined && form.txtNome.value != '') {
             url += "pesquisanome/"+form.txtNome.value;
@@ -51,6 +52,8 @@ class Categoria
         if(xhr != undefined){
             //Montar requisição
             xhr.open("GET", url, true);
+            //xhr.setRequestHeader("Content-Type","application/json");
+
             xhr.onload = function(e) {
                     //Verificar pelo estado "4" de pronto.
                 if (xhr.readyState == '4') {
@@ -120,12 +123,11 @@ class Categoria
             }
 
             //Enviar
+
             xhr.setRequestHeader('tk', Login.getCookie('token'));
-            xhr.send(); 
+            xhr.send();
         }
     }
-    
-    
 
     static confirmar(codigo)
     {

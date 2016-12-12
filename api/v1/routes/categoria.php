@@ -1,6 +1,6 @@
 <?php
-    //http://localhost/sistemaRest/api/v1/categoria/057d01d5d593ffcfce32ce8d5730e595f60f38ba95c0433772e1e0645bc2ce5e //retorna todos os dados
-    //http://localhost/sistemaRest/api/v1/categoria/057d01d5d593ffcfce32ce8d5730e595f60f38ba95c0433772e1e0645bc2ce5e/1 //pega dados categoria por 
+    //http://localhost/sistemaRest/api/v1/categoria //retorna todos os dados
+    //http://localhost/sistemaRest/api/v1/categoria/1 //pega dados categoria por 
     
     use matheus\sistemaRest\api\v1\model\Categoria;
     $objCategoria = new Categoria();

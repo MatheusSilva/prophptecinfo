@@ -26,4 +26,8 @@ $app->group('/categoria', function() {
     include_once 'routes/categoria.php';
 });
 
+$app->group('/divisao', function() {
+    include_once 'routes/divisao.php';
+});
+
 $app->run();

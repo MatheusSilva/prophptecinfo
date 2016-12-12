@@ -1,24 +1,52 @@
 class Divisao
 {
-    static consultar(form)
+    static formToJSON(form) 
     {
-        var pesquisa = '';
+        var codigo = "";
 
-        if (form != null && form.txtNome.value != undefined) {
-            pesquisa = form.txtNome.value;
+        if (form.codigo != undefined) {
+            codigo = form.codigo.value;
         }
 
-        var xhr = Ajax.createXHR();
-        var token  = Login.getCookie('token');
-        var consulta = "";
+        return JSON.stringify({
+            "codigo": codigo,
+            "txtNome": form.txtNome.value
+        });
+    }
 
-        if (token !== "") {
-            consulta = "&tk="+token;
+    static detalhe(codigo)
+    {
+        var xhr = Ajax.createXHR();
+        xhr.open("GET","http://localhost/sistemaRest/api/v1/divisao/"+codigo,true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function() {
+            //Verificar pelo estado "4" de pronto.
+
+            if (xhr.readyState == '4' && xhr.status == '200') {
+                //Pegar dados da resposta json
+                var data = JSON.parse(xhr.responseText);
+                document.getElementById("codigo").value = data.codigo_divisao;
+                document.getElementById("txtNome").value = data.nome;
+            }
+        }
+
+        xhr.setRequestHeader('tk', Login.getCookie('token'));
+        xhr.send();
+    }
+
+    static consultar(form)
+    {
+        var xhr = Ajax.createXHR();
+
+        var url = "http://localhost/sistemaRest/api/v1/divisao/";
+
+        if (form != null && form.txtNome.value != undefined && form.txtNome.value != '') {
+            url += "pesquisanome/"+form.txtNome.value;
         }
 
         if(xhr != undefined) {
             //Montar requisição
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=3"+consulta,true);
+            xhr.open("GET", url, true);
             xhr.onload = function(e) {
                 //Verificar pelo estado "4" de pronto.
                 if (xhr.readyState == '4') {
@@ -86,29 +114,13 @@ class Divisao
                     table.innerHTML = strHTML;
                 }
             }
-            
-            var jForm = new FormData();
-            jForm.append('p', pesquisa);
 
             //Enviar
-            xhr.send(jForm);
+            xhr.setRequestHeader('tk', Login.getCookie('token'));
+            xhr.send();
         }
     }
     
-    static formToJSON(form) 
-    {
-        var codigo = "";
-
-        if (form.codigo != undefined) {
-            codigo = form.codigo.value;
-        }
-
-        return JSON.stringify({
-            "codigo": codigo,
-            "txtNome": form.txtNome.value
-        });
-    }
-
     static confirmar(codigo)
     {
         var xhr = Ajax.createXHR();
@@ -119,19 +131,10 @@ class Divisao
 
             if (codigo == "") {
                 mensagem += "Código invalido";
-            } else {
-                codigo = "&id="+codigo;
-            }
-
-            var token  = Login.getCookie('token');
-            var consulta = "";
-
-            if (token !== "") {
-                consulta = "&tk="+token;
             }
 
             if(mensagem == "") {
-                xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=6"+codigo+consulta,true);
+                xhr.open("DELETE","http://localhost/sistemaRest/api/v1/divisao/"+codigo, true);
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
@@ -143,6 +146,7 @@ class Divisao
                     }
                 }
 
+                xhr.setRequestHeader('tk', Login.getCookie('token'));
                 xhr.send();
             } else {
                 alert(mensagem);
@@ -157,18 +161,15 @@ class Divisao
         var mensagem = "";
 
         if (form.txtNome.value == "") {
-            mensagem += "<br /><b>Você não preencheu a divisao</b>";
+            mensagem += "<br /><b>Você não preencheu a divisão</b>";
         }
 
-        var token  = Login.getCookie('token');
-        var consulta = "";
-
-        if (token !== "") {
-            consulta = "&tk="+token;
+        if (Login.getCookie('token') == "") {
+            mensagem += "Token inválido";
         }
                 
         if (mensagem == "" && xhr != undefined) {
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=4"+consulta,true);
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/divisao/",true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -181,6 +182,7 @@ class Divisao
                 }
             }
 
+            xhr.setRequestHeader('tk', Login.getCookie('token'));
             xhr.send(Divisao.formToJSON(form));
         } else {
             document.getElementById("mensagem").innerHTML = mensagem;
@@ -189,30 +191,29 @@ class Divisao
 
     static atualizar(form) 
     {
-        document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";  
-        var xhr = Ajax.createXHR();
-        var codigo = document.getElementById("codigo").value;
+        document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";
+        
+        var codigo = form.codigo.value;
         var mensagem = "";
 
-        if (codigo == "") {
+        if (Login.getCookie('token') == "") {
+            mensagem += "Token invalido";
+        }
+
+        if (codigo == "" || codigo == undefined) {
             mensagem += "Código invalido";
-        } else {
-            codigo = "&id="+codigo;
         }
-
+        
         if (document.getElementById("txtNome").value == "") {
-            mensagem += "<br /><b>Você não preencheu a divisao</b>";
+            mensagem += "<br /><b>Você não preencheu a Divisão</b>";
         }
-
-        var token  = Login.getCookie('token');
+        
         var consulta = "";
 
-        if (token !== "") {
-            consulta = "&tk="+token;
-        }
+        var xhr = Ajax.createXHR();
 
         if(mensagem == "" && xhr != undefined) {
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/divisao.php?a=5"+codigo+consulta,true);
+            xhr.open("PUT","http://localhost/sistemaRest/api/v1/divisao/"+codigo,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -220,10 +221,11 @@ class Divisao
                 if (xhr.readyState == '4' && xhr.status == '200') {
                     //Pegar dados da resposta json
                     var json = JSON.parse(xhr.responseText);
-                    document.getElementById("mensagem").innerHTML = "<br /><b>"+json.mensagem+"</b>";  
+                    document.getElementById("mensagem").innerHTML = json.mensagem;
                 }
             }
 
+            xhr.setRequestHeader('tk', Login.getCookie('token'));
             xhr.send(Divisao.formToJSON(form));
         } else {
             document.getElementById("mensagem").innerHTML = mensagem;
