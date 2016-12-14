@@ -1323,8 +1323,8 @@
     },
     {
         "name": "symfony/debug",
-        "version": "v3.2.0",
-        "version_normalized": "3.2.0.0",
+        "version": "v3.2.1",
+        "version_normalized": "3.2.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/debug.git",
@@ -1382,17 +1382,17 @@
     },
     {
         "name": "symfony/console",
-        "version": "v3.2.0",
-        "version_normalized": "3.2.0.0",
+        "version": "v3.2.1",
+        "version_normalized": "3.2.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/console.git",
-            "reference": "09d0fd33560e3573185a2ea17614e37ba38716c5"
+            "reference": "d12aa9ca20f4db83ec58410978dab6afcb9d6aaa"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/console/zipball/09d0fd33560e3573185a2ea17614e37ba38716c5",
-            "reference": "09d0fd33560e3573185a2ea17614e37ba38716c5",
+            "url": "https://api.github.com/repos/symfony/console/zipball/d12aa9ca20f4db83ec58410978dab6afcb9d6aaa",
+            "reference": "d12aa9ca20f4db83ec58410978dab6afcb9d6aaa",
             "shasum": ""
         },
         "require": {
@@ -1412,7 +1412,7 @@
             "symfony/filesystem": "",
             "symfony/process": ""
         },
-        "time": "2016-11-16 22:18:16",
+        "time": "2016-12-11 14:34:22",
         "type": "library",
         "extra": {
             "branch-alias": {

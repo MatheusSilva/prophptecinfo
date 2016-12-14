@@ -16,31 +16,7 @@
                         decodeURIComponent(parts[1].replace(/\+/g, " "));
                 });
 
-                var xhr = Ajax.createXHR();
-
-                var token  = Login.getCookie('token');
-                var consulta = "";
-
-                if (token !== "") {
-                    consulta = "&tk="+token;
-                }
-
-                xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=2&id="+location.queryString.codigo+consulta,true);
-                    
-                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                xhr.onreadystatechange = function() {
-                    //Verificar pelo estado "4" de pronto.
-
-                    if (xhr.readyState == '4' && xhr.status == '200') {
-                        //Pegar dados da resposta json
-                        var data = JSON.parse(xhr.responseText);
-                        document.getElementById("codigo").value = data.codigo_tecnico;
-                        document.getElementById("txtNome").value = data.nome;
-                        document.getElementById("txtDataNascimento").value = data.data_nascimento;
-                    }
-                }
-
-                xhr.send();
+                Tecnico.detalhe(location.queryString.codigo);
             });
         </script>
     </head>

@@ -30,4 +30,8 @@ $app->group('/divisao', function() {
     include_once 'routes/divisao.php';
 });
 
+$app->group('/tecnico', function() {
+    include_once 'routes/tecnico.php';
+});
+
 $app->run();

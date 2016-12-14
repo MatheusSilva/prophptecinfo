@@ -45,25 +45,40 @@ class Tecnico
         }
     }
 
-    static consultar(form)
+    static detalhe(codigo)
     {
-        var pesquisa = '';
+        var xhr = Ajax.createXHR();
+        xhr.open("GET","http://localhost/sistemaRest/api/v1/tecnico/"+codigo,true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function() {
+            //Verificar pelo estado "4" de pronto.
 
-        if (form != null && form.txtNome.value != undefined) {
-            pesquisa = form.txtNome.value;
+            if (xhr.readyState == '4' && xhr.status == '200') {
+                //Pegar dados da resposta json
+                var data = JSON.parse(xhr.responseText);
+                document.getElementById("codigo").value = data.codigo_tecnico;
+                document.getElementById("txtNome").value = data.nome;
+                document.getElementById("txtDataNascimento").value = data.data_nascimento;
+            }
         }
 
-        var xhr = Ajax.createXHR();
-        var token  = Login.getCookie('token');
-        var consulta = "";
+        xhr.setRequestHeader('tk', Login.getCookie('token'));
+        xhr.send();
+    }
 
-        if (token !== "") {
-            consulta = "&tk="+token;
+    static consultar(form)
+    {
+        var xhr = Ajax.createXHR();
+
+        var url = "http://localhost/sistemaRest/api/v1/tecnico/";
+
+        if (form != null && form.txtNome.value != undefined && form.txtNome.value != '') {
+            url += "pesquisanome/"+form.txtNome.value;
         }
             
         if(xhr != undefined) {
             //Montar requisição
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=3"+consulta,true);
+            xhr.open("GET", url, true);
             xhr.onload = function(e) {
                 //Verificar pelo estado "4" de pronto.
                 if (xhr.readyState == '4') {
@@ -132,11 +147,9 @@ class Tecnico
                 }
             }
 
-            var jForm = new FormData();
-            jForm.append('p', pesquisa);
-
             //Enviar
-            xhr.send(jForm);
+            xhr.setRequestHeader('tk', Login.getCookie('token'));
+            xhr.send();
         }
     }
     
@@ -187,19 +200,10 @@ class Tecnico
 
             if (codigo == "") {
                 mensagem += "Código invalido";
-            } else {
-                codigo = "&id="+codigo;
-            }
-
-            var token  = Login.getCookie('token');
-            var consulta = "";
-
-            if (token !== "") {
-                consulta = "&tk="+token;
             }
             
             if(mensagem == "") {
-                xhr.open("GET","http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=6"+codigo+consulta,true);
+                xhr.open("DELETE","http://localhost/sistemaRest/api/v1/tecnico/"+codigo, true);
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function() {
                     //Verificar pelo estado "4" de pronto.
@@ -211,6 +215,7 @@ class Tecnico
                     }
                 }
 
+                xhr.setRequestHeader('tk', Login.getCookie('token'));
                 xhr.send();
             } else {
                 alert(mensagem);
@@ -220,8 +225,6 @@ class Tecnico
 
     static cadastrar(form) 
     {
-        var xhr = Ajax.createXHR();
-
         if (Tecnico.valida() == false) {
             return false;
         }
@@ -232,16 +235,11 @@ class Tecnico
         if (form.txtNome.value == "") {
             mensagem += "<br /><b>Você não preencheu a técnico.</b>";
         }
-
-        var token  = Login.getCookie('token');
-        var consulta = "";
-
-        if (token !== "") {
-            consulta = "&tk="+token;
-        }
         
+        var xhr = Ajax.createXHR();
+
         if (mensagem == "" && xhr != undefined) {
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=4"+consulta,true);
+            xhr.open("POST","http://localhost/sistemaRest/api/v1/tecnico/", true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -253,6 +251,7 @@ class Tecnico
                 }
             }
 
+            xhr.setRequestHeader('tk', Login.getCookie('token'));
             xhr.send(Tecnico.formToJSON(form));
         } else {
             document.getElementById("mensagem").innerHTML = mensagem;
@@ -262,31 +261,22 @@ class Tecnico
     static atualizar(form) 
     {
         document.getElementById("mensagem").innerHTML = "<br /><b>Aguarde...</b>";  
-        var xhr = Ajax.createXHR();
+        
         var codigo = form.codigo.value;
         var mensagem = "";
 
         if (codigo == "") {
             mensagem += "Código invalido";
-        } else {
-            codigo = "&id="+codigo;
         }
-
 
         if (form.txtNome.value == "") {
             mensagem += "<br /><b>Você não preencheu a técnico</b>";
         }
-        
-        var token  = Login.getCookie('token');
-        
-        var consulta = "";
 
-        if (token !== "") {
-            consulta = "&tk="+token;
-        }
-
+        var xhr = Ajax.createXHR();
+        
         if(mensagem == "" && xhr != undefined) {
-            xhr.open("POST","http://localhost/sistemaRest/api/v1/controller/tecnico.php?a=5"+codigo+consulta,true);
+            xhr.open("PUT","http://localhost/sistemaRest/api/v1/tecnico/"+codigo,true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 //Verificar pelo estado "4" de pronto.
@@ -298,6 +288,7 @@ class Tecnico
                 }
             }
 
+            xhr.setRequestHeader('tk', Login.getCookie('token'));
             xhr.send(Tecnico.formToJSON(form));
         } else {
             document.getElementById("mensagem").innerHTML = mensagem;
