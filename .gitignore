@@ -1,6 +1,11 @@
+/node_modules
 /img
 /nbproject/private/
+/vendor
+/.idea
 .settings
 .project
 .buildpath
 temp.txt
+.env
+.composer.lock
